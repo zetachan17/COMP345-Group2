@@ -22,6 +22,7 @@ void testLoadMaps() {
 
         std::regex continentNameRegxp("[a-zA-Z\\s]*");
         std::regex continentScoreRegxp("[0-9]+");
+        std::regex territoryNameRegxp("[a-zA-Z0-9\\s\\_\\!]*");
         
         while(std::getline(mapFile, currentLine))
         {
@@ -38,7 +39,11 @@ void testLoadMaps() {
             }
             else if (std::regex_match(currentLine, territoriesRegxp))
             {
-                 std::cout << currentLine << std::endl;
+                //std::cout << currentLine << std::endl;
+                std::smatch territoryName;
+
+                std::regex_search(currentLine, territoryName, territoryNameRegxp);
+                std::cout << territoryName.str(0) << std::endl;
             }
         }
         
