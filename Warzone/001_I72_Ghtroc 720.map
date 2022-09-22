@@ -5,7 +5,7 @@ wrap=no
 scroll=vertical
 warn=no
 
-[Co ntinents]
+[Continents]
 Cockpit=5
 Right Thruster=6
 Left Thruster=6
