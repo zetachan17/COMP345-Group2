@@ -4,6 +4,8 @@
 #include <regex>
 #include "Map/MapDriver.h"
 
+#include <sstream>
+
 void testLoadMaps() {
     std::fstream mapFile;
     mapFile.open("001_I72_Ghtroc 720.map", std::ios::in);
@@ -16,37 +18,43 @@ void testLoadMaps() {
     if(mapFile.is_open())
     {
         std::string currentLine;
-        std::regex maptagRegxp("(\\[Map\\])");
-        std::regex continentsRegxp("[a-zA-Z\\s]*\\=[0-9]+");
-        std::regex territoriesRegxp("[a-zA-Z0-9\\s\\_\\!]*\\,[0-9]+\\,[0-9]+\\,[a-zA-Z0-9\\,\\s\\_\\!]*");
-
-        std::regex continentNameRegxp("[a-zA-Z\\s]*");
-        std::regex continentScoreRegxp("[0-9]+");
-        std::regex territoryNameRegxp("[a-zA-Z0-9\\s\\_\\!]*");
+        std::regex continentsRegxp("\\=[0-9]+$");
+        std::regex territoriesRegxp("\\,");
         
         while(std::getline(mapFile, currentLine))
         {
-            if (std::regex_match(currentLine, continentsRegxp))
+            if (std::regex_search(currentLine, continentsRegxp))
             {
-                std::smatch continentName;
-                std::smatch continentScore;
-                
-                std::regex_search(currentLine, continentName, continentNameRegxp);
-                std::cout << continentName.str(0) << std::endl;
-
-                std::regex_search(currentLine, continentScore, continentScoreRegxp);
-                std::cout << continentScore.str(0) << std::endl;
+                std::vector<std::string> result;
+                std::stringstream ss(currentLine);
+                while (ss.good())
+                {
+                    std::string substr;
+                    std::getline(ss, substr, '=');
+                    result.push_back(substr);
+                }
+                std::cout << "Continent: " << result[0] << " Score: " << result[1];
+               
+                std::cout << "" <<std::endl;
             }
-            else if (std::regex_match(currentLine, territoriesRegxp))
+            else if (std::regex_search(currentLine, territoriesRegxp))
             {
-                //std::cout << currentLine << std::endl;
-                std::smatch territoryName;
-
-                std::regex_search(currentLine, territoryName, territoryNameRegxp);
-                std::cout << territoryName.str(0) << std::endl;
+               std::vector<std::string> result;
+               std::stringstream ss(currentLine);
+               while (ss.good())
+               {
+                   std::string substr;
+                   std::getline(ss, substr, ',');
+                   result.push_back(substr);
+               }
+               std::cout << "Territory: " << result[0] << " Neighbour: ";
+                
+               for (int i= 3; i != result.size(); ++i)
+                   std::cout << result[i] << ' ';
+               
+               std::cout << "" <<std::endl;
             }
         }
-        
         mapFile.close();
     }
     
