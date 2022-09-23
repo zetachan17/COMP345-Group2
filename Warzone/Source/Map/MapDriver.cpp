@@ -1,10 +1,9 @@
-#include <string>
 #include <fstream>
 #include <iostream>
 #include <regex>
-#include "Map/MapDriver.h"
-
 #include <sstream>
+#include <string>
+#include "Map/MapDriver.h"
 
 void testLoadMaps() {
     std::fstream mapFile;
