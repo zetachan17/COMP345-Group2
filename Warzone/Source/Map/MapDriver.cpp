@@ -47,9 +47,9 @@ void testLoadMaps() {
                    std::getline(ss, substr, ',');
                    result.push_back(substr);
                }
-               std::cout << "Territory: " << result[0] << " Neighbour: ";
+               std::cout << "Territory: " << result[0] << " Continent belonged: " << result[3] << " Neighbour: ";
                 
-               for (int i= 3; i != result.size(); ++i)
+               for (int i= 4; i != result.size(); ++i)
                    std::cout << result[i] << ' ';
                
                std::cout << "" <<std::endl;
