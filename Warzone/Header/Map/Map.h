@@ -1,10 +1,28 @@
-#pragma once
-class Map
-{
-public:
-	int getNumber();
 
-private:
-	int number = 1;
+/*class Map
+{
+
+};*/
+
+class MapLoader {
+
+
+public:
+	
+	void readFile();
+
+
+	
 };
+
+/*struct Continents {
+
+};*/
+
+/*class Territory {
+	
+
+	int teritorryID;
+
+};*/
 
