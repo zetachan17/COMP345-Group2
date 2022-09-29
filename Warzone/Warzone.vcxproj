@@ -138,9 +138,13 @@
   <ItemGroup>
     <ClInclude Include="Header\GameEngine\GameEngine.h" />
     <ClInclude Include="Header\Cards\Cards.h" />
+    <ClInclude Include="Header\GameEngine\GameEngineDriver.h" />
     <ClInclude Include="Header\Map\Map.h" />
     <ClInclude Include="Header\Player\Player.h" />
     <ClInclude Include="Header\Orders\Orders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

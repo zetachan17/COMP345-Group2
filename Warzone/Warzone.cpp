@@ -3,9 +3,12 @@
 
 #include <iostream>
 
+#include "GameEngine/GameEngine.h"
+#include "GameEngine/GameEngineDriver.h"
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    testGameStates();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
