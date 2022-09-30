@@ -45,6 +45,7 @@ class Territory {
 	private:
 	int teritorryID;
 	std::string TeritorryName;
+	
 	vector<Territory*> arrOfAdjTerritories;
 	int* IDOfContTerritoryBelongsTo;//Potentially to know which continent the territory belongs to?
 
