@@ -6,24 +6,37 @@ using namespace std;
 
 class Map
 {
+private:
+	vector<Continent*>ContinentPointerArray;//Here we're creating the arrays of pointers to Continent and Territory objects
+	vector<Territory*>TerritoryPointerArray;
+	static int ContinentIDs;
+	static int TerritoryId;
+
+public:
+	Map(const Map& CopyOfMap);
+	Map();
+
+	friend class MapLoader;
 
 };
 
 class MapLoader {
-
+	int ContinentCounter;
+	
 
 public:
 	
 	void readFile();
 
-
+	friend class Map;
 	
 };
 
-struct Continents {
+struct Continent {
 	int ContinentID;
 	std::string ContinentName;
-	Continents(int contID, std::string contName);
+	Continent(int contID, std::string contName);
+	Continent(const Continent& CopyOfCont);
 
 };
 

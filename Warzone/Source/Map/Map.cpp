@@ -17,6 +17,9 @@ std::fstream mapFile;
         mapFile.open("001_I72_Ghtroc 720.map", std::ios::in);
         //mapFile.open("002_I72_X-29.map", std::ios::in);
 
+        Map* mapObj = new Map();//DESTRUCTOR1
+        
+
         std::string mapText;
         std::string continentsText;
         std::string territoriesText;
@@ -30,12 +33,14 @@ std::fstream mapFile;
             std::regex continentsRegxp("\\=[0-9]+$");
             std::regex territoriesRegxp("\\,");
 
+            
+
 
             while (std::getline(mapFile, currentLine))
             {
                 if (std::regex_search(currentLine, continentsRegxp))
                 {
-
+                    
                     std::stringstream ss(currentLine);
                     while (ss.good())
                     {
@@ -44,8 +49,15 @@ std::fstream mapFile;
                         ArrayContinents.push_back(substr);
 
                     }
-                    ArrayContinents.push_back("|");//The point of this is to add a delimiter to know when we're moving on to the data of the next territory
+                    ArrayContinents.push_back("|");//The point of this is to add a delimiter to know when we're moving on to the data of the next Continent
                     std::cout << "" << std::endl;
+
+                    
+
+                    
+                //Continent* contObj=new Continent()
+
+                    
                 }
                 else if (std::regex_search(currentLine, territoriesRegxp))
                 {
@@ -64,16 +76,21 @@ std::fstream mapFile;
             }
 
             int i = 0;
+            ContinentCounter = 0;
             while (i < ArrayContinents.size()) {//This part of the code is to be able to visualize how the arrays store the data on Continents and Territories
                 std::cout << "Continent: " << ArrayContinents[i] + " ";
+                mapObj->ContinentIDs = ContinentCounter;//Here because we're going through all the continents,we'll assign IDs as we count them
+                
                 i++;
                 std::cout << "Bonus: " << ArrayContinents[i] + " ";
+                Continent* contObj = new Continent(ContinentCounter, ArrayContinents[i]);//DESTRUCTOR X
                 i++;
                 if (ArrayContinents[i].compare("|") == 0) {
                     std::cout << "\n";
                     i++;
 
                 }
+                ContinentCounter++;
             }
 
 
@@ -102,13 +119,15 @@ std::fstream mapFile;
         }
 }
 
-class Map {
+Continent::Continent(int contID,std::string contName) {
+    ContinentID = contID;
+    ContinentName = contName;
+}
 
-};
+Territory::Territory(int TerrID, std::string TerrName, int ContID) {
 
-class Territory {
+}
 
-};
 
 
 
