@@ -6,6 +6,7 @@
 int main()
 {
     testLoadMaps();
+    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
