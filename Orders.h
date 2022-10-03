@@ -7,7 +7,6 @@ using std::vector;
 class Order
 {
 public:
-    // friend ostream& operator << (ostream& output, Order& o);
     Order(string name);
     bool validate();
     void execute();
