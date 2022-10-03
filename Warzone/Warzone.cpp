@@ -2,10 +2,15 @@
 //
 
 #include <iostream>
+#include "Cards/Cards.h"
+#include "Cards/CardsDriver.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+    testCards();
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
