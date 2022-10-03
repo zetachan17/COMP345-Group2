@@ -22,8 +22,12 @@ class Territory {
 		Territory(int TerrID, std::string TerrName, int ContID);
 		Territory(const Territory& TerrObj);//Copy constructor for Territory class
 
+		//methods
+		void addAdjTerr(Territory* x);
+
 		friend ostream& operator<<(ostream& os, const Territory& TerrObj);
-	
+		friend class Map;
+		
 
 
 
@@ -37,11 +41,13 @@ struct Continent {
 
 	//Constructors
 	Continent(int contID, string contName, int bonus);
+	
 	Continent(const Continent& ContObj);
 
 	//methods
 	
 	friend ostream& operator<<(ostream& os, const Continent& Contobj);
+	
 
 };
 
@@ -67,7 +73,8 @@ public:
 	//Methods
 	void addContToContVector(Continent* Cont);
 	void addTerrToTerrVector(Territory* Terr);
-	int getContId(string ContName, Map* MapObj);
+	int getContId(string ContName);
+	Territory* getTerrObjByName(string TerrName);
 
 	
 

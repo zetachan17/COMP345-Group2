@@ -8,6 +8,7 @@
 
 
 
+
 void MapLoader::readFile()
 {
     std::fstream mapFile;
@@ -112,7 +113,7 @@ void MapLoader::readFile()
                 std::cout << "Continent belonged: " << ArrayTerritories[i] + " ";
                
                 
-                Territory* TerrObj = new Territory(TerritoryCounter, ArrayTerritories[i - 3], mapObj->getContId(ArrayTerritories[i], mapObj));
+                Territory* TerrObj = new Territory(TerritoryCounter, ArrayTerritories[i - 3], mapObj->getContId(ArrayTerritories[i]));
                
                 i++;
                 std::cout << "Adj territories: ";
@@ -129,7 +130,30 @@ void MapLoader::readFile()
                 TerritoryCounter++;
             }
             
-            cout << *mapObj;
+            i = 0;
+           while (i<ArrayTerritories.size()) {//Here we will create both the array of ajdacent territories and the array of territories 
+                Territory* terr = (mapObj->getTerrObjByName(ArrayTerritories[i]));
+                
+                cout << "For territ: " << ArrayTerritories[i]<<"\n\n";
+                i = i + 4;
+                while (ArrayTerritories[i].compare("|") != 0) {
+                    cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
+                    terr->addAdjTerr(mapObj->getTerrObjByName(ArrayTerritories[i]));
+                    i++;
+                    
+                    
+                }
+                if (ArrayTerritories[i].compare("|") == 0) {
+                    i++;
+
+                }
+                
+                
+            }
+
+            
+            
+            //cout << *mapObj;
             mapFile.close();
             std::cin.get();
 
@@ -146,12 +170,27 @@ Territory::Territory(int TerrID, string TerrName, int ContID) {
 
 }
 Territory::Territory(const Territory& TerrObj) {
+    territoryID = TerrObj.territoryID;
+    TeritorryName = TerrObj.TeritorryName;
+    ContinentId = TerrObj.ContinentId;
+    for (Territory* terr : arrOfAdjTerritories) {
+        terr = new Territory(terr->territoryID, terr->TeritorryName, terr->ContinentId);
+    }
+
 
 }
 
 ostream& operator<<(ostream& os, const Territory& TerrObj) {
-    os << "Territory name: " + TerrObj.TeritorryName << " ID : " << TerrObj.territoryID << " Continent ID: " << TerrObj.ContinentId<< "\n";
+    os << "Territory name: " + TerrObj.TeritorryName << " ID : " << TerrObj.territoryID << " Continent ID: " << TerrObj.ContinentId << "\n";
+    
+
     return os;
+}
+
+
+
+void Territory::addAdjTerr(Territory* Terr) {
+    arrOfAdjTerritories.push_back(Terr);
 }
 
 Continent::Continent(int contID,string contName, int bonus) {
@@ -183,18 +222,18 @@ Map::Map() {
 }
 
 Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map class
-    this->Cont = new Continent(*(MapObj.Cont));
-    this->Terr = new Territory(*(MapObj.Terr));
+    Cont = new Continent(*(MapObj.Cont));
+    Terr = new Territory(*(MapObj.Terr));
     nbOfContinents = MapObj.nbOfContinents;
     nbOfTerritories = MapObj.nbOfTerritories;
-    ContinentPointerArray = MapObj.ContinentPointerArray;
+    ContinentPointerArray = MapObj.ContinentPointerArray;//These are shallow copies, gotta iterate through the array of pointers to make deep copies
     TerritoryPointerArray = MapObj.TerritoryPointerArray;
 
 }
 
-Map& Map::operator=(const Map& MapObj) {
-    this->Cont = new Continent(*(MapObj.Cont));
-    this->Terr = new Territory(*(MapObj.Terr));
+Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
+    Cont = new Continent(*(MapObj.Cont));
+    Terr = new Territory(*(MapObj.Terr));
     nbOfContinents = MapObj.nbOfContinents;
     nbOfTerritories = MapObj.nbOfTerritories;
     ContinentPointerArray = MapObj.ContinentPointerArray;
@@ -212,12 +251,21 @@ void Map::addTerrToTerrVector(Territory* Terr) {
     TerritoryPointerArray.push_back(Terr);
 
 }
-int Map::getContId(string ContName, Map* MapObj) {
-    for (Continent* x : MapObj->ContinentPointerArray) {
+int Map::getContId(string ContName) {
+    for (Continent* x : ContinentPointerArray) {
         if ((x->ContinentName).compare(ContName) == 0) {
             return x->ContinentID;
         }
     }
+}
+
+    Territory* Map::getTerrObjByName(string TerrName) {
+    for (Territory* x : TerritoryPointerArray) {
+        if ((x->TeritorryName).compare(TerrName) == 0) {//For some reason declaring the Map class as a friend works, but not declaring the function as a friend fn
+            return x;
+        }
+    }
+
 }
 
 
