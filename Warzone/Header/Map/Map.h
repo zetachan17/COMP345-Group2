@@ -27,10 +27,6 @@ class Territory {
 
 		friend ostream& operator<<(ostream& os, const Territory& TerrObj);
 		friend class Map;
-		
-
-
-
 };
 
 struct Continent {
@@ -74,6 +70,10 @@ public:
 	void addContToContVector(Continent* Cont);
 	void addTerrToTerrVector(Territory* Terr);
 	int getContId(string ContName);
+	void validate();
+	bool isMapConnected();
+	bool isContinentsconected();
+	void DFS(const Territory* Terr, vector <string>& visited);
 	Territory* getTerrObjByName(string TerrName);
 
 	
