@@ -15,6 +15,7 @@ class Territory {
 
 	
 	vector<Territory*> arrOfAdjTerritories;
+	
 	int ContinentId;//Potentially to know which continent the territory belongs to?
 	
 
@@ -25,12 +26,10 @@ class Territory {
 		//methods
 		void addAdjTerr(Territory* x);
 
+
 		friend ostream& operator<<(ostream& os, const Territory& TerrObj);
 		friend class Map;
-		
-
-
-
+		friend struct Continent;
 };
 
 struct Continent {
@@ -44,9 +43,12 @@ struct Continent {
 	
 	Continent(const Continent& ContObj);
 
+
 	//methods
+	void addTerritoryToContinent(Territory* terr);
 	
 	friend ostream& operator<<(ostream& os, const Continent& Contobj);
+	
 	
 
 };
@@ -74,6 +76,11 @@ public:
 	void addContToContVector(Continent* Cont);
 	void addTerrToTerrVector(Territory* Terr);
 	int getContId(string ContName);
+	Continent* getContinent(string name);
+	void validate();
+	bool isMapConnected();
+	bool isContinentsconected();
+	void DFS(const Territory* Terr, vector <string>& visited);
 	Territory* getTerrObjByName(string TerrName);
 
 	
