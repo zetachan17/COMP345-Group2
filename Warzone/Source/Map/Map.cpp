@@ -359,7 +359,7 @@ void Map::continentDFS(const Territory* Terr, vector<string>& visited)
     {
         if (Terr->ContinentId == adjTerritory->ContinentId)
         {
-            DFS(adjTerritory, visited);
+            continentDFS(adjTerritory, visited);
         }
     }
 }
