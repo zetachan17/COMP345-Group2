@@ -19,7 +19,6 @@ void MapLoader::readFile()
     vector<Continent*> ContinentPointerArray;//Here we're creating the arrays of pointers to Continent and Territory objects
     vector<Territory*> TerritoryPointerArray;
 
-
     if (mapFile.is_open())
     {
         std::string currentLine;
@@ -120,18 +119,14 @@ void MapLoader::readFile()
                 //cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
                 terr->addAdjTerr(mapObj->getTerrObjByName(ArrayTerritories[i]));
                 i++;
-                    
-                    
             }
             if (ArrayTerritories[i].compare("|") == 0) {
                 i++;
-
             }
         }
 
         i = 0;
         while (i < ArrayTerritories.size()) {//Here we create the array of territories for each continent
-            
             Territory* terr = (mapObj->getTerrObjByName(ArrayTerritories[i]));
             
             i = i + 3;//This is to access the name of the continent in the Territories data
@@ -143,19 +138,16 @@ void MapLoader::readFile()
             }
             if (ArrayTerritories[i].compare("|") == 0) {
                 i++;
-
             }
-
         }
+        
         for (Continent* c : ContinentPointerArray) {
             cout << *c;
-            
         }
-            
-            cout << *mapObj;
-            mapFile.close();
-            std::cin.get();
-
+        
+        cout << *mapObj;
+        mapFile.close();
+        std::cin.get();
     }
 }
 
@@ -165,9 +157,8 @@ Territory::Territory(int TerrID, string TerrName, int ContID) {
     territoryID = TerrID;
     TeritorryName = TerrName;
     ContinentId = ContID;
-
-
 }
+
 Territory::Territory(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
@@ -175,16 +166,12 @@ Territory::Territory(const Territory& TerrObj) {
     for (Territory* terri : arrOfAdjTerritories) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
     }
-
-
 }
 
 ostream& operator<<(ostream & os, const Territory& TerrObj) {
     os << "Territory name: " + TerrObj.TeritorryName << " ID : " << TerrObj.territoryID << " Continent ID: " << TerrObj.ContinentId<<"\n\n";
     return os;
 }
-
-
 
 void Territory::addAdjTerr(Territory* Terr) {
     arrOfAdjTerritories.push_back(Terr);
@@ -194,8 +181,6 @@ Continent::Continent(int contID,string contName, int bonus) {
     ContinentID = contID;
     ContinentName = contName;
     Bonus = bonus;
-    
-
 }
 
 Continent::Continent(const Continent& ContObj) {
@@ -207,16 +192,9 @@ Continent::Continent(const Continent& ContObj) {
     }
 }
 
-
-
-
 void Continent::addTerritoryToContinent(Territory* terr) {
     arrOfTerrInContinent.push_back(terr);
 }
-
-
-
-
 
 ostream& operator<<(ostream& os, const Continent& Contobj) {
     os << "Coninent: " + Contobj.ContinentName << "ID and Bonus are: " << Contobj.ContinentID << " and "<< Contobj.Bonus <<"\n\n";
@@ -238,7 +216,6 @@ Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map c
     nbOfTerritories = MapObj.nbOfTerritories;
     ContinentPointerArray = MapObj.ContinentPointerArray;//These are shallow copies, gotta iterate through the array of pointers to make deep copies
     TerritoryPointerArray = MapObj.TerritoryPointerArray;
-
 }
 
 Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
@@ -254,13 +231,12 @@ Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the as
 
 void Map::addContToContVector(Continent* Cont) {
     ContinentPointerArray.push_back(Cont);
-
 }
 
 void Map::addTerrToTerrVector(Territory* Terr) {
     TerritoryPointerArray.push_back(Terr);
-
 }
+
 int Map::getContId(string ContName) {
     for (Continent* x : ContinentPointerArray) {
         if ((x->ContinentName).compare(ContName) == 0) {
@@ -335,7 +311,6 @@ for (Territory* x : TerritoryPointerArray) {
         return x;
     }
 }
-
 }
 
 

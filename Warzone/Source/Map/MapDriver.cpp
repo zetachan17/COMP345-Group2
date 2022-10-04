@@ -6,8 +6,6 @@
 #include <string>
 #include <Map/Map.h>
 
-
-
 void testLoadMaps() {
     MapLoader mapl1{};
     mapl1.readFile();
