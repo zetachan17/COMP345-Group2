@@ -15,6 +15,7 @@ class Territory {
 
 	
 	vector<Territory*> arrOfAdjTerritories;
+	
 	int ContinentId;//Potentially to know which continent the territory belongs to?
 	
 
@@ -25,8 +26,10 @@ class Territory {
 		//methods
 		void addAdjTerr(Territory* x);
 
+
 		friend ostream& operator<<(ostream& os, const Territory& TerrObj);
 		friend class Map;
+		friend class MapLoader;
 		
 
 

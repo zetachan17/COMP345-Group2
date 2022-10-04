@@ -137,7 +137,7 @@ void MapLoader::readFile()
                 cout << "For territ: " << ArrayTerritories[i]<<"\n\n";
                 i = i + 4;
                 while (ArrayTerritories[i].compare("|") != 0) {
-                    cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
+                    //cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
                     terr->addAdjTerr(mapObj->getTerrObjByName(ArrayTerritories[i]));
                     i++;
                     
@@ -148,8 +148,12 @@ void MapLoader::readFile()
 
                 }
                 
-                
             }
+           
+           
+           
+
+
 
             
             
@@ -173,16 +177,17 @@ Territory::Territory(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
-    for (Territory* terr : arrOfAdjTerritories) {
-        terr = new Territory(terr->territoryID, terr->TeritorryName, terr->ContinentId);
+    for (Territory* terri : arrOfAdjTerritories) {
+        terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
     }
 
 
 }
 
-ostream& operator<<(ostream& os, const Territory& TerrObj) {
-    os << "Territory name: " + TerrObj.TeritorryName << " ID : " << TerrObj.territoryID << " Continent ID: " << TerrObj.ContinentId << "\n";
+ostream& operator<<(ostream & os, const Territory& TerrObj) {
+    os << "Territory name: " + TerrObj.TeritorryName << " ID : " << TerrObj.territoryID << " Continent ID: " << TerrObj.ContinentId<<"\n\n";
     
+   
 
     return os;
 }
