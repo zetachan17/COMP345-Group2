@@ -19,7 +19,7 @@ private:
 class Deploy : public Order
 {
 public:
-    Deploy(string name);
+    Deploy();
     bool validate();
     void execute();
 };
@@ -27,7 +27,7 @@ public:
 class Advance : public Order
 {
 public:
-    Advance(string name);
+    Advance();
     bool validate();
     void execute();
 };
@@ -35,7 +35,7 @@ public:
 class Bomb : public Order
 {
 public:
-    Bomb(string name);
+    Bomb();
     bool validate();
     void execute();
 };
@@ -43,7 +43,7 @@ public:
 class Blockade : public Order
 {
 public:
-    Blockade(string name);
+    Blockade();
     bool validate();
     void execute();
 };
@@ -51,7 +51,7 @@ public:
 class Airlift : public Order
 {
 public:
-    Airlift(string name);
+    Airlift();
     bool validate();
     void execute();
 };
@@ -59,7 +59,7 @@ public:
 class Negotiate : public Order
 {
 public:
-    Negotiate(string name);
+    Negotiate();
     bool validate();
     void execute();
 };

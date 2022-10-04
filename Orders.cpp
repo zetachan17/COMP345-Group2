@@ -6,35 +6,23 @@ using std::endl;
 // Order class constructor
 Order::Order(string order) : description(order) {}
 
-// Order class description/name accessor
+// Order class description accessor
 string Order::getDescription()
 {
     return description;
 }
 
-Deploy::Deploy(string order) : Order(order)
-{
-}
+Deploy::Deploy() : Order("Deploy") {}
 
-Advance::Advance(string order) : Order(order)
-{
-}
+Advance::Advance() : Order("Advance") {}
 
-Bomb::Bomb(string order) : Order(order)
-{
-}
+Bomb::Bomb() : Order("Bomb") {}
 
-Blockade::Blockade(string order) : Order(order)
-{
-}
+Blockade::Blockade() : Order("Blockade") {}
 
-Airlift::Airlift(string order) : Order(order)
-{
-}
+Airlift::Airlift() : Order("Airlift") {}
 
-Negotiate::Negotiate(string order) : Order(order)
-{
-}
+Negotiate::Negotiate() : Order("Negotiate") {}
 
 // issue() adds an order to the list.
 void OrdersList::issue(Order newOrder)
