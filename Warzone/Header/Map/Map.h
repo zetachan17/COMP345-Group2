@@ -57,7 +57,7 @@ public:
 	void addTerrToTerrVector(Territory* Terr);
 	int getContId(string ContName);
 	Continent* getContinent(string name);
-	void validate();
+	bool validate();
 	bool isMapConnected();
 	bool isContinentConected();
 	bool isBelongOneContinent();

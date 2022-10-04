@@ -145,9 +145,13 @@ void MapLoader::readFile()
             cout << *c;
         }
         
-        cout << *mapObj;
+        if (mapObj->validate())
+        {
+            cout << *mapObj;
+        }
+
         mapFile.close();
-        std::cin.get();
+        //std::cin.get();
     }
 }
 
@@ -257,24 +261,23 @@ Continent* Map::getContinent(string name) {
     //add default return
 }
 
-void Map::validate()
+bool Map::validate()
 {
-    if (isMapConnected())
-    {
-        cout << "YAS" << endl;
-    }
-    else
-    {
-        cout << "NA" << endl;
-    }
+    if (!isMapConnected())
+        return false;
+    if (!isContinentConected())
+        return false;
+    if (!isBelongOneContinent())
+        return false;
+
+    return true;
 }
 
 bool Map::isMapConnected()
 {
-    vector <string> visited;
-
     for (Territory* territory : TerritoryPointerArray)
     {
+        vector <string> visited;
         DFS(territory, visited);
 
         for (Territory* territory : TerritoryPointerArray)
@@ -315,6 +318,16 @@ bool Map::isContinentConected()
 
 bool Map::isBelongOneContinent()
 {
+    for (Continent* continent : ContinentPointerArray)
+    {
+        for (const Territory* territory : continent->arrOfTerrInContinent)
+        {
+            if (territory->ContinentId != continent->ContinentID)
+            {
+                return false;
+            }
+        }
+    }
     return true;
 }
 
@@ -346,7 +359,7 @@ void Map::continentDFS(const Territory* Terr, vector<string>& visited)
     {
         if (Terr->ContinentId == adjTerritory->ContinentId)
         {
-            continentDFS(adjTerritory, visited);
+            DFS(adjTerritory, visited);
         }
     }
 }
