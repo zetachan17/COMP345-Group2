@@ -59,8 +59,10 @@ public:
 	Continent* getContinent(string name);
 	void validate();
 	bool isMapConnected();
-	bool isContinentsconected();
+	bool isContinentConected();
+	bool isBelongOneContinent();
 	void DFS(const Territory* Terr, vector <string>& visited);
+	void continentDFS(const Territory* Terr, vector <string>& visited);
 	Territory* getTerrObjByName(string TerrName);
 	
 	friend class MapLoader;

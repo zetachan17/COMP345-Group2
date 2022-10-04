@@ -243,6 +243,8 @@ int Map::getContId(string ContName) {
             return x->ContinentID;
         }
     }
+    //TODO:
+    //add default return
 }
 
 Continent* Map::getContinent(string name) {
@@ -251,6 +253,8 @@ Continent* Map::getContinent(string name) {
             return x;
         }
     }
+    //TODO:
+    //add default return
 }
 
 void Map::validate()
@@ -285,9 +289,33 @@ bool Map::isMapConnected()
     return true;
 }
 
-bool Map::isContinentsconected()
+bool Map::isContinentConected()
 {
-    return false;
+    for (Continent* continent : ContinentPointerArray)
+    {
+        vector <Territory*>& continentTerritories = continent->arrOfTerrInContinent;
+
+        for (Territory* territory : continent->arrOfTerrInContinent)
+        {
+            vector <string> visited;
+            continentDFS(territory, visited);
+
+            for (Territory* territory : continentTerritories)
+            {
+                if (find(visited.begin(), visited.end(), territory->TeritorryName) == visited.end())
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Map::isBelongOneContinent()
+{
+    return true;
 }
 
 void Map::DFS(const Territory* Terr, vector <string>& visited)
@@ -305,23 +333,43 @@ void Map::DFS(const Territory* Terr, vector <string>& visited)
     }
 }
 
-Territory* Map::getTerrObjByName(string TerrName) {
-for (Territory* x : TerritoryPointerArray) {
-    if ((x->TeritorryName).compare(TerrName) == 0) {//For some reason declaring the Map class as a friend works, but not declaring the function as a friend fn
-        return x;
+void Map::continentDFS(const Territory* Terr, vector<string>& visited)
+{
+    if (find(visited.begin(), visited.end(), Terr->TeritorryName) != visited.end())
+    {
+        return;
+    }
+
+    visited.push_back(Terr->TeritorryName);
+
+    for (const Territory* adjTerritory : Terr->arrOfAdjTerritories)
+    {
+        if (Terr->ContinentId == adjTerritory->ContinentId)
+        {
+            continentDFS(adjTerritory, visited);
+        }
     }
 }
+
+Territory* Map::getTerrObjByName(string TerrName) {
+    for (Territory* x : TerritoryPointerArray) {
+        if ((x->TeritorryName).compare(TerrName) == 0) {//For some reason declaring the Map class as a friend works, but not declaring the function as a friend fn
+            return x;
+        }
+    }
+    //TODO:
+    //add default return
 }
 
 
 ostream& operator<<(ostream & os, const Map & mapObjPointer) {
-for (Continent* x : mapObjPointer.ContinentPointerArray) {
-    os << *x;//important to dereference the object as they are of type Continent* not Continent
-}
-for (Territory* y : mapObjPointer.TerritoryPointerArray) {
-    os << *y;
-}
-return os;
+    for (Continent* x : mapObjPointer.ContinentPointerArray) {
+        os << *x;//important to dereference the object as they are of type Continent* not Continent
+    }
+    for (Territory* y : mapObjPointer.TerritoryPointerArray) {
+        os << *y;
+    }
+    return os;
 }
 
 
