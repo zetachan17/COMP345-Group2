@@ -3,18 +3,18 @@
 using std::cout;
 using std::endl;
 
-void testOrdersList()
+void testOrdersLists()
 {
      OrdersList orders;
 
      // Issue some test orders to the list.
      cout << string(21, '-') << endl
           << "Issued 5 orders:\n";
-     orders.issue(Deploy());
-     orders.issue(Deploy());
-     orders.issue(Advance());
-     orders.issue(Bomb());
-     orders.issue(Negotiate());
+     orders.issue(new Deploy());
+     orders.issue(new Deploy());
+     orders.issue(new Advance());
+     orders.issue(new Bomb());
+     orders.issue(new Negotiate());
      orders.output();
      cout << string(21, '-') << endl;
 
@@ -51,10 +51,10 @@ void testOrdersList()
      cout << string(21, '-') << endl;
 
      // Issue new orders to check issueing after moving and removing.
-     orders.issue(Deploy());
-     orders.issue(Deploy());
-     orders.issue(Blockade());
-     orders.issue(Airlift());
+     orders.issue(new Deploy());
+     orders.issue(new Deploy());
+     orders.issue(new Blockade());
+     orders.issue(new Airlift());
      cout << string(21, '-') << endl
           << "Issued 4 new orders:\n";
      orders.output();

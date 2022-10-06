@@ -10,10 +10,10 @@ public:
     Order(string name);
     bool validate();
     void execute();
-    string getDescription();
+    string getName() const;
 
 private:
-    string description;
+    string name;
 };
 
 class Deploy : public Order
@@ -67,11 +67,11 @@ public:
 class OrdersList
 {
 public:
-    void issue(Order newOrder);
+    void issue(Order *newOrder);
     void move(int pos, int newPos);
     void remove(int pos);
-    void output();
+    void output() const;
 
 private:
-    vector<Order> m_Orders;
+    vector<Order *> m_Orders;
 };
