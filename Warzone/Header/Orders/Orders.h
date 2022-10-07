@@ -10,10 +10,9 @@ class Order
 {
 public:
     Order(string name);
-    bool validate();
-    void execute();
-    string getName() const;
-    friend ostream &operator<<(ostream &output, const Order &o);
+    virtual bool validate();
+    virtual void execute();
+    friend ostream &operator<<(ostream &output, const Order *o);
 
 private:
     string name;
@@ -23,7 +22,7 @@ class Deploy : public Order
 {
 public:
     Deploy();
-    bool validate();
+    bool validate() const;
     void execute();
 };
 
@@ -31,7 +30,7 @@ class Advance : public Order
 {
 public:
     Advance();
-    bool validate();
+    bool validate() const;
     void execute();
 };
 
@@ -39,7 +38,7 @@ class Bomb : public Order
 {
 public:
     Bomb();
-    bool validate();
+    bool validate() const;
     void execute();
 };
 
@@ -47,7 +46,7 @@ class Blockade : public Order
 {
 public:
     Blockade();
-    bool validate();
+    bool validate() const;
     void execute();
 };
 
@@ -55,7 +54,7 @@ class Airlift : public Order
 {
 public:
     Airlift();
-    bool validate();
+    bool validate() const;
     void execute();
 };
 
@@ -63,7 +62,7 @@ class Negotiate : public Order
 {
 public:
     Negotiate();
-    bool validate();
+    bool validate() const;
     void execute();
 };
 
@@ -73,8 +72,8 @@ public:
     void issue(Order *newOrder);
     void move(int pos, int newPos);
     void remove(int pos);
-    void output() const;
-    friend ostream &operator<<(ostream &output, const OrdersList &oList);
+    void executeNextOrder();
+    friend ostream &operator<<(ostream &output, const OrdersList *oList);
 
 private:
     vector<Order *> m_Orders;

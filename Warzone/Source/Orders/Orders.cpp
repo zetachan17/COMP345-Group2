@@ -6,28 +6,136 @@ using std::endl;
 // Order class constructor
 Order::Order(string order) : name(order) {}
 
-// Order class name accessor
-string Order::getName() const
-{
-    return name;
-}
-
 // The different kinds of orders implemented as subclasses of the Order class
 Deploy::Deploy() : Order("Deploy") {}
 
+bool Deploy::validate() const
+{
+    if (true)
+    {
+        return true;
+    }
+    else if (false)
+    {
+        return false;
+    }
+}
+
+void Deploy::execute()
+{
+    if (validate())
+    {
+    }
+}
+
 Advance::Advance() : Order("Advance") {}
+
+bool Advance::validate() const
+{
+    if (true)
+    {
+        return true;
+    }
+    else if (false)
+    {
+        return false;
+    }
+}
+
+void Advance::execute()
+{
+    if (validate())
+    {
+    }
+}
 
 Bomb::Bomb() : Order("Bomb") {}
 
+bool Bomb::validate() const
+{
+    if (true)
+    {
+        return true;
+    }
+    else if (false)
+    {
+        return false;
+    }
+}
+
+void Bomb::execute()
+{
+    if (validate())
+    {
+    }
+}
+
 Blockade::Blockade() : Order("Blockade") {}
+
+bool Blockade::validate() const
+{
+    if (true)
+    {
+        return true;
+    }
+    else if (false)
+    {
+        return false;
+    }
+}
+
+void Blockade::execute()
+{
+    if (validate())
+    {
+    }
+}
 
 Airlift::Airlift() : Order("Airlift") {}
 
+bool Airlift::validate() const
+{
+    if (true)
+    {
+        return true;
+    }
+    else if (false)
+    {
+        return false;
+    }
+}
+
+void Airlift::execute()
+{
+    if (validate())
+    {
+    }
+}
+
 Negotiate::Negotiate() : Order("Negotiate") {}
 
-ostream &operator<<(ostream &output, const Order &o)
+bool Negotiate::validate() const
 {
-    output << o.name << endl;
+    if (true)
+    {
+        return true;
+    }
+    else if (false)
+    {
+        return false;
+    }
+}
+
+void Negotiate::execute()
+{
+    if (validate())
+    {
+    }
+}
+
+ostream &operator<<(ostream &output, const Order *o)
+{
+    output << o->name << endl;
     return output;
 }
 
@@ -56,18 +164,16 @@ void OrdersList::remove(int p)
     m_Orders.erase(m_Orders.begin() + (p - 1));
 }
 
-// Outputs a list of the issued orders, in the order they were issued starting from "1."
-void OrdersList::output() const
+void OrdersList::executeNextOrder()
 {
-    int i = 1;
-    for (auto &order : m_Orders)
-        cout << i++ << ". " << *order;
+    m_Orders[0]->execute();
+    remove(1);
 }
 
-ostream &operator<<(ostream &output, const OrdersList &oList)
+ostream &operator<<(ostream &output, const OrdersList *oList)
 {
     int i = 1;
-    for (auto &order : oList.m_Orders)
-        cout << i++ << ". " << *order;
+    for (auto &order : oList->m_Orders)
+        cout << i++ << ". " << order;
     return output;
 }
