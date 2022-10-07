@@ -1,22 +1,50 @@
+#include <iostream>
 #include "GameEngine/GameEngine.h"
 
-#include <iostream>
-#include <valarray>
-#include <valarray>
+GameEngine::GameEngine()
+{
+    this->state = GameEngine::State::Start;
+}
 
-State GameEngine::StartGame(State state)
+GameEngine::GameEngine(const GameEngine& game)
+{
+    this->state = game.state;
+}
+
+GameEngine& GameEngine::operator=(const GameEngine&)
+{
+    return *this;
+}
+
+GameEngine::~GameEngine()
+{
+}
+
+std::ostream& operator<<(std::ostream& out, const GameEngine& g)
+{
+    return out;
+}
+
+std::istream& operator>>(std::istream& in, GameEngine& g)
+{
+    return in;
+}
+
+
+GameEngine::State GameEngine::StartGame(GameEngine::State state)
 {
     std::string userInput;
     
     switch (state)
     {
-    case Start:
+    case GameEngine::State::Start:
         std::cout << "Welcome to Warzone!" << std::endl;
+        std::cout << "Please enter \"loadmap\" to load map" << std::endl;
         std::cin >> userInput;
         if (userInput == "loadmap")
         {
             //loadMap();
-            state = MapLoaded;
+            state = GameEngine::State::MapLoaded;
             break;
         }
         else
@@ -24,7 +52,7 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-    case MapLoaded:
+    case GameEngine::State::MapLoaded:
         std::cout << "Map Loaded! "<< std::endl;
         std::cout << "Do you want to load another map? Y/N" << std::endl;
         std::cin >> userInput;
@@ -36,7 +64,7 @@ State GameEngine::StartGame(State state)
         else if (userInput == "N" || userInput == "n")
         {
             //validateMap();
-            state = MapValidated;
+            state = GameEngine::State::MapValidated;
             break;
         }
         else
@@ -44,13 +72,13 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-    case MapValidated:
+    case GameEngine::State::MapValidated:
         std::cout << "Add Player? Y/N" << std::endl;
         std::cin >> userInput;
         if (userInput == "Y" || userInput == "y")
         {
             //addPlayer();
-            state = PlayersAdded;
+            state = GameEngine::State::PlayersAdded;
             break;
         }
         else if (userInput == "N" || userInput == "n")
@@ -62,18 +90,18 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-    case PlayersAdded:
+    case GameEngine::State::PlayersAdded:
         std::cout << "Player Added! Want to add another player? Press N to assign countries. Y/N" << std::endl;
         std::cin >> userInput;
         
         if (userInput == "Y" || userInput == "y")
         {
-            state = MapValidated;
+            state = GameEngine::State::MapValidated;
             break;
         }
         else if (userInput == "N" || userInput == "n")
         {
-            state = AssignReinforcement;
+            state = GameEngine::State::AssignReinforcement;
             break;
         }
         else
@@ -81,14 +109,14 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-    case AssignReinforcement:
+    case GameEngine::State::AssignReinforcement:
         std::cout << "Please enter \"issueorder\" to order issue" << std::endl;
         std::cin >> userInput;
 
         if (userInput == "issueorder")
         {
             //issueOrder();
-            state = IssueOrders;
+            state = GameEngine::State::IssueOrders;
             break;
         }
         else
@@ -96,7 +124,7 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-    case IssueOrders:
+    case GameEngine::State::IssueOrders:
         std::cout << "Enter \"issueorder\" to order more issues or \"endissueorders\" to execute orders" << std::endl;
         std::cin >> userInput;
 
@@ -108,14 +136,14 @@ State GameEngine::StartGame(State state)
         else if (userInput == "endissueorders")
         {
             //executeOrder();
-            state = ExecuteOrders;
+            state = GameEngine::State::ExecuteOrders;
         }
         else
         {
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-    case ExecuteOrders:
+    case GameEngine::State::ExecuteOrders:
         std::cout << "Enter \"execorder\" to execute more orders or \"endexecorders\" to end execute orders" << std::endl;
         std::cin >> userInput;
 
@@ -126,7 +154,14 @@ State GameEngine::StartGame(State state)
         }
         else if (userInput == "endexecorders")
         {
-            state = AssignReinforcement;
+            state = GameEngine::State::AssignReinforcement;
+            break;
+        }
+        // temporary testing win condition
+        //if (/*some win condition*/)
+        else if (userInput == "win")
+        {
+            state = GameEngine::State::Win;
             break;
         }
         else
@@ -134,24 +169,18 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
-
-        //if (/*some win condition*/)
-        {
-            state = Win;
-            break;
-        }
-    case Win:
+    case GameEngine::State::Win:
         std::cout << "Want to play again? Y/N" << std::endl;
         std::cin >> userInput;
 
         if (userInput == "Y" || userInput == "y")
         {
-            state = Start;
+            state = GameEngine::State::Start;
             break;
         }
         else if (userInput == "N" || userInput == "n")
         {
-            state = End;
+            state = GameEngine::State::End;
             break;
         }
         else
@@ -159,7 +188,10 @@ State GameEngine::StartGame(State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
+    case GameEngine::State::End:
+        break;
     }
     
     return state;
 }
+

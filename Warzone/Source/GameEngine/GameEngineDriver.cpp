@@ -3,10 +3,12 @@
 
 void testGameStates()
 {
-    State currentState = Start;
-    while (currentState != End)
+    GameEngine ge;
+    GameEngine::State currentState = GameEngine::State::Start;
+    
+    while (currentState != GameEngine::State::End)
     {
-        currentState = GameEngine::StartGame(currentState);
+        currentState = ge.StartGame(currentState);
     }
     
 }
