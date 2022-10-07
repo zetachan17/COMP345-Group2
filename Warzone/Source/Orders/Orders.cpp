@@ -12,6 +12,7 @@ string Order::getName() const
     return name;
 }
 
+// The different kinds of orders implemented as subclasses of the Order class
 Deploy::Deploy() : Order("Deploy") {}
 
 Advance::Advance() : Order("Advance") {}
@@ -23,6 +24,12 @@ Blockade::Blockade() : Order("Blockade") {}
 Airlift::Airlift() : Order("Airlift") {}
 
 Negotiate::Negotiate() : Order("Negotiate") {}
+
+ostream &operator<<(ostream &output, const Order &o)
+{
+    output << o.name << endl;
+    return output;
+}
 
 // issue() adds an order to the list.
 void OrdersList::issue(Order *newOrder)
@@ -36,7 +43,7 @@ void OrdersList::issue(Order *newOrder)
 void OrdersList::move(int p, int newP)
 {
     Order *temp = m_Orders[p - 1];
-    remove(p);
+    m_Orders.erase(m_Orders.begin() + (p - 1));
     m_Orders.insert(m_Orders.begin() + (newP - 1), temp);
 }
 
@@ -45,12 +52,22 @@ void OrdersList::move(int p, int newP)
 // so the position received is subtracted by 1
 void OrdersList::remove(int p)
 {
+    delete m_Orders[p - 1];
     m_Orders.erase(m_Orders.begin() + (p - 1));
 }
 
 // Outputs a list of the issued orders, in the order they were issued starting from "1."
 void OrdersList::output() const
 {
-    for (int i = 0; i < m_Orders.size(); i++)
-        cout << (i + 1) << ". " << (*m_Orders[i]).getName() << endl;
+    int i = 1;
+    for (auto &order : m_Orders)
+        cout << i++ << ". " << *order;
+}
+
+ostream &operator<<(ostream &output, const OrdersList &oList)
+{
+    int i = 1;
+    for (auto &order : oList.m_Orders)
+        cout << i++ << ". " << *order;
+    return output;
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <iostream>
+using std::ostream;
 using std::string;
 using std::vector;
 
@@ -11,6 +13,7 @@ public:
     bool validate();
     void execute();
     string getName() const;
+    friend ostream &operator<<(ostream &output, const Order &o);
 
 private:
     string name;
@@ -71,6 +74,7 @@ public:
     void move(int pos, int newPos);
     void remove(int pos);
     void output() const;
+    friend ostream &operator<<(ostream &output, const OrdersList &oList);
 
 private:
     vector<Order *> m_Orders;
