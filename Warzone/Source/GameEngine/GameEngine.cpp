@@ -18,6 +18,7 @@ GameEngine& GameEngine::operator=(const GameEngine&)
 
 GameEngine::~GameEngine()
 {
+    std::cout << "Game engine destroyed!" << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& out, const GameEngine& g)
