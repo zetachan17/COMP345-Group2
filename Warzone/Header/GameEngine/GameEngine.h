@@ -27,7 +27,7 @@ public:
     friend std::ostream& operator << (std::ostream& out, const GameEngine& g);
     friend std::istream& operator >> (std::istream& in, GameEngine& g);
 
-    //
+    //Start the game
     State StartGame(State state);
 
 private:
