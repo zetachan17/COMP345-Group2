@@ -1,44 +1,85 @@
-#include <string>
 #include <vector>
 
 #pragma once
 
-//enum cardsType {
-//
-//	//0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
-//	bomb,
-//	reinforcement,
-//	blockade,
-//	airlift,
-//	diplomacy
-//};
-
-class Cards {
+class Player {
 
 public:
+
+};
+
+class Order {
+
+public:
+
+	int type;
+};
+
+class OrdersList {
+
+public:
+
+	void addToOrders(Order* order);
+};
+
+class Cards : public OrdersList{
+
+public:
+
+	//constructors
+	Cards();
+	Cards(const Cards& card);
+	Cards& operator=(const Cards& card);
 
 	//card type: 0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
 	int type;
-	void playCard();
-	void createOrder();
+
+	void play(Cards* card);
+	void createOrder(Cards* card);
 
 };
 
-class Deck {
+class Deck : public Cards{
 
 public:
-	void draw();
+
+	//constructors
+	Deck();
+	~Deck();
+	Deck(const Deck& card);
+	Deck& operator=(const Deck& card);
+
 	void createDeck();
 	void printDeck();
+	Cards* draw();
+	void addToDeck(Cards* card);
+
+private:
+	//creation of a vector of card pointers, this will be the deck
+	std::vector<Cards*> deckOfCards;
+	//temporary card for deck drawing
+	Cards* tempDrawCard;
 
 };
 
-class Hand {
+class Hand : public Cards{
 
 public:
-	void createHand();
-	void printHand();
-	void play();
-	friend void playCard();
 
+	//constructors
+	Hand();
+	~Hand();
+	Hand(const Hand& card);
+	Hand& operator=(const Hand& card);
+
+	void addToHand(Cards* card);
+	void printHand();
+	Cards* playCard(Deck* deck);
+
+private:
+	//creation of a vector of card pointers, this will be the player hand
+	std::vector<Cards*> cardsInHand;
+	//temporary card for playing from hand
+	Cards* tempPlayCard;
 };
+
