@@ -3,7 +3,6 @@
 using std::cout;
 using std::endl;
 
-// Order class constructor
 Order::Order(string type) : m_type(type) {}
 
 Order::Order(const Order &other)
@@ -16,6 +15,8 @@ Order *Order::clone() const
     return (new Order(*this));
 }
 
+// base Order class validate(), if ever called returns false to indicate it's not a
+// valid, specific order
 bool Order::validate() const
 {
     return false;
@@ -37,7 +38,6 @@ ostream &operator<<(ostream &output, const Order &order)
 
 Order::~Order() {}
 
-// The different kinds of orders implemented as subclasses of the Order class
 Deploy::Deploy() : Order("Deploy") {}
 
 Order *Deploy::clone() const
@@ -45,6 +45,8 @@ Order *Deploy::clone() const
     return (new Deploy(*this));
 }
 
+// validate() not fully implemented yet for part 1, simply returns true (valid) for now to
+// demonstrate it can be accessed to check validity.
 bool Deploy::validate() const
 {
     if (true)
@@ -54,10 +56,14 @@ bool Deploy::validate() const
     }
     else if (false)
     {
+        cout << *this << " order not valid.\n";
         return false;
     }
 }
 
+// execute() not fully implemented yet for part 1, for now it simply calls validate()
+// to check validity first and then prints that the order was execute.
+// If not valid, function does nothing.
 void Deploy::execute()
 {
     if (validate())
@@ -75,6 +81,8 @@ Order *Advance::clone() const
     return (new Advance(*this));
 }
 
+// validate() not fully implemented yet for part 1, simply returns true (valid) for now to
+// demonstrate it can be accessed to check validity.
 bool Advance::validate() const
 {
     if (true)
@@ -84,10 +92,14 @@ bool Advance::validate() const
     }
     else if (false)
     {
+        cout << *this << " order not valid.\n";
         return false;
     }
 }
 
+// execute() not fully implemented yet for part 1, for now it simply calls validate()
+// to check validity first and then prints that the order was execute.
+// If not valid, function does nothing.
 void Advance::execute()
 {
     if (validate())
@@ -105,6 +117,8 @@ Order *Bomb::clone() const
     return (new Bomb(*this));
 }
 
+// validate() not fully implemented yet for part 1, simply returns true (valid) for now to
+// demonstrate it can be accessed to check validity.
 bool Bomb::validate() const
 {
     if (true)
@@ -114,10 +128,14 @@ bool Bomb::validate() const
     }
     else if (false)
     {
+        cout << *this << " order not valid.\n";
         return false;
     }
 }
 
+// execute() not fully implemented yet for part 1, for now it simply calls validate()
+// to check validity first and then prints that the order was execute.
+// If not valid, function does nothing.
 void Bomb::execute()
 {
     if (validate())
@@ -135,6 +153,8 @@ Order *Blockade::clone() const
     return (new Blockade(*this));
 }
 
+// validate() not fully implemented yet for part 1, simply returns true (valid) for now to
+// demonstrate it can be accessed to check validity.
 bool Blockade::validate() const
 {
     if (true)
@@ -144,10 +164,14 @@ bool Blockade::validate() const
     }
     else if (false)
     {
+        cout << *this << " order not valid.\n";
         return false;
     }
 }
 
+// execute() not fully implemented yet for part 1, for now it simply calls validate()
+// to check validity first and then prints that the order was execute.
+// If not valid, function does nothing.
 void Blockade::execute()
 {
     if (validate())
@@ -165,6 +189,8 @@ Order *Airlift::clone() const
     return (new Airlift(*this));
 }
 
+// validate() not fully implemented yet for part 1, simply returns true (valid) for now to
+// demonstrate it can be accessed to check validity.
 bool Airlift::validate() const
 {
     if (true)
@@ -174,10 +200,14 @@ bool Airlift::validate() const
     }
     else if (false)
     {
+        cout << *this << " order not valid.\n";
         return false;
     }
 }
 
+// execute() not fully implemented yet for part 1, for now it simply calls validate()
+// to check validity first and then prints that the order was execute.
+// If not valid, function does nothing.
 void Airlift::execute()
 {
     if (validate())
@@ -195,6 +225,8 @@ Order *Negotiate::clone() const
     return (new Negotiate(*this));
 }
 
+// validate() not fully implemented yet for part 1, simply returns true (valid) for now to
+// demonstrate it can be accessed to check validity.
 bool Negotiate::validate() const
 {
     if (true)
@@ -204,10 +236,14 @@ bool Negotiate::validate() const
     }
     else if (false)
     {
+        cout << *this << " order not valid.\n";
         return false;
     }
 }
 
+// execute() not fully implemented yet for part 1, for now it simply calls validate()
+// to check validity first and then prints that the order was execute.
+// If not valid, function does nothing.
 void Negotiate::execute()
 {
     if (validate())
@@ -237,9 +273,12 @@ void OrdersList::issue(Order *newOrder)
 // starting from 1 (first order), so the positions received are subtracted by 1
 void OrdersList::move(int p, int newP)
 {
-    Order *temp = m_orders[p - 1];
-    m_orders.erase(m_orders.begin() + (p - 1));
-    m_orders.insert(m_orders.begin() + (newP - 1), temp);
+    if (!((p < 1) || (p > m_orders.size()) || (newP < 1) || (newP > m_orders.size())))
+    {
+        Order *temp = m_orders[p - 1];
+        m_orders.erase(m_orders.begin() + (p - 1));
+        m_orders.insert(m_orders.begin() + (newP - 1), temp);
+    }
 }
 
 // remove() takes in the position of an order, from a list of current orders shown to the user,
@@ -247,16 +286,22 @@ void OrdersList::move(int p, int newP)
 // so the position received is subtracted by 1
 void OrdersList::remove(int p)
 {
-    delete (m_orders[p - 1]);
-    m_orders.erase(m_orders.begin() + (p - 1));
+    if (!((p < 1) || (p > m_orders.size())))
+    {
+        delete (m_orders[p - 1]);
+        m_orders.erase(m_orders.begin() + (p - 1));
+    }
 }
 
+// executes the top order in the list (position 0 in the vector), deletes Order object
+// and removes it from the list
 void OrdersList::executeNextOrder()
 {
     m_orders[0]->execute();
     remove(1);
 }
 
+// destructor deletes every Order object and then clears the underlying vector container
 OrdersList::~OrdersList()
 {
     for (auto &order : m_orders)
@@ -264,6 +309,9 @@ OrdersList::~OrdersList()
     m_orders.clear();
 }
 
+// overloaded assignment operator, first checks if the LHS order list is empty, if not,
+// deletes its current Order objects and clears the list, then creates a hard copy of the RHS
+// order list and assigns it to the LHS OrdersList
 OrdersList &OrdersList::operator=(const OrdersList &rightSide)
 {
     if (!(this->m_orders.empty()))

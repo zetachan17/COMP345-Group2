@@ -2,6 +2,8 @@
 #include <iostream>
 using std::cout;
 
+/// Tests the functionality of the Orders & OrdersList classes.
+/// Orders are created and added to the list, removed, moved around, and then executed.
 void testOrdersLists()
 {
      cout << "** PART 3: ORDERS LIST **\n\n";
