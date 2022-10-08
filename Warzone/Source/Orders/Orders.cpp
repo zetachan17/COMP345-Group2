@@ -4,15 +4,52 @@ using std::cout;
 using std::endl;
 
 // Order class constructor
-Order::Order(string order) : name(order) {}
+Order::Order(string type) : m_type(type) {}
+
+Order::Order(const Order &other)
+{
+    m_type = other.m_type;
+}
+
+Order *Order::clone() const
+{
+    return (new Order(*this));
+}
+
+bool Order::validate() const
+{
+    return false;
+}
+
+void Order::execute() {}
+
+Order &Order::operator=(const Order &rightSide)
+{
+    m_type = rightSide.m_type;
+    return *this;
+}
+
+ostream &operator<<(ostream &output, const Order &order)
+{
+    output << order.m_type;
+    return output;
+}
+
+Order::~Order() {}
 
 // The different kinds of orders implemented as subclasses of the Order class
 Deploy::Deploy() : Order("Deploy") {}
+
+Order *Deploy::clone() const
+{
+    return (new Deploy(*this));
+}
 
 bool Deploy::validate() const
 {
     if (true)
     {
+        cout << *this << " order validated.\n";
         return true;
     }
     else if (false)
@@ -25,15 +62,24 @@ void Deploy::execute()
 {
     if (validate())
     {
+        cout << *this << " order executed.\n";
     }
 }
 
+Deploy::~Deploy() {}
+
 Advance::Advance() : Order("Advance") {}
+
+Order *Advance::clone() const
+{
+    return (new Advance(*this));
+}
 
 bool Advance::validate() const
 {
     if (true)
     {
+        cout << *this << " order validated.\n";
         return true;
     }
     else if (false)
@@ -46,15 +92,24 @@ void Advance::execute()
 {
     if (validate())
     {
+        cout << *this << " order executed.\n";
     }
 }
 
+Advance::~Advance() {}
+
 Bomb::Bomb() : Order("Bomb") {}
+
+Order *Bomb::clone() const
+{
+    return (new Bomb(*this));
+}
 
 bool Bomb::validate() const
 {
     if (true)
     {
+        cout << *this << " order validated.\n";
         return true;
     }
     else if (false)
@@ -67,15 +122,24 @@ void Bomb::execute()
 {
     if (validate())
     {
+        cout << *this << " order executed.\n";
     }
 }
 
+Bomb::~Bomb() {}
+
 Blockade::Blockade() : Order("Blockade") {}
+
+Order *Blockade::clone() const
+{
+    return (new Blockade(*this));
+}
 
 bool Blockade::validate() const
 {
     if (true)
     {
+        cout << *this << " order validated.\n";
         return true;
     }
     else if (false)
@@ -88,15 +152,24 @@ void Blockade::execute()
 {
     if (validate())
     {
+        cout << *this << " order executed.\n";
     }
 }
 
+Blockade::~Blockade() {}
+
 Airlift::Airlift() : Order("Airlift") {}
+
+Order *Airlift::clone() const
+{
+    return (new Airlift(*this));
+}
 
 bool Airlift::validate() const
 {
     if (true)
     {
+        cout << *this << " order validated.\n";
         return true;
     }
     else if (false)
@@ -109,15 +182,24 @@ void Airlift::execute()
 {
     if (validate())
     {
+        cout << *this << " order executed.\n";
     }
 }
 
+Airlift::~Airlift() {}
+
 Negotiate::Negotiate() : Order("Negotiate") {}
+
+Order *Negotiate::clone() const
+{
+    return (new Negotiate(*this));
+}
 
 bool Negotiate::validate() const
 {
     if (true)
     {
+        cout << *this << " order validated.\n";
         return true;
     }
     else if (false)
@@ -130,19 +212,24 @@ void Negotiate::execute()
 {
     if (validate())
     {
+        cout << *this << " order executed.\n";
     }
 }
 
-ostream &operator<<(ostream &output, const Order *o)
+Negotiate::~Negotiate() {}
+
+OrdersList::OrdersList() {}
+
+OrdersList::OrdersList(const OrdersList &other)
 {
-    output << o->name << endl;
-    return output;
+    for (auto &o : other.m_orders)
+        issue(o->clone());
 }
 
 // issue() adds an order to the list.
 void OrdersList::issue(Order *newOrder)
 {
-    m_Orders.push_back(newOrder);
+    m_orders.push_back(newOrder);
 }
 
 // move() takes in the current position of an order, from a list of current orders shown to the
@@ -150,9 +237,9 @@ void OrdersList::issue(Order *newOrder)
 // starting from 1 (first order), so the positions received are subtracted by 1
 void OrdersList::move(int p, int newP)
 {
-    Order *temp = m_Orders[p - 1];
-    m_Orders.erase(m_Orders.begin() + (p - 1));
-    m_Orders.insert(m_Orders.begin() + (newP - 1), temp);
+    Order *temp = m_orders[p - 1];
+    m_orders.erase(m_orders.begin() + (p - 1));
+    m_orders.insert(m_orders.begin() + (newP - 1), temp);
 }
 
 // remove() takes in the position of an order, from a list of current orders shown to the user,
@@ -160,20 +247,50 @@ void OrdersList::move(int p, int newP)
 // so the position received is subtracted by 1
 void OrdersList::remove(int p)
 {
-    delete m_Orders[p - 1];
-    m_Orders.erase(m_Orders.begin() + (p - 1));
+    delete (m_orders[p - 1]);
+    m_orders.erase(m_orders.begin() + (p - 1));
 }
 
 void OrdersList::executeNextOrder()
 {
-    m_Orders[0]->execute();
+    m_orders[0]->execute();
     remove(1);
 }
 
-ostream &operator<<(ostream &output, const OrdersList *oList)
+OrdersList::~OrdersList()
 {
-    int i = 1;
-    for (auto &order : oList->m_Orders)
-        cout << i++ << ". " << order;
-    return output;
+    for (auto &order : m_orders)
+        delete order;
+    m_orders.clear();
+}
+
+OrdersList &OrdersList::operator=(const OrdersList &rightSide)
+{
+    if (!(this->m_orders.empty()))
+    {
+        for (auto &order : m_orders)
+            delete order;
+        m_orders.clear();
+    }
+
+    for (auto &o : rightSide.m_orders)
+        issue(o->clone());
+
+    return *this;
+}
+
+ostream &operator<<(ostream &output, const OrdersList &orders)
+{
+    if (orders.m_orders.empty())
+    {
+        cout << "-ORDERS LIST EMPTY-" << endl;
+        return output;
+    }
+    else
+    {
+        int i = 1;
+        for (auto &order : orders.m_orders)
+            cout << i++ << ". " << *order << endl;
+        return output;
+    }
 }

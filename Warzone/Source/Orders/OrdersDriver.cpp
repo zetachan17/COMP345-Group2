@@ -1,62 +1,185 @@
 #include "Orders.h"
 #include <iostream>
 using std::cout;
-using std::endl;
 
 void testOrdersLists()
 {
+     cout << "** PART 3: ORDERS LIST **\n\n";
+
      OrdersList *orders = new OrdersList();
+     cout << "*Created order list*\n";
 
-     // Issue some test orders to the list.
-     cout << string(21, '-')
-          << "\nIssued 5 orders:\n";
-     orders->issue(new Deploy());
-     orders->issue(new Deploy());
-     orders->issue(new Advance());
-     orders->issue(new Bomb());
+     // testing creating orders and adding them to the list sequentially
      orders->issue(new Negotiate());
-     cout << orders
-          << string(21, '-') << endl;
-
-     // Test moving orders around with move().
-     cout << string(21, '-')
-          << "\nMoved order #4 (Bomb) to position #1:\n";
-     orders->move(4, 1);
-     cout << orders
-          << string(21, '-') << endl;
-
-     cout << string(21, '-')
-          << "\nMoved order #1 (Bomb) back to position #4:\n";
-     orders->move(1, 4);
-     cout << orders
-          << string(21, '-') << endl;
-
-     cout << string(21, '-')
-          << "\nMoved order #2 (Deploy) to position #3:\n";
-     orders->move(2, 3);
-     cout << orders
-          << string(21, '-') << endl;
-
-     // Test removing orders with remove() orders->
-     cout << string(21, '-')
-          << "\nRemoved order #3 (Deploy):\n";
-     orders->remove(3);
-     cout << orders
-          << string(21, '-') << endl;
-
-     cout << string(21, '-')
-          << "\nRemoved order #2 (Advance):\n";
-     orders->remove(2);
-     cout << orders
-          << string(21, '-') << endl;
-
-     // Issue new orders to check issueing after moving and removing.
+     orders->issue(new Bomb());
+     orders->issue(new Advance());
      orders->issue(new Deploy());
+     orders->issue(new Airlift());
+     orders->issue(new Blockade());
+     cout << "*Created & placed the 6 different orders into the orders list*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+
+     orders->issue(new Bomb());
+     orders->issue(new Airlift());
+     orders->issue(new Negotiate());
+     orders->issue(new Airlift());
+     orders->issue(new Advance());
+     cout << "*Created & placed 5 additional orders*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
+
+     // testing remove() on different orders and positions of the list
+     orders->remove(1);
+     cout << "*Removed order #1 (Negotiate)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(10);
+     cout << "*Removed order #10 (Advance)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(6);
+     cout << "*Removed order #6 (Bomb)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(3);
+     cout << "*Removed order #3 (Deploy)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(3);
+     cout << "*Removed order #3 (Airlift)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(3);
+     cout << "*Removed order #3 (Blockade)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
+
+     // testing move() on the different orders and positions of the list
+     orders->move(1, 5);
+     cout << "*Moved order #1 (Bomb) to position #5*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->move(3, 1);
+     cout << "*Moved order #3 (Negotiate) to position #1*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->move(5, 2);
+     cout << "*Moved order #5 (Bomb) to position #2*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->move(5, 1);
+     cout << "*Moved order #5 (Airlift) to position #1*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
+
+     // Testing emptying the list
+     orders->remove(1);
+     cout << "*Removed order #1 (Airlift)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(2);
+     cout << "*Removed order #2 (Bomb)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(3);
+     cout << "*Removed order #3 (Airlift)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(1);
+     cout << "*Removed order #1 (Negotiate)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->remove(1);
+     cout << "*Removed order #1 (Advance)*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     orders->issue(new Bomb());
+     orders->issue(new Advance());
+     orders->issue(new Negotiate());
      orders->issue(new Deploy());
      orders->issue(new Blockade());
      orders->issue(new Airlift());
-     cout << string(21, '-')
-          << "\nIssued 4 new orders:\n"
-          << orders
-          << string(21, '-') << endl;
+     cout << "*Added 6 different orders to the list*\n"
+          << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
+
+     // executing and validating orders
+     cout << "*Execute first order*\n";
+     orders->executeNextOrder();
+     cout << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     cout << "*Execute next order*\n";
+     orders->executeNextOrder();
+     cout << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     cout << "*Execute next order*\n";
+     orders->executeNextOrder();
+     cout << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     cout << "*Execute next order*\n";
+     orders->executeNextOrder();
+     cout << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     cout << "*Execute next order*\n";
+     orders->executeNextOrder();
+     cout << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n";
+     cout << "*Execute next order*\n";
+     orders->executeNextOrder();
+     cout << "-------------------------------------------\n"
+          << "CURRENT ORDER LIST:\n"
+          << *orders
+          << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
 }

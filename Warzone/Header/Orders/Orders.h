@@ -9,72 +9,92 @@ using std::vector;
 class Order
 {
 public:
-    Order(string name);
-    virtual bool validate();
+    Order(string type);
+    Order(const Order &other);
+    virtual Order *clone() const;
+    virtual bool validate() const;
     virtual void execute();
-    friend ostream &operator<<(ostream &output, const Order *o);
+    Order &operator=(const Order &rightSide);
+    friend ostream &operator<<(ostream &output, const Order &order);
+    virtual ~Order();
 
 private:
-    string name;
+    string m_type;
 };
 
 class Deploy : public Order
 {
 public:
     Deploy();
-    bool validate() const;
-    void execute();
+    Order *clone() const override;
+    bool validate() const override;
+    void execute() override;
+    ~Deploy();
 };
 
 class Advance : public Order
 {
 public:
     Advance();
-    bool validate() const;
-    void execute();
+    Order *clone() const override;
+    bool validate() const override;
+    void execute() override;
+    ~Advance();
 };
 
 class Bomb : public Order
 {
 public:
     Bomb();
-    bool validate() const;
-    void execute();
+    Order *clone() const override;
+    bool validate() const override;
+    void execute() override;
+    ~Bomb();
 };
 
 class Blockade : public Order
 {
 public:
     Blockade();
-    bool validate() const;
-    void execute();
+    Order *clone() const override;
+    bool validate() const override;
+    void execute() override;
+    ~Blockade();
 };
 
 class Airlift : public Order
 {
 public:
     Airlift();
-    bool validate() const;
-    void execute();
+    Order *clone() const override;
+    bool validate() const override;
+    void execute() override;
+    ~Airlift();
 };
 
 class Negotiate : public Order
 {
 public:
     Negotiate();
-    bool validate() const;
-    void execute();
+    Order *clone() const override;
+    bool validate() const override;
+    void execute() override;
+    ~Negotiate();
 };
 
 class OrdersList
 {
 public:
+    OrdersList();
+    OrdersList(const OrdersList &other);
     void issue(Order *newOrder);
     void move(int pos, int newPos);
     void remove(int pos);
     void executeNextOrder();
-    friend ostream &operator<<(ostream &output, const OrdersList *oList);
+    OrdersList &operator=(const OrdersList &rightSide);
+    friend ostream &operator<<(ostream &output, const OrdersList &orders);
+    ~OrdersList();
 
 private:
-    vector<Order *> m_Orders;
+    vector<Order *> m_orders;
 };
