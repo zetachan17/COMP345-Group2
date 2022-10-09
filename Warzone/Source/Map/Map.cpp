@@ -147,12 +147,12 @@ void MapLoader::readFile()
             }
 
         }
-       /* for (Continent* c : ContinentPointerArray) {
+        for (Continent* c : ContinentPointerArray) {
             cout << *c;
             
-        }*/
+        }
             
-            //cout << *mapObj;
+            cout << *mapObj;
         if (mapObj->isMapConnected()) {
             cout << "the map is connected!";
         }
@@ -175,6 +175,8 @@ MapLoader::MapLoader(const MapLoader& MapLObj)
     TerritoryCounter = 0;
 }
 
+
+
 MapLoader& MapLoader::operator=(const MapLoader& MapLObj)
 {
     ContinentCounter = MapLObj.ContinentCounter;
@@ -195,30 +197,31 @@ Territory::Territory(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
-    for (Territory* terri : arrOfAdjTerritories) {
+    /*for (Territory* terri : arrOfAdjTerritories) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }
+    }*/
 
 
 }
-//Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
-//    Cont = new Continent(*(MapObj.Cont));
-//    Terr = new Territory(*(MapObj.Terr));
-//    nbOfContinents = MapObj.nbOfContinents;
-//    nbOfTerritories = MapObj.nbOfTerritories;
-//    ContinentPointerArray = MapObj.ContinentPointerArray;
-//    TerritoryPointerArray = MapObj.TerritoryPointerArray;
-//
-//    return *this;
-//}
+
+Territory::~Territory() {
+    for (Territory* terr : arrOfAdjTerritories) {
+        delete terr;
+        terr = NULL;
+
+    }
+}
+
+
+
 
 Territory& Territory::operator=(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
-    for (Territory* terri : arrOfAdjTerritories) {
+   /* for (Territory* terri : arrOfAdjTerritories) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }
+    }*/
     return *this;
 }
 
@@ -245,8 +248,15 @@ Continent::Continent(const Continent& ContObj) {
     ContinentID = ContObj.ContinentID;
     ContinentName = ContObj.ContinentName;
     Bonus = ContObj.Bonus;
-    for (Territory* terri : arrOfTerrInContinent) {
+   /* for (Territory* terri : arrOfTerrInContinent) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
+    }*/
+}
+
+Continent::~Continent() {
+    for (Territory* terr:arrOfTerrInContinent) {
+        delete terr;
+        terr = NULL;
     }
 }
 
@@ -254,9 +264,9 @@ Continent& Continent::operator=(const Continent& ContObj) {
     ContinentID = ContObj.ContinentID;
     ContinentName = ContObj.ContinentName;
     Bonus = ContObj.Bonus;
-    for (Territory* terri : arrOfTerrInContinent) {
+   /* for (Territory* terri : arrOfTerrInContinent) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }
+    }*/
     return *this;
 }
 
@@ -284,6 +294,8 @@ Map::Map() {
 
 }
 
+
+
 Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map class
     Cont = new Continent(*(MapObj.Cont));
     Terr = new Territory(*(MapObj.Terr));
@@ -292,6 +304,22 @@ Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map c
     ContinentPointerArray = MapObj.ContinentPointerArray;//These are shallow copies, gotta iterate through the array of pointers to make deep copies
     TerritoryPointerArray = MapObj.TerritoryPointerArray;
 
+}
+
+Map::~Map() {
+    for (Continent* cont:ContinentPointerArray) {
+        delete cont;
+        cont = NULL;
+    }
+    for (Territory* terr:TerritoryPointerArray) {
+        delete terr;
+        terr = NULL;
+    }
+
+    delete Cont;
+    delete Terr;
+    Cont = NULL;
+    Terr = NULL;
 }
 
 Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
@@ -445,7 +473,9 @@ ostream& operator<<(ostream& os, const MapLoader& mapLoaderObj)
     return os;
 }
 
-
+MapLoader::~MapLoader() {
+    //Nothing in particular is needed here since the MapLoader class contains no data member that is a pointer
+}
 
 
 

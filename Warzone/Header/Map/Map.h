@@ -23,6 +23,8 @@ class Territory {
 		Territory(int TerrID, std::string TerrName, int ContID);
 		Territory(const Territory& TerrObj);//Copy constructor for Territory class
 
+		~Territory();
+
 		Territory& operator=(const Territory& TerrObj);
 		
 
@@ -43,8 +45,11 @@ struct Continent {
 
 	//Constructors
 	Continent(int contID, string contName, int bonus);
-	
 	Continent(const Continent& ContObj);
+
+	//Destructor
+	~Continent();
+
 	//assignment operator
 	Continent& operator=(const Continent& ContObj);
 
@@ -73,6 +78,9 @@ public:
 	//Constructors
 	Map(const Map& MapObj);
 	Map();
+
+	//Destructor
+	~Map();
 	//Overloaded assignment operator
 	Map& operator=(const Map& MapObj);
 
@@ -106,6 +114,8 @@ public:
 	void readFile();
 	MapLoader();
 	MapLoader(const MapLoader& MapLObj);
+	//Destructor
+	~MapLoader();
 	MapLoader& operator=(const MapLoader& MapLObj);
 	friend ostream& operator<<(ostream& os, const MapLoader& mapLoaderObj);
 	friend class Map;
