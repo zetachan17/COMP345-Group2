@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Player\PlayerDriver.cpp" />
     <ClCompile Include="Source\GameEngine\GameEngine.cpp" />
     <ClCompile Include="Source\Cards\Cards.cpp" />
     <ClCompile Include="Source\Map\MapDriver.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Header\Orders\OrdersDriver.h" />
     <ClInclude Include="Header\Player\Player.h" />
     <ClInclude Include="Header\Orders\Orders.h" />
+    <ClInclude Include="Header\Player\PlayerDriver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp" />
