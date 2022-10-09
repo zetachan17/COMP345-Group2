@@ -37,4 +37,3 @@ public:
 	vector<string*> cards;
 	vector<string*> ordersList;
 };
-

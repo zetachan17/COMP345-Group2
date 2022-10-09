@@ -26,6 +26,7 @@ Player::~Player()
 {
 	territories.clear();
 	cards.clear();
+	ordersList.clear();
 }
 
 Player &Player::operator=(const Player &otherPlayer)
