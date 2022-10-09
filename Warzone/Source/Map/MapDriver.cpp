@@ -9,6 +9,6 @@
 
 
 void testLoadMaps() {
-    MapLoader mapl1{};
-    mapl1.readFile();
+    MapLoader *mapl1=new MapLoader;
+    mapl1->readFile();
 }

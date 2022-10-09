@@ -147,16 +147,39 @@ void MapLoader::readFile()
             }
 
         }
-        for (Continent* c : ContinentPointerArray) {
+       /* for (Continent* c : ContinentPointerArray) {
             cout << *c;
             
-        }
+        }*/
             
-            cout << *mapObj;
+            //cout << *mapObj;
+        if (mapObj->isMapConnected()) {
+            cout << "the map is connected!";
+        }
+        if (mapObj->isContinentsconected()) {
+            cout << "the conts are connected!";
+        }
             mapFile.close();
             std::cin.get();
 
     }
+}
+
+MapLoader::MapLoader()
+{
+}
+
+MapLoader::MapLoader(const MapLoader& MapLObj)
+{
+    ContinentCounter = 0;
+    TerritoryCounter = 0;
+}
+
+MapLoader& MapLoader::operator=(const MapLoader& MapLObj)
+{
+    ContinentCounter = MapLObj.ContinentCounter;
+    TerritoryCounter = MapLObj.TerritoryCounter;
+    return *this;
 }
 
 
@@ -177,6 +200,26 @@ Territory::Territory(const Territory& TerrObj) {
     }
 
 
+}
+//Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
+//    Cont = new Continent(*(MapObj.Cont));
+//    Terr = new Territory(*(MapObj.Terr));
+//    nbOfContinents = MapObj.nbOfContinents;
+//    nbOfTerritories = MapObj.nbOfTerritories;
+//    ContinentPointerArray = MapObj.ContinentPointerArray;
+//    TerritoryPointerArray = MapObj.TerritoryPointerArray;
+//
+//    return *this;
+//}
+
+Territory& Territory::operator=(const Territory& TerrObj) {
+    territoryID = TerrObj.territoryID;
+    TeritorryName = TerrObj.TeritorryName;
+    ContinentId = TerrObj.ContinentId;
+    for (Territory* terri : arrOfAdjTerritories) {
+        terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
+    }
+    return *this;
 }
 
 ostream& operator<<(ostream & os, const Territory& TerrObj) {
@@ -205,6 +248,16 @@ Continent::Continent(const Continent& ContObj) {
     for (Territory* terri : arrOfTerrInContinent) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
     }
+}
+
+Continent& Continent::operator=(const Continent& ContObj) {
+    ContinentID = ContObj.ContinentID;
+    ContinentName = ContObj.ContinentName;
+    Bonus = ContObj.Bonus;
+    for (Territory* terri : arrOfTerrInContinent) {
+        terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
+    }
+    return *this;
 }
 
 
@@ -311,7 +364,44 @@ bool Map::isMapConnected()
 
 bool Map::isContinentsconected()
 {
-    return false;
+    for (Continent* continent : ContinentPointerArray)
+    {
+        vector <Territory*>& continentTerritories = continent->arrOfTerrInContinent;
+
+        for (Territory* territory : continent->arrOfTerrInContinent)
+        {
+            vector <string> visited;
+            continentDFS(territory, visited);
+
+            for (Territory* territory : continentTerritories)
+            {
+                if (find(visited.begin(), visited.end(), territory->TeritorryName) == visited.end())
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+void Map::continentDFS(const Territory* Terr, vector<string>& visited)
+{
+    if (find(visited.begin(), visited.end(), Terr->TeritorryName) != visited.end())
+    {
+        return;
+    }
+
+    visited.push_back(Terr->TeritorryName);
+
+    for (const Territory* adjTerritory : Terr->arrOfAdjTerritories)
+    {
+        if (Terr->ContinentId == adjTerritory->ContinentId)
+        {
+            continentDFS(adjTerritory, visited);
+        }
+    }
 }
 
 void Map::DFS(const Territory* Terr, vector <string>& visited)
@@ -348,6 +438,14 @@ for (Territory* y : mapObjPointer.TerritoryPointerArray) {
 }
 return os;
 }
+
+ostream& operator<<(ostream& os, const MapLoader& mapLoaderObj)
+{
+    os << "This is the printing statement for the MapLoader class!";
+    return os;
+}
+
+
 
 
 

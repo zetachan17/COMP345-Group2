@@ -23,6 +23,9 @@ class Territory {
 		Territory(int TerrID, std::string TerrName, int ContID);
 		Territory(const Territory& TerrObj);//Copy constructor for Territory class
 
+		Territory& operator=(const Territory& TerrObj);
+		
+
 		//methods
 		void addAdjTerr(Territory* x);
 
@@ -42,7 +45,8 @@ struct Continent {
 	Continent(int contID, string contName, int bonus);
 	
 	Continent(const Continent& ContObj);
-
+	//assignment operator
+	Continent& operator=(const Continent& ContObj);
 
 	//methods
 	void addTerritoryToContinent(Territory* terr);
@@ -81,6 +85,7 @@ public:
 	bool isMapConnected();
 	bool isContinentsconected();
 	void DFS(const Territory* Terr, vector <string>& visited);
+	void continentDFS(const Territory* Terr, vector<string>& visited);
 	Territory* getTerrObjByName(string TerrName);
 
 	
@@ -99,7 +104,10 @@ class MapLoader {
 public:
 	
 	void readFile();
-
+	MapLoader();
+	MapLoader(const MapLoader& MapLObj);
+	MapLoader& operator=(const MapLoader& MapLObj);
+	friend ostream& operator<<(ostream& os, const MapLoader& mapLoaderObj);
 	friend class Map;
 	
 };
