@@ -131,7 +131,9 @@
     <ClCompile Include="Source\Cards\CardsDriver.cpp" />
     <ClCompile Include="Source\GameEngine\GameEngine.cpp" />
     <ClCompile Include="Source\Cards\Cards.cpp" />
+    <ClCompile Include="Source\Map\MapDriver.cpp" />
     <ClCompile Include="Source\Orders\Orders.cpp" />
+    <ClCompile Include="Source\Orders\OrdersDriver.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
     <ClCompile Include="Source\Map\Map.cpp" />
     <ClCompile Include="Warzone.cpp" />
@@ -140,9 +142,15 @@
     <ClInclude Include="Header\Cards\CardsDriver.h" />
     <ClInclude Include="Header\GameEngine\GameEngine.h" />
     <ClInclude Include="Header\Cards\Cards.h" />
+    <ClInclude Include="Header\GameEngine\GameEngineDriver.h" />
     <ClInclude Include="Header\Map\Map.h" />
+    <ClInclude Include="Header\Map\MapDriver.h" />
+    <ClInclude Include="Header\Orders\OrdersDriver.h" />
     <ClInclude Include="Header\Player\Player.h" />
     <ClInclude Include="Header\Orders\Orders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
