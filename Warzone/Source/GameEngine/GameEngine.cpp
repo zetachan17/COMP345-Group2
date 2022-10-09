@@ -84,6 +84,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         }
         else if (userInput == "N" || userInput == "n")
         {
+            state = GameEngine::State::PlayersAdded;
             break;
         }
         else
@@ -97,7 +98,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         
         if (userInput == "Y" || userInput == "y")
         {
-            state = GameEngine::State::MapValidated;
+            // addPlayer();
             break;
         }
         else if (userInput == "N" || userInput == "n")
@@ -117,6 +118,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         if (userInput == "issueorder")
         {
             //issueOrder();
+            std::cout << "Reinforcements assigned!" << std::endl;
             state = GameEngine::State::IssueOrders;
             break;
         }
@@ -126,7 +128,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
             break;
         }
     case GameEngine::State::IssueOrders:
-        std::cout << "Enter \"issueorder\" to order more issues or \"endissueorders\" to execute orders" << std::endl;
+        std::cout << "Enter \"issueorder\" to issues more orders or \"endissueorders\" to execute orders" << std::endl;
         std::cin >> userInput;
 
         if (userInput == "issueorder")
