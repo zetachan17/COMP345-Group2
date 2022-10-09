@@ -16,9 +16,9 @@ Left Escape Pod=8
 Hyperdrive=12
 
 [Territories]
-Cockpit01,658,355,Cockpit,Cockpit02,Territory33
-Cockpit02,658,375,Cockpit,Cockpit01,Cockpit03,Territory33,Territory85
-Cockpit03,658,395,Cockpit,Cockpit02,Territory85
+Cockpit01,658,355,Cockpit,Cockpit03,Cockpit02
+Cockpit02,658,375,Cockpit,Cockpit01,Territory33,Territory85
+Cockpit03,658,395,Cockpit,Cockpit01,Territory85
 Territory04,205,170,Left Cargo,Territory05,Territory10,Territory69,Territory11
 Territory05,332,136,Left Cargo,Territory08,Territory06,Territory04
 Territory06,413,226,Left Cargo,Territory09,Territory05,Territory10,Territory07,Territory08
@@ -48,7 +48,7 @@ Territory29,605,548,Right Thruster,Territory30
 Territory30,621,533,Right Thruster,Territory22,Territory29
 Territory31,609,468,Right Thruster,Territory22,Territory87,Territory32
 Territory32,614,433,Right Thruster,Territory22,Territory85
-Territory33,601,350,Cockpit,Territory36,Territory35,Cockpit01,Cockpit02,Territory57,Territory85,Territory62
+Territory33,601,350,Cockpit,Territory36,Territory35,Territory57,Territory85,Territory62
 Territory35,571,358,Cockpit,Territory36,Territory33,Territory57,Territory96
 Territory36,570,392,Cockpit,Territory35,Territory33,Territory22,Territory85,Territory97
 Territory36!,451,309,Hyperdrive,Territory50,Territory101,Territory12,Territory07,Territory96,Territory92
@@ -97,7 +97,7 @@ Territory80,84,583,Right Escape Pod,Territory81,Territory82,Territory79
 Territory81,65,551,Right Escape Pod,Territory82,Territory80,Territory78
 Territory82,61,575,Right Escape Pod,Territory84,Territory81,Territory80
 Territory84,33,588,Right Escape Pod,Territory82
-Territory85,603,398,Cockpit,Territory36,Cockpit03,Territory33,Cockpit02,Territory32,Territory22
+Territory85,603,398,Cockpit,Territory36,Territory32,Territory22,Cockpit03
 Territory86,535,512,Right Thruster,Territory22,Territory23,Territory88
 Territory87,611,511,Right Thruster,Territory22,Territory27,Territory88
 Territory88,505,660,Right Thruster,Territory28,Territory86,Territory87,Territory27,Territory26,Territory25,Territory24,Territory23

@@ -93,7 +93,7 @@ void MapLoader::readFile()
             std::cout << " Continent belonged: " << ArrayTerritories[i] + " ";
                
                 
-            Territory* TerrObj = new Territory(TerritoryCounter, ArrayTerritories[i - 3], mapObj->getContId(ArrayTerritories[i]));
+            Territory* TerrObj = new Territory(TerritoryCounter, ArrayTerritories[i - 3], mapObj->getContId(ArrayTerritories[i]));//    Destructor!
                
             i++;
             std::cout << "Adj territories: ";
@@ -153,14 +153,17 @@ void MapLoader::readFile()
         }
             
             cout << *mapObj;
-        if (mapObj->isMapConnected()) {
-            cout << "the map is connected!";
-        }
+        
         if (mapObj->isContinentsconected()) {
             cout << "the conts are connected!";
+        }if (mapObj->isMapConnected()) {
+            cout << "the map is connected!";
         }
             mapFile.close();
+
+            
             std::cin.get();
+            
 
     }
 }
@@ -197,7 +200,7 @@ Territory::Territory(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
-    /*for (Territory* terri : arrOfAdjTerritories) {
+   /* for (Territory* terri : arrOfAdjTerritories) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
     }*/
 
@@ -219,9 +222,9 @@ Territory& Territory::operator=(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
-   /* for (Territory* terri : arrOfAdjTerritories) {
+    for (Territory* terri : arrOfAdjTerritories) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }*/
+    }
     return *this;
 }
 
@@ -248,9 +251,12 @@ Continent::Continent(const Continent& ContObj) {
     ContinentID = ContObj.ContinentID;
     ContinentName = ContObj.ContinentName;
     Bonus = ContObj.Bonus;
-   /* for (Territory* terri : arrOfTerrInContinent) {
+    for (Territory* terri : arrOfTerrInContinent) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }*/
+
+    }
+
+    
 }
 
 Continent::~Continent() {
@@ -264,9 +270,9 @@ Continent& Continent::operator=(const Continent& ContObj) {
     ContinentID = ContObj.ContinentID;
     ContinentName = ContObj.ContinentName;
     Bonus = ContObj.Bonus;
-   /* for (Territory* terri : arrOfTerrInContinent) {
+    for (Territory* terri : arrOfTerrInContinent) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }*/
+    }
     return *this;
 }
 
@@ -297,8 +303,8 @@ Map::Map() {
 
 
 Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map class
-    Cont = new Continent(*(MapObj.Cont));
-    Terr = new Territory(*(MapObj.Terr));
+   /* Cont = new Continent(*(MapObj.Cont));
+    Terr = new Territory(*(MapObj.Terr));*/
     nbOfContinents = MapObj.nbOfContinents;
     nbOfTerritories = MapObj.nbOfTerritories;
     ContinentPointerArray = MapObj.ContinentPointerArray;//These are shallow copies, gotta iterate through the array of pointers to make deep copies
@@ -316,18 +322,19 @@ Map::~Map() {
         terr = NULL;
     }
 
-    delete Cont;
+   /* delete Cont;
     delete Terr;
     Cont = NULL;
-    Terr = NULL;
+    Terr = NULL;*/
 }
 
 Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
-    Cont = new Continent(*(MapObj.Cont));
-    Terr = new Territory(*(MapObj.Terr));
+  /*  Cont = new Continent(*(MapObj.Cont));
+    Terr = new Territory(*(MapObj.Terr));*/
     nbOfContinents = MapObj.nbOfContinents;
     nbOfTerritories = MapObj.nbOfTerritories;
     ContinentPointerArray = MapObj.ContinentPointerArray;
+    //for(Continent* cont: ContinentPointerArray)
     TerritoryPointerArray = MapObj.TerritoryPointerArray;
     
     return *this;
@@ -410,7 +417,7 @@ bool Map::isContinentsconected()
             }
         }
     }
-
+    
     return true;
 }
 

@@ -70,8 +70,8 @@ private:
 	vector<Territory*> TerritoryPointerArray;
 	int nbOfContinents;
 	int nbOfTerritories;
-	Continent* Cont;
-	Territory* Terr;
+	/*Continent* Cont;
+	Territory* Terr;*/
 	
 
 public:
