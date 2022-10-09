@@ -81,6 +81,7 @@ void MapLoader::readFile()
             mapObj->addContToContVector(contObj);
                 
             ContinentCounter++;
+            contObj = NULL;//Avoiding dangling pointer problems at the next initialization
         }
 
         i = 0;//Resetting the counter
@@ -108,6 +109,7 @@ void MapLoader::readFile()
             }
             mapObj->addTerrToTerrVector(TerrObj);
             TerritoryCounter++;
+            TerrObj = NULL;//Avoiding dangling pointer problems at the next initialization
         }
             
         i = 0;
@@ -120,13 +122,15 @@ void MapLoader::readFile()
                 //cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
                 terr->addAdjTerr(mapObj->getTerrObjByName(ArrayTerritories[i]));
                 i++;
+               
                     
                     
             }
             if (ArrayTerritories[i].compare("|") == 0) {
                 i++;
 
-            }
+            } 
+            terr = NULL;//Avoiding dangling pointer problems at the next initialization
         }
 
         i = 0;
@@ -145,7 +149,7 @@ void MapLoader::readFile()
                 i++;
 
             }
-
+            terr = NULL;//Avoiding dangling pointer problems at the next initialization
         }
         for (Continent* c : ContinentPointerArray) {
             cout << *c;
@@ -160,9 +164,24 @@ void MapLoader::readFile()
             cout << "the map is connected!";
         }
             mapFile.close();
+            std::cin.get();
+            
+            for (Territory* terr : TerritoryPointerArray) {//Memory deallocation to avoid leaks
+                delete terr;
+                terr = NULL;
+           }
+
+            for (Continent* cont : ContinentPointerArray) {
+                delete cont;
+                cont = NULL;
+            }
+
+            delete mapObj;
+            
+            mapObj = NULL;//Handling the pointers to avoid dangling pointers
+            
 
             
-            std::cin.get();
             
 
     }
@@ -196,13 +215,15 @@ Territory::Territory(int TerrID, string TerrName, int ContID) {
 
 
 }
+/* Important note: For the copy constructors and the overloaded assignment operators, we make it possible to have deep copies, but so far for assignment 1, we have never needed to actually use them!
+This implies that even though the new keyword is written, the code is never executed so the allocation on the heap is never made. For that reason, there is no need to delete these objects and handle the pointer values (make them NULL)*/
 Territory::Territory(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
-   /* for (Territory* terri : arrOfAdjTerritories) {
+    for (Territory* terri : arrOfAdjTerritories) {
         terri = new Territory(terri->territoryID, terri->TeritorryName, terri->ContinentId);
-    }*/
+    }
 
 
 }
@@ -218,7 +239,7 @@ Territory::~Territory() {
 
 
 
-Territory& Territory::operator=(const Territory& TerrObj) {
+Territory& Territory::operator=(const Territory& TerrObj) {//Important note: Here we define 
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
     ContinentId = TerrObj.ContinentId;
@@ -303,8 +324,6 @@ Map::Map() {
 
 
 Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map class
-   /* Cont = new Continent(*(MapObj.Cont));
-    Terr = new Territory(*(MapObj.Terr));*/
     nbOfContinents = MapObj.nbOfContinents;
     nbOfTerritories = MapObj.nbOfTerritories;
     ContinentPointerArray = MapObj.ContinentPointerArray;//These are shallow copies, gotta iterate through the array of pointers to make deep copies
@@ -321,20 +340,12 @@ Map::~Map() {
         delete terr;
         terr = NULL;
     }
-
-   /* delete Cont;
-    delete Terr;
-    Cont = NULL;
-    Terr = NULL;*/
 }
 
 Map& Map::operator=(const Map& MapObj) {//generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
-  /*  Cont = new Continent(*(MapObj.Cont));
-    Terr = new Territory(*(MapObj.Terr));*/
     nbOfContinents = MapObj.nbOfContinents;
     nbOfTerritories = MapObj.nbOfTerritories;
     ContinentPointerArray = MapObj.ContinentPointerArray;
-    //for(Continent* cont: ContinentPointerArray)
     TerritoryPointerArray = MapObj.TerritoryPointerArray;
     
     return *this;
