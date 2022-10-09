@@ -42,10 +42,8 @@ std::fstream mapFile;
                         std::string substr;
                         std::getline(ss, substr, '=');
                         ArrayContinents.push_back(substr);
-
                     }
                     ArrayContinents.push_back("|");//The point of this is to add a delimiter to know when we're moving on to the data of the next territory
-                    std::cout << "" << std::endl;
                 }
                 else if (std::regex_search(currentLine, territoriesRegxp))
                 {
@@ -57,9 +55,7 @@ std::fstream mapFile;
                         ArrayTerritories.push_back(substr);
                     }
 
-                    ArrayTerritories.push_back("|");
-                    std::cout << "" << std::endl;
-
+                    ArrayTerritories.push_back("|")
                 }
             }
 
@@ -72,12 +68,9 @@ std::fstream mapFile;
                 if (ArrayContinents[i].compare("|") == 0) {
                     std::cout << "\n";
                     i++;
-
                 }
             }
-
-
-
+            
             i = 0;//Resetting the counter
             while (i < ArrayTerritories.size()) {
 
@@ -98,7 +91,7 @@ std::fstream mapFile;
             }
 
             mapFile.close();
-            std::cin.get();
+            //std::cin.get();
         }
 }
 
