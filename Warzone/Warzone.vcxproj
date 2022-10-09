@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Cards\CardsDriver.cpp" />
     <ClCompile Include="Source\GameEngine\GameEngine.cpp" />
     <ClCompile Include="Source\Cards\Cards.cpp" />
     <ClCompile Include="Source\Map\MapDriver.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="Warzone.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\Cards\CardsDriver.h" />
     <ClInclude Include="Header\GameEngine\GameEngine.h" />
     <ClInclude Include="Header\Cards\Cards.h" />
     <ClInclude Include="Header\GameEngine\GameEngineDriver.h" />
