@@ -12,27 +12,23 @@ class Territory {
 	private:
 	int territoryID;
 	string TeritorryName;
-
-	
 	vector<Territory*> arrOfAdjTerritories;
-	
-	int ContinentId;//Potentially to know which continent the territory belongs to?
+	int ContinentId;
 	
 
 	public:
 		Territory(int TerrID, std::string TerrName, int ContID);
-		Territory(const Territory& TerrObj);//Copy constructor for Territory class
-
+		//Copy constructor 
+		Territory(const Territory& TerrObj);
+		//Destructor
 		~Territory();
-
+		//Assignment operator overload
 		Territory& operator=(const Territory& TerrObj);
-		
+		//Stream operator overload
+		friend ostream& operator<<(ostream& os, const Territory& TerrObj);
 
 		//methods
 		void addAdjTerr(Territory* x);
-
-
-		friend ostream& operator<<(ostream& os, const Territory& TerrObj);
 		friend class Map;
 		friend struct Continent;
 };
@@ -43,8 +39,8 @@ struct Continent {
 	int Bonus;
 	vector<Territory*> arrOfTerrInContinent;
 
-	//Constructors
 	Continent(int contID, string contName, int bonus);
+	//Copy constructor 
 	Continent(const Continent& ContObj);
 
 	//Destructor
@@ -52,12 +48,11 @@ struct Continent {
 
 	//assignment operator
 	Continent& operator=(const Continent& ContObj);
-
-	//methods
-	void addTerritoryToContinent(Territory* terr);
-	
+	//Stream operator overload
 	friend ostream& operator<<(ostream& os, const Continent& Contobj);
 	
+	//methods
+	void addTerritoryToContinent(Territory* terr);
 	
 
 };
@@ -70,8 +65,6 @@ private:
 	vector<Territory*> TerritoryPointerArray;
 	int nbOfContinents;
 	int nbOfTerritories;
-	/*Continent* Cont;
-	Territory* Terr;*/
 	
 
 public:
@@ -84,6 +77,9 @@ public:
 	//Overloaded assignment operator
 	Map& operator=(const Map& MapObj);
 
+	//Stream operator overload
+	friend ostream& operator<<(ostream& os, const Map& mapObjPointer);
+	
 	//Methods
 	void addContToContVector(Continent* Cont);
 	void addTerrToTerrVector(Territory* Terr);
@@ -96,12 +92,7 @@ public:
 	void continentDFS(const Territory* Terr, vector<string>& visited);
 	Territory* getTerrObjByName(string TerrName);
 
-	
-
 	friend class MapLoader;
-
-	friend ostream& operator<<(ostream& os, const Map& mapObjPointer);
-
 };
 
 class MapLoader {
@@ -113,11 +104,16 @@ public:
 	
 	void readFile(string fileName);
 	MapLoader();
+	
+	//Copy Constructor
 	MapLoader(const MapLoader& MapLObj);
 	//Destructor
 	~MapLoader();
+	//Overloaded assignment operator
 	MapLoader& operator=(const MapLoader& MapLObj);
+	//Stream operator overload
 	friend ostream& operator<<(ostream& os, const MapLoader& mapLoaderObj);
+
 	friend class Map;
 	
 };
