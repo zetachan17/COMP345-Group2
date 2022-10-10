@@ -111,7 +111,7 @@ class MapLoader {
 
 public:
 	
-	void readFile();
+	void readFile(string fileName);
 	MapLoader();
 	MapLoader(const MapLoader& MapLObj);
 	//Destructor
