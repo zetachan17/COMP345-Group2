@@ -29,7 +29,6 @@ public:
 	vector<OrderStub*> orders;
 
 	OrdersListStub(vector<OrderStub*> orders);
-	//OrdersListStub& operator=(const OrdersListStub& otherPlayer);
 };
 
 class CardStub
@@ -46,7 +45,6 @@ public:
 	vector<CardStub*> cards;
 
 	HandStub(vector<CardStub*> cards);
-	//HandStub& operator=(const HandStub& otherPlayer);
 };
 
 class Player
@@ -68,7 +66,7 @@ public:
 
 	void toAttack(); // lists territories that the Player is able to attack
 
-	// issues an order by adding it to the player's orderslist.
+	// issues an order by adding it to the player's ordersList.
 	// if the order requires a card, the player's cards are checked before issuing the order
 	// the card is then removed from the player's cards
 	void issueOrder(string orderName); 

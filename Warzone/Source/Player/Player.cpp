@@ -14,17 +14,6 @@ OrdersListStub::OrdersListStub(vector<OrderStub*> orders)
 	this->orders = orders;
 }
 
-//OrdersListStub& OrdersListStub::operator=(const OrdersListStub& otherOrdersList)
-//{
-//	this->orders = vector<OrderStub*>(otherOrdersList.orders.size());
-//	for (OrderStub* order : otherOrdersList.orders)
-//	{
-//		this->orders.push_back(new OrderStub(order->name));
-//	}
-//
-//	return *this;
-//}
-
 TerritoryStub::TerritoryStub(string name)
 {
 	this->name = name;
@@ -39,17 +28,6 @@ HandStub::HandStub(vector<CardStub*> cards)
 {
 	this->cards = cards;
 }
-
-//HandStub& HandStub::operator=(const HandStub& otherHand)
-//{
-//	this->cards = vector<CardStub*>(otherHand.cards.size());
-//	for (CardStub* card : otherHand.cards)
-//	{
-//		this->cards.push_back(new CardStub(card->name));
-//	}
-//
-//	return *this;
-//}
 
 Player::Player()
 {
