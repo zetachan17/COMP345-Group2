@@ -55,7 +55,7 @@ std::fstream mapFile;
                         ArrayTerritories.push_back(substr);
                     }
 
-                    ArrayTerritories.push_back("|")
+                    ArrayTerritories.push_back("|");
                 }
             }
 

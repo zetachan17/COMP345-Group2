@@ -33,7 +33,7 @@
     <ClCompile Include="Source\GameEngine\GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Map\MapDriver.cpp">
+    <ClCompile Include="Source\Cards\CardsDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Orders\OrdersDriver.cpp">
@@ -72,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header\Player\PlayerDriver.h">
+      <Filter>Header Files</Filter>
+     </ClInclude>
+    <ClInclude Include="Header\Cards\CardsDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
