@@ -10,7 +10,7 @@
 {
     
         std::fstream mapFile;
-        mapFile.open(fileName, std::ios::in);
+        mapFile.open("001_I72_Ghtroc 720.map", std::ios::in);
         //mapFile.open("002_I72_X-29.map", std::ios::in);
 
         
@@ -73,20 +73,19 @@
                 ContinentCounter = 0;
 
                 while (i < ArrayContinents.size())
-                {//This part of the code is to be able to visualize how the arrays store the data on Continents and Territories
-                    std::cout << "Continent: " << ArrayContinents[i] + " ";
+                {
                     mapObj->nbOfContinents = ContinentCounter;//Here because we're going through all the continents,we'll assign IDs as we count them
 
                     i++;
-                    std::cout << "Bonus: " << ArrayContinents[i] + " ";
-                    Continent* contObj = new Continent(ContinentCounter, ArrayContinents[i - 1], stoi(ArrayContinents[i]));//DESTRUCTOR X
+                    
+                    Continent* contObj = new Continent(ContinentCounter, ArrayContinents[i - 1], stoi(ArrayContinents[i]));
                     i++;
                     if (ArrayContinents[i].compare("|") == 0)
                     {
                         std::cout << "\n";
                         i++;
                     }
-                    //cout << *contObj;
+                    
                     mapObj->addContToContVector(contObj);
 
                     ContinentCounter++;
@@ -97,22 +96,22 @@
                 TerritoryCounter = 0;
                 while (i < ArrayTerritories.size())
                 {
-                    std::cout << "Territory: " << ArrayTerritories[i];
+                    
                     mapObj->nbOfTerritories = TerritoryCounter;
                     i = i + 3;
-                    std::cout << " Continent belonged: " << ArrayTerritories[i] + " ";
+                    
 
 
                     Territory* TerrObj = new Territory(TerritoryCounter, ArrayTerritories[i - 3], mapObj->getContId(ArrayTerritories[i]));//    Destructor!
 
                     i++;
-                    std::cout << "Adj territories: ";
+                    
                     while (ArrayTerritories[i].compare("|") != 0) {
-                        std::cout << ArrayTerritories[i] + " ";
+                        
                         i++;
                     }
                     if (ArrayTerritories[i].compare("|") == 0) {
-                        std::cout << "\n";
+                        
                         i++;
 
                     }
@@ -125,10 +124,10 @@
                 while (i < ArrayTerritories.size()) {//Here we will create the array of ajdacent territories 
                     Territory* terr = (mapObj->getTerrObjByName(ArrayTerritories[i]));
 
-                    //cout << "For territ: " << ArrayTerritories[i]<<"\n";
+                    
                     i = i + 4;
                     while (ArrayTerritories[i].compare("|") != 0) {
-                        //cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
+                        
                         terr->addAdjTerr(mapObj->getTerrObjByName(ArrayTerritories[i]));
                         i++;
 
@@ -160,15 +159,10 @@
                     }
                     terr = NULL;//Avoiding dangling pointer problems at the next initialization
                 }
-                for (Continent* c : ContinentPointerArray) {
-                    cout << *c;
-
-                }
-
-                cout << *mapObj;
+                
 
                 if (mapObj->isContinentsconected()) {
-                    cout << "the conts are connected!";
+                    cout << "the conts are connected!"<<"\n";
                 }if (mapObj->isMapConnected()) {
                     cout << "the map is connected!";
                 }
@@ -204,45 +198,18 @@
 
 
 
-    
-        
-   
-
-        
-    
-    
-
-
-MapLoader::MapLoader()
-{
-}
-
-MapLoader::MapLoader(const MapLoader& MapLObj)
-{
-    ContinentCounter = 0;
-    TerritoryCounter = 0;
-}
 
 
 
-MapLoader& MapLoader::operator=(const MapLoader& MapLObj)
-{
-    ContinentCounter = MapLObj.ContinentCounter;
-    TerritoryCounter = MapLObj.TerritoryCounter;
-    return *this;
-}
 
 
 
-Territory::Territory(int TerrID, string TerrName, int ContID) {
-    territoryID = TerrID;
-    TeritorryName = TerrName;
-    ContinentId = ContID;
-
-
-}
 /* Important note: For the copy constructors and the overloaded assignment operators, we make it possible to have deep copies, but so far for assignment 1, we have never needed to actually use them!
 This implies that even though the new keyword is written, the code is never executed so the allocation on the heap is never made. For that reason, there is no need to delete these objects and handle the pointer values (make them NULL)*/
+
+
+
+
 Territory::Territory(const Territory& TerrObj) {
     territoryID = TerrObj.territoryID;
     TeritorryName = TerrObj.TeritorryName;
@@ -254,6 +221,13 @@ Territory::Territory(const Territory& TerrObj) {
 
 }
 
+Territory::Territory(int TerrID, string TerrName, int ContID) {
+    territoryID = TerrID;
+    TeritorryName = TerrName;
+    ContinentId = ContID;
+
+
+}
 Territory::~Territory() {
     for (Territory* terr : arrOfAdjTerritories) {
         delete terr;
@@ -261,8 +235,6 @@ Territory::~Territory() {
 
     }
 }
-
-
 
 
 Territory& Territory::operator=(const Territory& TerrObj) {//Important note: Here we define 
@@ -280,11 +252,10 @@ ostream& operator<<(ostream & os, const Territory& TerrObj) {
     return os;
 }
 
-
-
 void Territory::addAdjTerr(Territory* Terr) {
     arrOfAdjTerritories.push_back(Terr);
 }
+
 
 Continent::Continent(int contID,string contName, int bonus) {
     ContinentID = contID;
@@ -324,15 +295,9 @@ Continent& Continent::operator=(const Continent& ContObj) {
 }
 
 
-
-
 void Continent::addTerritoryToContinent(Territory* terr) {
     arrOfTerrInContinent.push_back(terr);
 }
-
-
-
-
 
 ostream& operator<<(ostream& os, const Continent& Contobj) {
     os << "Coninent: " + Contobj.ContinentName << "ID and Bonus are: " << Contobj.ContinentID << " and "<< Contobj.Bonus <<"\n\n";
@@ -347,6 +312,15 @@ Map::Map() {
 
 }
 
+ostream& operator<<(ostream & os, const Map & mapObjPointer) {
+for (Continent* x : mapObjPointer.ContinentPointerArray) {
+    os << *x;//important to dereference the object as they are of type Continent* not Continent
+}
+for (Territory* y : mapObjPointer.TerritoryPointerArray) {
+    os << *y;
+}
+return os;
+}
 
 
 Map::Map(const Map& MapObj) {//Here we define the copy constructor for the Map class
@@ -501,15 +475,7 @@ for (Territory* x : TerritoryPointerArray) {
 }
 
 
-ostream& operator<<(ostream & os, const Map & mapObjPointer) {
-for (Continent* x : mapObjPointer.ContinentPointerArray) {
-    os << *x;//important to dereference the object as they are of type Continent* not Continent
-}
-for (Territory* y : mapObjPointer.TerritoryPointerArray) {
-    os << *y;
-}
-return os;
-}
+
 
 ostream& operator<<(ostream& os, const MapLoader& mapLoaderObj)
 {
@@ -521,8 +487,23 @@ MapLoader::~MapLoader() {
     //Nothing in particular is needed here since the MapLoader class contains no data member that is a pointer
 }
 
+MapLoader::MapLoader()
+{
+}
+MapLoader::MapLoader(const MapLoader& MapLObj)
+{
+    ContinentCounter = 0;
+    TerritoryCounter = 0;
+}
 
 
+
+MapLoader& MapLoader::operator=(const MapLoader& MapLObj)
+{
+    ContinentCounter = MapLObj.ContinentCounter;
+    TerritoryCounter = MapLObj.TerritoryCounter;
+    return *this;
+}
 
 
 

@@ -9,13 +9,6 @@
 
 
 void testLoadMaps() {
-    string fileName="0";
-    
-    while (fileName.compare("null")!=0) {
-        
-        cout << "Please enter the name of the file you'd like to load, if there is no other file you would like to try, enter null : ";
-        cin >> fileName;
-        MapLoader* mapl1 = new MapLoader;
-        mapl1->readFile(fileName);
-    }
+    MapLoader* mapl1 = new MapLoader;
+    mapl1->readFile("j");
 }
