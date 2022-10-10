@@ -92,6 +92,7 @@ public:
 	void validate();
 	bool isMapConnected();
 	bool isContinentsconected();
+	bool isBelongOneContinent();
 	void DFS(const Territory* Terr, vector <string>& visited);
 	void continentDFS(const Territory* Terr, vector<string>& visited);
 	Territory* getTerrObjByName(string TerrName);

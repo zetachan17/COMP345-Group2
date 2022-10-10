@@ -13,7 +13,6 @@
         mapFile.open(fileName, std::ios::in);
         //mapFile.open("002_I72_X-29.map", std::ios::in);
 
-        
         std::vector<std::string> ArrayContinents;//We declare the arrays that store the Continents and Territory data
         std::vector<std::string> ArrayTerritories;
         vector<Continent*> ContinentPointerArray;//Here we're creating the arrays of pointers to Continent and Territory objects
@@ -53,7 +52,6 @@
                     }
 
                     ArrayTerritories.push_back("|");
-                    
                 }
                 //Above we're going to do some checks on the file before we create the map object
 
@@ -131,9 +129,6 @@
                         //cout << *(mapObj->getTerrObjByName(ArrayTerritories[i]));
                         terr->addAdjTerr(mapObj->getTerrObjByName(ArrayTerritories[i]));
                         i++;
-
-
-
                     }
                     if (ArrayTerritories[i].compare("|") == 0) {
                         i++;
@@ -167,11 +162,7 @@
 
                 cout << *mapObj;
 
-                if (mapObj->isContinentsconected()) {
-                    cout << "the conts are connected!";
-                }if (mapObj->isMapConnected()) {
-                    cout << "the map is connected!";
-                }
+                mapObj->validate();
                 mapFile.close();
                 std::cin.get();
 
@@ -188,30 +179,12 @@
                 delete mapObj;
 
                 mapObj = NULL;//Handling the pointers to avoid dangling pointers
-
-
-
-
-
             }
         }
         else {
         cout << "Error: The map file could not be opened, please try again with a different map file";
         }
-    
-
-    }
-
-
-
-    
-        
-   
-
-        
-    
-    
-
+}
 
 MapLoader::MapLoader()
 {
@@ -392,6 +365,7 @@ int Map::getContId(string ContName) {
             return x->ContinentID;
         }
     }
+    return -1;
 }
 
 Continent* Map::getContinent(string name) {
@@ -400,18 +374,20 @@ Continent* Map::getContinent(string name) {
             return x;
         }
     }
+    return nullptr;
 }
 
 void Map::validate()
 {
-    if (isMapConnected())
-    {
-        cout << "YAS" << endl;
-    }
+    if (!isMapConnected())
+        cout << "Map is not connected!" << endl;
+    else if (!isContinentsconected())
+        cout << "Continent is not connected!" << endl;
+    else if (!isBelongOneContinent())
+        cout << "Terrtory does npt belong to only on continent!" << endl;
     else
-    {
-        cout << "NA" << endl;
-    }
+        cout << "Map validated!" << endl;
+    
 }
 
 bool Map::isMapConnected()
@@ -458,6 +434,21 @@ bool Map::isContinentsconected()
     return true;
 }
 
+bool Map::isBelongOneContinent()
+{
+    for (Continent* continent : ContinentPointerArray)
+    {
+        for (const Territory* territory : continent->arrOfTerrInContinent)
+        {
+            if (territory->ContinentId != continent->ContinentID)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void Map::continentDFS(const Territory* Terr, vector<string>& visited)
 {
     if (find(visited.begin(), visited.end(), Terr->TeritorryName) != visited.end())
@@ -497,7 +488,7 @@ for (Territory* x : TerritoryPointerArray) {
         return x;
     }
 }
-
+return nullptr;
 }
 
 
