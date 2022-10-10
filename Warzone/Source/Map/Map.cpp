@@ -35,10 +35,8 @@
                         std::string substr;
                         std::getline(ss, substr, '=');
                         ArrayContinents.push_back(substr);
-
                     }
                     ArrayContinents.push_back("|");//The point of this is to add a delimiter to know when we're moving on to the data of the next Continent
-                    
                 }
 
                 else if (std::regex_search(currentLine, territoriesRegxp))
@@ -79,6 +77,7 @@
                     std::cout << "Bonus: " << ArrayContinents[i] + " ";
                     Continent* contObj = new Continent(ContinentCounter, ArrayContinents[i - 1], stoi(ArrayContinents[i]));//DESTRUCTOR X
                     i++;
+                    
                     if (ArrayContinents[i].compare("|") == 0)
                     {
                         std::cout << "\n";
@@ -457,7 +456,7 @@ void Map::continentDFS(const Territory* Terr, vector<string>& visited)
     }
 
     visited.push_back(Terr->TeritorryName);
-
+    
     for (const Territory* adjTerritory : Terr->arrOfAdjTerritories)
     {
         if (Terr->ContinentId == adjTerritory->ContinentId)
