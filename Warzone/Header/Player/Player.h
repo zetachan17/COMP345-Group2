@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Orders/Orders.h"
 #include <vector>
 #include<string>
 #include<iostream>
@@ -8,12 +7,54 @@ using std::ostream;
 using std::string;
 using std::vector;
 
+class TerritoryStub
+{
+public:
+	string name;
+
+	TerritoryStub(string name);
+};
+
+class OrderStub
+{
+public:
+	string name;
+
+	OrderStub(string name);
+};
+
+class OrdersListStub
+{
+public:
+	vector<OrderStub*> orders;
+
+	OrdersListStub(vector<OrderStub*> orders);
+	//OrdersListStub& operator=(const OrdersListStub& otherPlayer);
+};
+
+class CardStub
+{
+public:
+	string name;
+
+	CardStub(string name);
+};
+
+class HandStub
+{
+public:
+	vector<CardStub*> cards;
+
+	HandStub(vector<CardStub*> cards);
+	//HandStub& operator=(const HandStub& otherPlayer);
+};
+
 class Player
 {
 public:
 	Player(); //default constructor
 
-	Player(vector<string*> territories, vector<string*> cards, vector<string*> ordersList); // parameterized constructor
+	Player(vector<TerritoryStub*> territories, vector<CardStub*> cards, vector<OrderStub*> orders); // parameterized constructor
 	
 	Player(const Player& player); // copy constructor
 
@@ -33,7 +74,10 @@ public:
 	void issueOrder(string orderName); 
 
 //private:
-	vector<string*> territories;
-	vector<string*> cards;
-	vector<string*> ordersList;
+	vector<TerritoryStub*> territories;
+	HandStub* hand;
+	OrdersListStub* ordersList;
 };
+
+
+
