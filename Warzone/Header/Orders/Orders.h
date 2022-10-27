@@ -14,19 +14,19 @@ public:
 
     Order(const Order &other); // copy constructor
 
-    virtual Order *clone() const; // clones() creates a new order object identical to this
-                                  // order and returns a pointer to the new order
+    virtual Order *clone() const = 0; // clones() creates a new order object identical to this
+                                      // order and returns a pointer to the new order
 
     // verifies if the order is valid, each subclass overrides this function for their
     // own validity check
-    virtual bool validate() const;
+    virtual bool validate() const = 0;
 
     // executes order, checks validity first, each subclass overrides this function for their own
     // individual implementation resulting in some game action depending on the specific order
-    virtual void execute();
+    virtual void execute() = 0;
 
-    // overloaded assignment operator, returns a copy of the RHS Order object 
-    Order &operator=(const Order &rightSide); 
+    // overloaded assignment operator, returns a copy of the RHS Order object
+    Order &operator=(const Order &rightSide);
 
     // overloaded stream insertion operator, prints the order type (Deploy, Bomb, Advance, ...)
     friend ostream &operator<<(ostream &output, const Order &order);
@@ -108,11 +108,11 @@ public:
 class OrdersList
 {
 public:
-    OrdersList(); // default constructor
+    OrdersList();                           // default constructor
 
-    OrdersList(const OrdersList &other); // copy constructor
+    OrdersList(const OrdersList &other);    // copy constructor
 
-    void issue(Order *newOrder); // adds an order to list
+    void addOrder(Order *newOrder);         // adds an order to list
 
     // moves an order to a different position in the list, first int parameter represents the
     // current position of the order th ebe moved, second int indicated the target position

@@ -10,20 +10,6 @@ Order::Order(const Order &other)
     m_type = other.m_type;
 }
 
-Order *Order::clone() const
-{
-    return (new Order(*this));
-}
-
-// base Order class validate(), if ever called returns false to indicate it's not a
-// valid, specific order
-bool Order::validate() const
-{
-    return false;
-}
-
-void Order::execute() {}
-
 Order &Order::operator=(const Order &rightSide)
 {
     m_type = rightSide.m_type;
@@ -259,11 +245,11 @@ OrdersList::OrdersList() {}
 OrdersList::OrdersList(const OrdersList &other)
 {
     for (auto &o : other.m_orders)
-        issue(o->clone());
+        addOrder(o->clone());
 }
 
-// issue() adds an order to the list.
-void OrdersList::issue(Order *newOrder)
+// addOrder() adds an order to the list.
+void OrdersList::addOrder(Order *newOrder)
 {
     m_orders.push_back(newOrder);
 }
@@ -322,7 +308,7 @@ OrdersList &OrdersList::operator=(const OrdersList &rightSide)
     }
 
     for (auto &o : rightSide.m_orders)
-        issue(o->clone());
+        addOrder(o->clone());
 
     return *this;
 }

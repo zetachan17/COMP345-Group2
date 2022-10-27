@@ -13,23 +13,23 @@ void testOrdersLists()
      cout << "*Created order list*\n";
 
      // testing creating orders and adding them to the list sequentially
-     orders->issue(new Negotiate());
-     orders->issue(new Bomb());
-     orders->issue(new Advance());
-     orders->issue(new Deploy());
-     orders->issue(new Airlift());
-     orders->issue(new Blockade());
+     orders->addOrder(new Negotiate());
+     orders->addOrder(new Bomb());
+     orders->addOrder(new Advance());
+     orders->addOrder(new Deploy());
+     orders->addOrder(new Airlift());
+     orders->addOrder(new Blockade());
      cout << "*Created & placed the 6 different orders into the orders list*\n"
           << "-------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
           << "-------------------------------------------\n";
 
-     orders->issue(new Bomb());
-     orders->issue(new Airlift());
-     orders->issue(new Negotiate());
-     orders->issue(new Airlift());
-     orders->issue(new Advance());
+     orders->addOrder(new Bomb());
+     orders->addOrder(new Airlift());
+     orders->addOrder(new Negotiate());
+     orders->addOrder(new Airlift());
+     orders->addOrder(new Advance());
      cout << "*Created & placed 5 additional orders*\n"
           << "-------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
@@ -134,12 +134,12 @@ void testOrdersLists()
           << "CURRENT ORDER LIST:\n"
           << *orders
           << "-------------------------------------------\n";
-     orders->issue(new Bomb());
-     orders->issue(new Advance());
-     orders->issue(new Negotiate());
-     orders->issue(new Deploy());
-     orders->issue(new Blockade());
-     orders->issue(new Airlift());
+     orders->addOrder(new Bomb());
+     orders->addOrder(new Advance());
+     orders->addOrder(new Negotiate());
+     orders->addOrder(new Deploy());
+     orders->addOrder(new Blockade());
+     orders->addOrder(new Airlift());
      cout << "*Added 6 different orders to the list*\n"
           << "-------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
