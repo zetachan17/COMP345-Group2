@@ -377,13 +377,27 @@ Continent *Map::getContinent(string name)
 void Map::validate()
 {
     if (!isMapConnected())
+    {
         cout << "Map is not connected!" << endl;
-    else if (!isContinentsconected())
+        return;
+    }
+    cout << "Map is connected!" << endl;
+    
+    if (!isContinentsconected())
+    {
         cout << "Continent is not connected!" << endl;
-    else if (!isBelongOneContinent())
-        cout << "Terrtory does npt belong to only on continent!" << endl;
-    else
-        cout << "Map validated!" << endl;
+        return;
+    }
+    cout << "Continent is connected!" << endl;
+    
+    if (!isBelongOneContinent())
+    {
+        cout << "Terrtoriey does not belong to only on continent!" << endl;
+        return;
+    }
+    cout << "All terrtories belong to only on continent!" << endl;
+    
+    cout << "Map validated!" << endl;
 }
 
 bool Map::isMapConnected()
