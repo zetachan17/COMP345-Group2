@@ -5,7 +5,7 @@
 #include <sstream>
 #include <fstream>
 
-void MapLoader::readFile(string fileName)
+bool MapLoader::readFile(string fileName)
 {
 
     std::fstream mapFile;
@@ -87,7 +87,7 @@ void MapLoader::readFile(string fileName)
                 mapObj->addContToContVector(contObj);
 
                 ContinentCounter++;
-                contObj = NULL; // Avoiding dangling pointer problems at the next initialization
+                contObj = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0; // Resetting the counter
@@ -115,7 +115,7 @@ void MapLoader::readFile(string fileName)
                 }
                 mapObj->addTerrToTerrVector(TerrObj);
                 TerritoryCounter++;
-                TerrObj = NULL; // Avoiding dangling pointer problems at the next initialization
+                TerrObj = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0;
@@ -135,7 +135,7 @@ void MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                terr = NULL; // Avoiding dangling pointer problems at the next initialization
+                terr = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0;
@@ -156,7 +156,7 @@ void MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                terr = NULL; // Avoiding dangling pointer problems at the next initialization
+                terr = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
             for (Continent *c : ContinentPointerArray)
             {
@@ -172,23 +172,26 @@ void MapLoader::readFile(string fileName)
             for (Territory *terr : TerritoryPointerArray)
             { // Memory deallocation to avoid leaks
                 delete terr;
-                terr = NULL;
+                terr = nullptr;
             }
 
             for (Continent *cont : ContinentPointerArray)
             {
                 delete cont;
-                cont = NULL;
+                cont = nullptr;
             }
 
             delete mapObj;
 
-            mapObj = NULL; // Handling the pointers to avoid dangling pointers
+            mapObj = nullptr; // Handling the pointers to avoid dangling pointers
         }
+
+        return true;
     }
     else
     {
-        cout << "Error: The map file could not be opened, please try again with a different map file";
+        cout << "Error: The map file could not be opened, please try again with a different map file\n";
+        return false;
     }
 }
 
@@ -317,12 +320,12 @@ Map::~Map()
     for (Continent *cont : ContinentPointerArray)
     {
         delete cont;
-        cont = NULL;
+        cont = nullptr;
     }
     for (Territory *terr : TerritoryPointerArray)
     {
         delete terr;
-        terr = NULL;
+        terr = nullptr;
     }
 }
 

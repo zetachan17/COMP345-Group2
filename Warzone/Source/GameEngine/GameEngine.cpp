@@ -1,5 +1,7 @@
 #include <iostream>
 #include "GameEngine/GameEngine.h"
+#include <regex>
+#include "Map/Map.h"
 
 GameEngine::GameEngine()
 {
@@ -39,19 +41,34 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     switch (state)
     {
     case GameEngine::State::Start:
-        std::cout << "Welcome to Warzone!" << std::endl;
-        std::cout << "Please enter \"loadmap\" to load map" << std::endl;
-        std::cin >> userInput;
-        if (userInput == "loadmap")
         {
-            //loadMap();
-            state = GameEngine::State::MapLoaded;
-            break;
-        }
-        else
-        {
-            std::cout << "Invalid input, please try again!" << std::endl;
-            break;
+            std::regex loadmapRegex("loadmap ");
+            std::cout << "Welcome to Warzone!" << std::endl;
+            std::cout << "Please enter \"loadmap <filename>\" to load map" << std::endl;
+            std::getline(std::cin, userInput);
+            
+            if (std::regex_search(userInput, loadmapRegex))
+            {
+                std::size_t pos = userInput.find(" ");
+                std::string fileName = userInput.substr(pos + 1);
+                
+                //P2.1, load map file to the game
+                MapLoader *mLoader = new MapLoader;
+                if (mLoader->readFile(fileName.c_str()))
+                {
+                    state = GameEngine::State::MapLoaded;
+                    break;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                std::cout << "Invalid input, please try again!" << std::endl;
+                break;
+            }
         }
     case GameEngine::State::MapLoaded:
         std::cout << "Map Loaded! "<< std::endl;

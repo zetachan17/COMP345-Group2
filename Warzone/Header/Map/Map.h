@@ -95,7 +95,7 @@ class MapLoader
 	int TerritoryCounter;
 
 public:
-	void readFile(string fileName);
+	bool readFile(string fileName);
 	MapLoader();
 	MapLoader(const MapLoader &MapLObj);
 	// Destructor
