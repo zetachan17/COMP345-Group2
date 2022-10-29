@@ -96,8 +96,11 @@ class MapLoader
 
 public:
 	bool readFile(string fileName);
+	Map map;
+	
 	MapLoader();
 	MapLoader(const MapLoader &MapLObj);
+	Map& getMap();
 	// Destructor
 	~MapLoader();
 	MapLoader &operator=(const MapLoader &MapLObj);

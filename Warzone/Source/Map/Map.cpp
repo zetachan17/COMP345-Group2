@@ -7,7 +7,6 @@
 
 bool MapLoader::readFile(string fileName)
 {
-
     std::fstream mapFile;
     mapFile.open(fileName, std::ios::in);
     // mapFile.open("002_I72_X-29.map", std::ios::in);
@@ -64,7 +63,7 @@ bool MapLoader::readFile(string fileName)
         {
 
             Map *mapObj = new Map(); // DESTRUCTOR1
-
+            
             int i = 0;
             ContinentCounter = 0;
 
@@ -163,11 +162,10 @@ bool MapLoader::readFile(string fileName)
                 cout << *c;
             }
 
-            cout << *mapObj;
-
-            mapObj->validate();
+            map = *mapObj;
+            cout << map;
+            
             mapFile.close();
-            std::cin.get();
 
             for (Territory *terr : TerritoryPointerArray)
             { // Memory deallocation to avoid leaks
@@ -182,7 +180,6 @@ bool MapLoader::readFile(string fileName)
             }
 
             delete mapObj;
-
             mapObj = nullptr; // Handling the pointers to avoid dangling pointers
         }
 
@@ -203,6 +200,11 @@ MapLoader::MapLoader(const MapLoader &MapLObj)
 {
     ContinentCounter = 0;
     TerritoryCounter = 0;
+}
+
+Map& MapLoader::getMap()
+{
+    return map;
 }
 
 MapLoader &MapLoader::operator=(const MapLoader &MapLObj)
@@ -475,6 +477,7 @@ void Map::DFS(const Territory *Terr, vector<string> &visited)
         DFS(adjTerritory, visited);
     }
 }
+
 
 Territory *Map::getTerrObjByName(string TerrName)
 {

@@ -37,6 +37,7 @@ std::istream& operator>>(std::istream& in, GameEngine& g)
 GameEngine::State GameEngine::StartGame(GameEngine::State state)
 {
     std::string userInput;
+    MapLoader *mLoader = new MapLoader;
     
     switch (state)
     {
@@ -53,7 +54,6 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
                 std::string fileName = userInput.substr(pos + 1);
                 
                 //P2.1, load map file to the game
-                MapLoader *mLoader = new MapLoader;
                 if (mLoader->readFile(fileName.c_str()))
                 {
                     state = GameEngine::State::MapLoaded;
@@ -72,16 +72,17 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         }
     case GameEngine::State::MapLoaded:
         std::cout << "Map Loaded! "<< std::endl;
-        std::cout << "Do you want to load another map? Y/N" << std::endl;
+        std::cout << "Do you want to load another map? Press Y to load another map, Enter \"validatemap\" to validate current map" << std::endl;
         std::cin >> userInput;
         if (userInput == "Y" || userInput == "y")
         {
-            //loadMap();
+            state = GameEngine::State::Start;
             break;    
         }
-        else if (userInput == "N" || userInput == "n")
+        else if (userInput == "validatemap")
         {
-            //validateMap();
+            //P2.2, validate the map
+            mLoader->getMap().validate();
             state = GameEngine::State::MapValidated;
             break;
         }
