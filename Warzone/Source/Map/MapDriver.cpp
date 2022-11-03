@@ -21,4 +21,4 @@ void testLoadMaps()
         MapLoader* mapl1 = new MapLoader;
         mapl1->readFile(fileName);
     }
-}
+

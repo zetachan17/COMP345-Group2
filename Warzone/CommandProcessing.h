@@ -1,4 +1,4 @@
-
+#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,17 +7,17 @@ using namespace std;
 
 struct Command
 {
-	private:
-		string commandName;
-		string commandEffect;
+private:
+	string commandName;
+	string commandEffect;
 
-	public:
-		//Default constructor
-		Command();
+public:
+	//Default constructor
+	Command();
 
-		//friend class
-		friend class CommandProcessor;
-	
+	//friend class
+	friend class CommandProcessor;
+
 };
 
 
@@ -39,8 +39,7 @@ public:
 	void saveCommand(Command* command);
 	void saveEffect(string effectName);
 
-	//friend class
-	friend void testCommandProcessor();
+
 
 
 

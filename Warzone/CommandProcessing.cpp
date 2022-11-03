@@ -1,9 +1,10 @@
-#include CommandProcessing.h
+#include "CommandProcessing/CommandProcessing.h"
+#include "CommandProcessingDriver.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
-Command::Command()
+Command:: Command()
 {
 	commandName = "None";
 	commandEffect = "None";
@@ -19,4 +20,9 @@ string CommandProcessor::readCommand()
 	cout << "Please enter the command you would like to send next: ";
 
 
+}
+
+Command* CommandProcessor::getCommand()
+{
+	readCommand();
 }
