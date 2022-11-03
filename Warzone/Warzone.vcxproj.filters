@@ -33,7 +33,16 @@
     <ClCompile Include="Source\GameEngine\GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Map\MapDriver.cpp">
+    <ClCompile Include="Source\Cards\CardsDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Orders\OrdersDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,6 +60,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header\GameEngine\GameEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\GameEngine\GameEngineDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Map\MapDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Orders\OrdersDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Player\PlayerDriver.h">
+      <Filter>Header Files</Filter>
+     </ClInclude>
+    <ClInclude Include="Header\Cards\CardsDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

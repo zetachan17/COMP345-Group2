@@ -1,0 +1,326 @@
+[Map]
+image=Eurasia - WWI 1914.bmp
+wrap=no
+scroll=horizontal
+author=Don Morris
+warn=yes
+
+[Continents]
+Arabia=6
+Austria-Hungary=8
+Balkans=6
+Belgian & Portuguese Africa=3
+British India=22
+British West Africa=3
+China=25
+East Africa=7
+East Indies=8
+Egypt & Cyprus=4
+Ethiopian Empire=3
+France=11
+French Africa=8
+French IndoChina=5
+German African Territories=5
+German Empire=11
+Great Britain & Ireland=7
+Italy=8
+Japan=6
+Low Countries=2
+Mongolia & Tuva=6
+Ottoman Empire=19
+Persia & Afghanistan=4
+Philippines=3
+Russian Empire=28
+Russian in Asia=16
+Scandinavia=4
+Siam=4
+Spain & Portugal=9
+Switzerland=1
+Tibet=3
+
+[Territories]
+Al Hasa,555,455,Arabia,Nejd,Trucial Coast,Basrah
+Asir,520,539,Arabia,Nejd,Yemen,Hejaz,Empty Quarter
+Empty Quarter,591,526,Arabia,Nejd,Asir,Yemen,Trucial Coast,Bombay Presidency-Aden,Muscat & Oman
+Muscat & Oman,644,513,Arabia,Trucial Coast,Empty Quarter,Bombay Presidency-Aden,Baluchistan
+Nejd,509,459,Arabia,Asir,Al Hasa,Hejaz,Empty Quarter,Trucial Coast,Basrah,Damascus,Mosul & Dayr Al-Zur,Halab,Baghdad
+Trucial Coast,614,486,Arabia,Nejd,Al Hasa,Muscat & Oman,Empty Quarter,Iran-British Sphere
+
+Austria,230,236,Austria-Hungary,Slovakia & Ruthenia,Bohemia & Moravia,Switzerland,Hungary,Baden Wurttemberg & Hesse,Lombardy Piedmont & Venetia,Croatia & Slovenia,Bavaria
+Bohemia & Moravia,237,213,Austria-Hungary,Austria,Slovakia & Ruthenia,Saxony,Galicia,Prussia-Silesia & Posen,Bavaria
+Bosnia & Herzegovina,262,269,Austria-Hungary,Croatia & Slovenia,Serbia & Montenegro
+Croatia & Slovenia,241,256,Austria-Hungary,Austria,Bosnia & Herzegovina,Hungary,Lombardy Piedmont & Venetia,Serbia & Montenegro
+Galicia,310,212,Austria-Hungary,Slovakia & Ruthenia,Romania,Hungary,Poland,Volhynia Kiev & Podolia,Transylvania & Banat,Bohemia & Moravia,Prussia-Silesia & Posen
+Hungary,280,236,Austria-Hungary,Austria,Croatia & Slovenia,Galicia,Slovakia & Ruthenia,Transylvania & Banat,Serbia & Montenegro
+Slovakia & Ruthenia,279,221,Austria-Hungary,Austria,Bohemia & Moravia,Galicia,Hungary
+Transylvania & Banat,310,252,Austria-Hungary,Galicia,Hungary,Romania,Serbia & Montenegro
+
+Albania,283,302,Balkans,Greece,Serbia & Montenegro,Naples
+Bulgaria,323,286,Balkans,Romania,Edirne & Istanbul,Greece,Serbia & Montenegro
+Crete,326,364,Balkans,Greece,Aydin,Sicily,Cyrenaica,Cyprus
+Greece,299,324,Balkans,Crete,Albania,Bulgaria,Serbia & Montenegro,Aydin
+Romania,339,259,Balkans,Galicia,Transylvania & Banat,Bulgaria,Volhynia Kiev & Podolia,Bessarabia,Serbia & Montenegro
+Serbia & Montenegro,292,282,Balkans,Romania,Bosnia & Herzegovina,Croatia & Slovenia,Hungary,Transylvania & Banat,Albania,Bulgaria,Greece
+
+Angola,269,845,Belgian & Portuguese Africa,Belgian Congo,Katanga,Middle Congo,Gabon
+Belgian Congo,328,752,Belgian & Portuguese Africa,Angola,Katanga,Middle Congo,German East Africa,Oubangui-Shari,Ruanda-Urundi,Uganda,Sudan
+Katanga,353,832,Belgian & Portuguese Africa,Angola,Belgian Congo,German East Africa
+
+Assam,964,459,British India,Upper Burma,Bengal Presidency,Bhutan & Sikkim,Lower Burma,Wei,Kham
+Baluchistan,705,442,British India,North-West Frontier Provinces,Bombay Presidency,Punjab,Afghanistan,Muscat & Oman,Iran-British Sphere
+Bengal Presidency,930,488,British India,Assam,Bihar & Orissa,Lower Burma,Bhutan & Sikkim,Nepal
+Bhutan & Sikkim,934,448,British India,Assam,Bengal Presidency,Nepal,Wei
+Bihar & Orissa,889,489,British India,Bengal Presidency,Madras Presidency,Central Provinces,United Provinces of Agra & Oudh,Nepal
+Bombay Presidency,790,514,British India,Baluchistan,Madras Presidency,Rajputana Agency,Hyderabad,Punjab,Mysore,Central India Agency,Bombay Presidency-Aden,Central Provinces
+Bombay Presidency-Aden,566,578,British India,Empty Quarter,Muscat & Oman,Yemen,French Somaliland,Bombay Presidency
+Central India Agency,829,483,British India,Bombay Presidency,Central Provinces,Rajputana Agency,United Provinces of Agra & Oudh
+Central Provinces,854,515,British India,Bihar & Orissa,Madras Presidency,Hyderabad,Central India Agency,United Provinces of Agra & Oudh,Bombay Presidency
+Ceylon,870,660,British India,Madras Presidency,Lower Burma,Sumatra
+Hyderabad,835,561,British India,Bombay Presidency,Central Provinces,Madras Presidency,Mysore
+Kashmir,788,373,British India,North-West Frontier Provinces,Chinese Turkestan,Punjab,Ngari,Afghanistan
+Lower Burma,1001,555,British India,Assam,Bengal Presidency,Upper Burma,Ceylon,Northern Siam,Central Siam,Southern Siam
+Madras Presidency,852,602,British India,Bihar & Orissa,Bombay Presidency,Central Provinces,Hyderabad,Mysore,Travancore & Cochin,Ceylon
+Mysore,830,600,British India,Bombay Presidency,Hyderabad,Madras Presidency
+Nepal,872,440,British India,Bengal Presidency,Bhutan & Sikkim,Bihar & Orissa,United Provinces of Agra & Oudh,Ngari,Wei
+North-West Frontier Provinces,751,376,British India,Baluchistan,Kashmir,Punjab,Afghanistan
+Punjab,774,412,British India,Baluchistan,Bombay Presidency,Kashmir,North-West Frontier Provinces,Rajputana Agency,United Provinces of Agra & Oudh,Ngari
+Rajputana Agency,782,463,British India,Bombay Presidency,Central India Agency,Punjab,United Provinces of Agra & Oudh
+Travancore & Cochin,830,635,British India,Madras Presidency,Kenya
+United Provinces of Agra & Oudh,831,442,British India,Bihar & Orissa,Central Provinces,Nepal,Punjab,Rajputana Agency,Central India Agency,Ngari
+Upper Burma,998,506,British India,Assam,Lower Burma,Northern Siam,Laos,Szecgwab,Yunnan,Kham
+
+Gold Coast,96,661,British West Africa,Upper Senegal & Niger,Togoland,Ivory Coast & French Guinea
+Nigeria,180,633,British West Africa,Kamerun,Dahomey,Oubangui-Shari,Northern Nigeria,Niger
+Northern Nigeria,172,676,British West Africa,Nigeria,Kamerun,Dahomey
+
+Chekiang,1199,440,China,Kiang,Nganwhei,Fukien,Kiangsi
+Chili,1139,305,China,Shengking,Shantung,Inner Mongolia,Honan,Shansi
+Chinese Turkestan,842,322,China,Kashmir,Kokonor,Kansu,Turkmenistan,Ngari,Akmolinsk,Dzungaria,Afghanistan
+Dzungaria,859,274,China,Chinese Turkestan,Zasagt Khanate,Kansu,Akmolinsk,Omsk,Khovd
+Fukien,1185,477,China,Chekiang,Kiangsi,Kwangtung,Takasago Koku
+Hainan,1128,536,China,Kwangtung,Takasago Koku,Luzon,Annam
+Holungkiang,1122,217,China,Transbaikalia,Inner Mongolia,Amur,Kirin,Setsen Khanate
+Honan,1116,379,China,Chili,Hupeh,Shantung,Kiang,Nganwhei,Shensi,Shansi
+Hunan & Kweichow,1109,467,China,Hupeh,Szecgwab,Yunnan,Kwangsi,Kiangsi,Kwangtung
+Hupeh,1111,425,China,Honan,Hunan & Kweichow,Szecgwab,Nganwhei,Kiangsi,Shensi
+Inner Mongolia,1072,288,China,Chili,Holungkiang,Tusheet Khanate,Shengking,Sain Noyon Khanate,Kansu,Kirin,Shensi,Shansi,Setsen Khanate
+Kansu,1015,340,China,Chinese Turkestan,Dzungaria,Inner Mongolia,Szecgwab,Kokonor,Shensi,Zasagt Khanate,Sain Noyon Khanate
+Kiang,1180,386,China,Chekiang,Honan,Shantung,Nganwhei
+Kiangsi,1160,458,China,Chekiang,Fukien,Hunan & Kweichow,Hupeh,Nganwhei,Kwangtung
+Kirin,1200,269,China,Holungkiang,Inner Mongolia,Shengking,Korea,Amur,Maritime Province-Southern
+Kokonor,960,357,China,Chinese Turkestan,Kansu,Szecgwab,Ngari,Wei,Kham
+Kwangsi,1113,495,China,Hunan & Kweichow,Yunnan,Kwangtung,Tonkin
+Kwangtung,1150,498,China,Fukien,Kiangsi,Kwangsi,Hainan,Hunan & Kweichow,Tonkin
+Nganwhei,1163,408,China,Chekiang,Honan,Hupeh,Kiang,Kiangsi
+Shansi,1108,316,China,Chili,Honan,Inner Mongolia,Shensi
+Shantung,1157,360,China,Chili,Honan,Kiang,Korea
+Shengking,1182,300,China,Chili,Inner Mongolia,Kirin,Korea
+Shensi,1070,361,China,Honan,Hupeh,Inner Mongolia,Kansu,Shansi,Szecgwab
+Szecgwab,1044,421,China,Upper Burma,Hunan & Kweichow,Hupeh,Kansu,Kokonor,Shensi,Yunnan,Kham
+Yunnan,1037,483,China,Upper Burma,Hunan & Kweichow,Kwangsi,Szecgwab,Laos,Tonkin
+
+British Somaliland,539,637,East Africa,Italian Somaliland,French Somaliland,Gallaland & Somaliland
+Eritrea,472,580,East Africa,Abyssinia,Aussa,Sudan,French Somaliland,Yemen
+French Somaliland,508,616,East Africa,British Somaliland,Eritrea,Aussa,Gallaland & Somaliland,Bombay Presidency-Aden
+Italian Somaliland,545,691,East Africa,British Somaliland,Jubaland,Gallaland & Somaliland
+Jubaland,504,734,East Africa,Italian Somaliland,Gallaland & Somaliland,Kenya
+Kenya,462,736,East Africa,Jubaland,Abyssinia,German East Africa,Gallaland & Somaliland,Uganda,Sudan,Travancore & Cochin
+Uganda,417,728,East Africa,Belgian Congo,Kenya,Sudan,German East Africa,Ruanda-Urundi
+
+British Borneo,1184,711,East Indies,Dutch Borneo,Malaya,Cochin China,Mindanao,Visayas
+Celebes,1247,765,East Indies,Java,Dutch Borneo,Lesser Sunda Islands,Mindanao
+Dutch Borneo,1184,749,East Indies,Java,Celebes,Sumatra,British Borneo
+Java,1155,821,East Indies,Sumatra,Celebes,Dutch Borneo,Lesser Sunda Islands,German East Africa
+Lesser Sunda Islands,1268,832,East Indies,Java,Celebes,Netherlands New Guinea
+Malaya,1073,700,East Indies,British Borneo,Sumatra,Southern Siam,Cochin China
+Netherlands New Guinea,1408,784,East Indies,Lesser Sunda Islands,Mindanao
+Sumatra,1072,750,East Indies,Java,Malaya,Dutch Borneo,Ceylon
+
+Cyprus,406,367,Egypt & Cyprus,Egypt,Crete,Beirut,Adana
+Darfur Sultanate,343,605,Egypt & Cyprus,Sudan,Oubangui-Shari
+Egypt,363,463,Egypt & Cyprus,Cyprus,Hejaz,Sudan,Damascus,Cyrenaica,Fezzan,Oubangui-Shari
+Sudan,404,593,Egypt & Cyprus,Egypt,Darfur Sultanate,Eritrea,Uganda,Kenya,Abyssinia,Belgian Congo,Oubangui-Shari
+
+Abyssinia,459,645,Ethiopian Empire,Eritrea,Kenya,Sudan,Aussa,Gallaland & Somaliland
+Aussa,490,615,Ethiopian Empire,Eritrea,French Somaliland,Abyssinia,Gallaland & Somaliland
+Gallaland & Somaliland,510,665,Ethiopian Empire,British Somaliland,French Somaliland,Italian Somaliland,Jubaland,Kenya,Abyssinia,Aussa
+
+Algerian Southern Territories,131,449,France,Algiers,Mauritania,Upper Senegal & Niger,Fezzan,Spanish Sahara,Morocco,Tunisia,Niger
+Algiers,133,370,France,Algerian Southern Territories,Spanish Morocco,Morocco,Tunisia,Balearic Islands
+Central France,134,243,France,Eastern France,Northern France,Western France,Southern France,SouthWestern France
+Corsica,188,290,France,Southern France,Sardinia,Lombardy Piedmont & Venetia,Balearic Islands
+Eastern France,148,224,France,Central France,Northern France,Southern France,Switzerland,Alsace-Lorraine,Belgium & Luxembourg
+Morocco,52,400,France,Algerian Southern Territories,Algiers,Spanish Morocco,Spanish Sahara
+Northern France,112,219,France,Central France,Eastern France,Western France,Belgium & Luxembourg,Ireland,South East England,South West England
+SouthWestern France,118,274,France,Central France,Western France,Southern France,Catalonia & Valencia,Aragon & Navarre
+Southern France,156,268,France,Central France,Eastern France,SouthWestern France,Corsica,Switzerland,Catalonia & Valencia,Lombardy Piedmont & Venetia
+Tunisia,189,377,France,Algiers,Fezzan,Tripoltania,Algerian Southern Territories,Sicily,Sardinia
+Western France,107,247,France,Central France,Northern France,SouthWestern France
+
+Dahomey,133,634,French Africa,Nigeria,Northern Nigeria,Upper Senegal & Niger,Togoland,Niger
+Gabon,218,755,French Africa,Angola,Neukamerun,Middle Congo
+Ivory Coast & French Guinea,60,660,French Africa,Gold Coast,Upper Senegal & Niger
+Mauritania,25,526,French Africa,Algerian Southern Territories,Upper Senegal & Niger,Spanish Sahara
+Middle Congo,253,768,French Africa,Oubangui-Shari,Angola,Belgian Congo,Gabon,Neukamerun
+Niger,195,558,French Africa,Nigeria,Algerian Southern Territories,Dahomey,Upper Senegal & Niger,Fezzan,Oubangui-Shari
+Oubangui-Shari,284,603,French Africa,Middle Congo,Belgian Congo,Nigeria,Egypt,Sudan,Niger,Neukamerun,Darfur Sultanate,Kamerun,Fezzan
+Upper Senegal & Niger,83,568,French Africa,Gold Coast,Algerian Southern Territories,Dahomey,Ivory Coast & French Guinea,Mauritania,Niger,Togoland
+
+Annam,1121,580,French IndoChina,Laos,Cochin China,Cambodia,Tonkin,Hainan
+Cambodia,1092,603,French IndoChina,Annam,Isaan,Laos,Central Siam,Cochin China
+Cochin China,1108,628,French IndoChina,Annam,Cambodia,Malaya,British Borneo
+Laos,1069,539,French IndoChina,Upper Burma,Yunnan,Annam,Cambodia,Isaan,Northern Siam,Tonkin
+Tonkin,1082,511,French IndoChina,Kwangsi,Yunnan,Annam,Laos,Kwangtung
+
+German East Africa,430,801,German African Territories,Belgian Congo,Katanga,Kenya,Uganda,Ruanda-Urundi,Java
+Kamerun,226,676,German African Territories,Nigeria,Northern Nigeria,Oubangui-Shari,Neukamerun
+Neukamerun,264,688,German African Territories,Gabon,Middle Congo,Oubangui-Shari,Kamerun
+Ruanda-Urundi,394,771,German African Territories,Belgian Congo,Uganda,German East Africa
+Togoland,120,652,German African Territories,Gold Coast,Dahomey,Upper Senegal & Niger
+
+Alsace-Lorraine,171,223,German Empire,Eastern France,Switzerland,Baden Wurttemberg & Hesse,Belgium & Luxembourg,Prussia-Westphalia & Rhineland
+Baden Wurttemberg & Hesse,183,224,German Empire,Austria,Alsace-Lorraine,Prussia-Hanover & Saxony,Switzerland,Prussia-Westphalia & Rhineland,Bavaria
+Bavaria,202,220,German Empire,Austria,Bohemia & Moravia,Baden Wurttemberg & Hesse,Prussia-Hanover & Saxony,Saxony
+Mecklenburg,207,173,German Empire,Prussia-Hanover & Saxony,Prussia-Pomerania,Prussia-Brandenburg,Denmark
+Prussia-Brandenburg,225,186,German Empire,Mecklenburg,Prussia-East&West,Prussia-Hanover & Saxony,Prussia-Pomerania,Saxony,Prussia-Silesia & Posen
+Prussia-East&West,269,169,German Empire,Prussia-Brandenburg,Prussia-Pomerania,Poland,Prussia-Silesia & Posen,Vilna & Kovno
+Prussia-Hanover & Saxony,188,185,German Empire,Baden Wurttemberg & Hesse,Bavaria,Mecklenburg,Prussia-Brandenburg,Saxony,Netherlands,Prussia-Westphalia & Rhineland,Denmark
+Prussia-Pomerania,232,174,German Empire,Mecklenburg,Prussia-Brandenburg,Prussia-East&West,Sweden
+Prussia-Silesia & Posen,253,189,German Empire,Saxony,Galicia,Bohemia & Moravia,Prussia-Brandenburg,Prussia-East&West,Poland
+Prussia-Westphalia & Rhineland,167,197,German Empire,Alsace-Lorraine,Baden Wurttemberg & Hesse,Prussia-Hanover & Saxony,Netherlands,Belgium & Luxembourg
+Saxony,210,201,German Empire,Bavaria,Prussia-Silesia & Posen,Bohemia & Moravia,Prussia-Brandenburg,Prussia-Hanover & Saxony
+
+Ireland,47,175,Great Britain & Ireland,Scotland,Wales,Iceland,Galicia & Asturias,Northern France
+Midlands,99,180,Great Britain & Ireland,South East England,Northern England,Wales,South West England
+Northern England,92,165,Great Britain & Ireland,Midlands,Scotland,Denmark,Wales
+Scotland,78,143,Great Britain & Ireland,Northern England,Ireland,Norway
+South East England,107,192,Great Britain & Ireland,Midlands,South West England,Northern France,Netherlands
+South West England,87,197,Great Britain & Ireland,Midlands,South East England,Wales,Northern France
+Wales,79,185,Great Britain & Ireland,Midlands,South West England,Ireland,Northern England
+
+Cyrenaica,304,418,Italy,Fezzan,Tripoltania,Egypt,Crete
+Fezzan,237,456,Italy,Tunisia,Niger,Oubangui-Shari,Cyrenaica,Tripoltania,Egypt,Algerian Southern Territories
+Lazio Tuscany & Emilia,216,284,Italy,Sardinia,Naples,Lombardy Piedmont & Venetia
+Lombardy Piedmont & Venetia,194,260,Italy,Austria,Croatia & Slovenia,Southern France,Lazio Tuscany & Emilia,Switzerland,Corsica
+Naples,247,306,Italy,Lazio Tuscany & Emilia,Sicily,Albania
+Sardinia,188,313,Italy,Sicily,Corsica,Balearic Islands,Lazio Tuscany & Emilia,Tunisia
+Sicily,235,340,Italy,Naples,Sardinia,Tripoltania,Crete,Tunisia
+Tripoltania,241,415,Italy,Tunisia,Cyrenaica,Fezzan,Sicily
+
+Hokkaido,1326,276,Japan,Honshu,Karafuto,Maritime Province-Northern
+Honshu,1336,353,Japan,Hokkaido,Kyushu & Shikoku,Korea
+Karafuto,1283,213,Japan,Hokkaido,Maritime Province-Southern,Maritime Province-Northern
+Korea,1230,335,Japan,Honshu,Takasago Koku,Kirin,Shengking,Shantung,Maritime Province-Southern
+Kyushu & Shikoku,1289,391,Japan,Honshu,Takasago Koku
+Takasago Koku,1222,488,Japan,Korea,Kyushu & Shikoku,Fukien,Hainan,Luzon
+
+Belgium & Luxembourg,149,203,Low Countries,Eastern France,Northern France,Alsace-Lorraine,Prussia-Westphalia & Rhineland,Netherlands
+Netherlands,158,185,Low Countries,Prussia-Hanover & Saxony,Prussia-Westphalia & Rhineland,Belgium & Luxembourg,South East England
+
+Khovd,886,217,Mongolia & Tuva,Dzungaria,Zasagt Khanate,Tusheet Khanate,Irkutsk,Sain Noyon Khanate,Omsk,Urjanchai
+Sain Noyon Khanate,949,255,Mongolia & Tuva,Inner Mongolia,Khovd,Zasagt Khanate,Tusheet Khanate,Kansu
+Setsen Khanate,1050,236,Mongolia & Tuva,Holungkiang,Inner Mongolia,Tusheet Khanate,Transbaikalia
+Tusheet Khanate,1003,254,Mongolia & Tuva,Inner Mongolia,Khovd,Sain Noyon Khanate,Setsen Khanate,Transbaikalia,Irkutsk
+Urjanchai,882,191,Mongolia & Tuva,Khovd,Yeniseisk,Irkutsk,Omsk
+Zasagt Khanate,910,245,Mongolia & Tuva,Dzungaria,Khovd,Sain Noyon Khanate,Kansu
+
+Adana,416,342,Ottoman Empire,Ankara,Konya,Sivas & Marmuret el Aziz,Halab,Cyprus
+Ankara,396,317,Ottoman Empire,Adana,Bursa,Konya,Kastamonu,Sivas & Marmuret el Aziz
+Aydin,354,336,Ottoman Empire,Bursa,Konya,Greece,Crete
+Baghdad,513,391,Ottoman Empire,Nejd,Iran-Neutral Sphere,Basrah,Mosul & Dayr Al-Zur
+Basrah,534,412,Ottoman Empire,Al Hasa,Nejd,Baghdad,Iran-Neutral Sphere
+Beirut,430,382,Ottoman Empire,Damascus,Halab,Cyprus
+Bursa,368,321,Ottoman Empire,Ankara,Aydin,Konya,Kastamonu,Edirne & Istanbul
+Damascus,435,403,Ottoman Empire,Nejd,Egypt,Beirut,Hejaz,Halab
+Diyarbakir & Van,468,330,Ottoman Empire,Iran-Russian Sphere,Erzerum,Sivas & Marmuret el Aziz,Mosul & Dayr Al-Zur,Halab
+Edirne & Istanbul,349,301,Ottoman Empire,Bulgaria,Bursa,Kastamonu,Taurida Kherson & Ekaterinoslav
+Erzerum,470,315,Ottoman Empire,Diyarbakir & Van,Trabzon,Sivas & Marmuret el Aziz,Erevan & Kars,Iran-Russian Sphere
+Halab,450,355,Ottoman Empire,Nejd,Adana,Beirut,Damascus,Diyarbakir & Van,Sivas & Marmuret el Aziz,Mosul & Dayr Al-Zur
+Hejaz,475,494,Ottoman Empire,Yemen,Asir,Nejd,Egypt,Damascus
+Kastamonu,391,302,Ottoman Empire,Ankara,Bursa,Edirne & Istanbul,Trabzon,Sivas & Marmuret el Aziz
+Konya,383,339,Ottoman Empire,Adana,Ankara,Aydin,Bursa
+Mosul & Dayr Al-Zur,491,360,Ottoman Empire,Nejd,Baghdad,Diyarbakir & Van,Halab,Iran-Russian Sphere,Iran-Neutral Sphere
+Sivas & Marmuret el Aziz,426,318,Ottoman Empire,Adana,Ankara,Diyarbakir & Van,Erzerum,Halab,Kastamonu,Trabzon
+Trabzon,450,310,Ottoman Empire,Erzerum,Kastamonu,Sivas & Marmuret el Aziz,Tiflis & Kutais,Erevan & Kars,Taurida Kherson & Ekaterinoslav
+Yemen,528,571,Ottoman Empire,Hejaz,Asir,Empty Quarter,Bombay Presidency-Aden,Eritrea
+
+Afghanistan,693,383,Persia & Afghanistan,Baluchistan,Kashmir,North-West Frontier Provinces,Chinese Turkestan,Transcaspia,Bukhara Emirate,Iran-Neutral Sphere,Turkmenistan,Iran-British Sphere,Iran-Russian Sphere
+Iran-British Sphere,648,436,Persia & Afghanistan,Iran-Neutral Sphere,Afghanistan,Baluchistan,Trucial Coast
+Iran-Neutral Sphere,593,421,Persia & Afghanistan,Iran-British Sphere,Baghdad,Basrah,Mosul & Dayr Al-Zur,Afghanistan,Iran-Russian Sphere
+Iran-Russian Sphere,578,366,Persia & Afghanistan,Diyarbakir & Van,Mosul & Dayr Al-Zur,Iran-Neutral Sphere,Erevan & Kars,Baku & Elizavetpol,Transcaspia,Afghanistan,Erzerum
+
+Luzon,1240,565,Philippines,Visayas,Hainan,Takasago Koku
+Mindanao,1288,661,Philippines,Visayas,British Borneo,Celebes,Netherlands New Guinea
+Visayas,1259,620,Philippines,Luzon,Mindanao,British Borneo
+
+Arkhangelsk,439,60,Russian Empire,Vologda,Norway,Novgorod Tver & Olonets,Yaroslav Vladimir & Kostroma,Finland Grand Duchy,Tobolsk
+Baku & Elizavetpol,522,310,Russian Empire,Iran-Russian Sphere,Terek & Dagestan,Erevan & Kars,Tiflis & Kutais
+Bessarabia,357,237,Russian Empire,Romania,Volhynia Kiev & Podolia,Taurida Kherson & Ekaterinoslav
+Chernigov Kharkov & Poltava,391,212,Russian Empire,Don Cossak Host,Volhynia Kiev & Podolia,Kursk Oryol & Voronezh,Taurida Kherson & Ekaterinoslav,Minsk Grodno & Mogilev
+Don Cossak Host,457,227,Russian Empire,Chernigov Kharkov & Poltava,Ural Cossaks & Astrakhan,Kursk Oryol & Voronezh,Ekaterinodar & Stavropol,Samara Penzov & Saratov,Tula Ryazan & Tambov,Taurida Kherson & Ekaterinoslav
+Ekaterinodar & Stavropol,461,261,Russian Empire,Don Cossak Host,Terek & Dagestan,Ural Cossaks & Astrakhan,Tiflis & Kutais,Taurida Kherson & Ekaterinoslav
+Erevan & Kars,494,307,Russian Empire,Erzerum,Iran-Russian Sphere,Baku & Elizavetpol,Tiflis & Kutais,Trabzon
+Finland Grand Duchy,302,76,Russian Empire,Arkhangelsk,Sweden,Norway,Novgorod Tver & Olonets,St Petersburg Pskov & Vitebsk,Reval Livland & Kurland
+Kazan Smbirsk & Nizhny Novgorod,484,166,Russian Empire,Yaroslav Vladimir & Kostroma,Perm & Vyatka,Samara Penzov & Saratov,Orenburg & Ufa
+Kursk Oryol & Voronezh,416,196,Russian Empire,Chernigov Kharkov & Poltava,Don Cossak Host,Tula Ryazan & Tambov,Moscow Smolensk & Kaluga,Minsk Grodno & Mogilev
+Minsk Grodno & Mogilev,332,176,Russian Empire,Reval Livland & Kurland,Poland,Vilna & Kovno,Moscow Smolensk & Kaluga,Volhynia Kiev & Podolia,St Petersburg Pskov & Vitebsk,Volhynia Kiev & Podolia,Kursk Oryol & Voronezh,Chernigov Kharkov & Poltava
+Moscow Smolensk & Kaluga,366,160,Russian Empire,Kursk Oryol & Voronezh,Minsk Grodno & Mogilev,Tula Ryazan & Tambov,Novgorod Tver & Olonets,Yaroslav Vladimir & Kostroma,St Petersburg Pskov & Vitebsk
+Novgorod Tver & Olonets,366,111,Russian Empire,Arkhangelsk,Finland Grand Duchy,Moscow Smolensk & Kaluga,Yaroslav Vladimir & Kostroma,St Petersburg Pskov & Vitebsk
+Orenburg & Ufa,567,175,Russian Empire,Kazan Smbirsk & Nizhny Novgorod,Perm & Vyatka,Turgai,Tobolsk,Uralsk,Samara Penzov & Saratov
+Perm & Vyatka,547,136,Russian Empire,Kazan Smbirsk & Nizhny Novgorod,Orenburg & Ufa,Vologda,Yaroslav Vladimir & Kostroma,Tobolsk
+Poland,282,190,Russian Empire,Galicia,Prussia-East&West,Prussia-Silesia & Posen,Minsk Grodno & Mogilev,Vilna & Kovno,Volhynia Kiev & Podolia
+Reval Livland & Kurland,308,133,Russian Empire,Minsk Grodno & Mogilev,Vilna & Kovno,St Petersburg Pskov & Vitebsk,Finland Grand Duchy,Sweden
+Samara Penzov & Saratov,492,194,Russian Empire,Don Cossak Host,Kazan Smbirsk & Nizhny Novgorod,Orenburg & Ufa,Tula Ryazan & Tambov,Yaroslav Vladimir & Kostroma,Ural Cossaks & Astrakhan,Uralsk
+St Petersburg Pskov & Vitebsk,330,130,Russian Empire,Finland Grand Duchy,Minsk Grodno & Mogilev,Moscow Smolensk & Kaluga,Novgorod Tver & Olonets,Reval Livland & Kurland
+Taurida Kherson & Ekaterinoslav,397,236,Russian Empire,Bessarabia,Chernigov Kharkov & Poltava,Volhynia Kiev & Podolia,Ekaterinodar & Stavropol,Don Cossak Host,Trabzon,Edirne & Istanbul
+Terek & Dagestan,502,279,Russian Empire,Baku & Elizavetpol,Ekaterinodar & Stavropol,Ural Cossaks & Astrakhan,Tiflis & Kutais
+Tiflis & Kutais,486,293,Russian Empire,Trabzon,Baku & Elizavetpol,Ekaterinodar & Stavropol,Erevan & Kars,Terek & Dagestan
+Tula Ryazan & Tambov,427,178,Russian Empire,Kursk Oryol & Voronezh,Moscow Smolensk & Kaluga,Samara Penzov & Saratov,Yaroslav Vladimir & Kostroma,Don Cossak Host
+Ural Cossaks & Astrakhan,501,236,Russian Empire,Don Cossak Host,Ekaterinodar & Stavropol,Samara Penzov & Saratov,Terek & Dagestan,Uralsk
+Vilna & Kovno,298,158,Russian Empire,Prussia-East&West,Minsk Grodno & Mogilev,Poland,Reval Livland & Kurland
+Volhynia Kiev & Podolia,352,209,Russian Empire,Galicia,Romania,Bessarabia,Chernigov Kharkov & Poltava,Minsk Grodno & Mogilev,Poland,Taurida Kherson & Ekaterinoslav
+Vologda,486,103,Russian Empire,Arkhangelsk,Perm & Vyatka,Yaroslav Vladimir & Kostroma,Tobolsk
+Yaroslav Vladimir & Kostroma,430,144,Russian Empire,Arkhangelsk,Kazan Smbirsk & Nizhny Novgorod,Moscow Smolensk & Kaluga,Novgorod Tver & Olonets,Perm & Vyatka,Samara Penzov & Saratov,Tula Ryazan & Tambov,Vologda
+
+Akmolinsk,735,229,Russian in Asia,Chinese Turkestan,Dzungaria,Turgai,Turkmenistan,Tobolsk,Omsk
+Amur,1169,189,Russian in Asia,Holungkiang,Kirin,Transbaikalia,Yakutsk,Maritime Province-Southern
+Bukhara Emirate,695,330,Russian in Asia,Khiva Khanate,Afghanistan,Transcaspia,Turkmenistan
+Irkutsk,941,155,Russian in Asia,Khovd,Tusheet Khanate,Urjanchai,Transbaikalia,Yakutsk,Yeniseisk
+Khiva Khanate,617,294,Russian in Asia,Bukhara Emirate,Transcaspia,Turkmenistan
+Maritime Province-Northern,1348,87,Russian in Asia,Yakutsk,Maritime Province-Southern,Karafuto,Hokkaido
+Maritime Province-Southern,1239,206,Russian in Asia,Kirin,Karafuto,Amur,Maritime Province-Northern,Yakutsk,Korea
+Omsk,776,166,Russian in Asia,Dzungaria,Khovd,Urjanchai,Akmolinsk,Yeniseisk,Tobolsk
+Tobolsk,639,103,Russian in Asia,Arkhangelsk,Orenburg & Ufa,Perm & Vyatka,Vologda,Akmolinsk,Omsk,Yeniseisk,Turgai
+Transbaikalia,1024,188,Russian in Asia,Holungkiang,Setsen Khanate,Tusheet Khanate,Amur,Irkutsk,Yakutsk
+Transcaspia,610,313,Russian in Asia,Afghanistan,Iran-Russian Sphere,Bukhara Emirate,Khiva Khanate,Uralsk
+Turgai,617,220,Russian in Asia,Orenburg & Ufa,Akmolinsk,Tobolsk,Turkmenistan,Uralsk
+Turkmenistan,689,282,Russian in Asia,Chinese Turkestan,Afghanistan,Akmolinsk,Bukhara Emirate,Khiva Khanate,Turgai
+Uralsk,565,225,Russian in Asia,Orenburg & Ufa,Samara Penzov & Saratov,Ural Cossaks & Astrakhan,Transcaspia,Turgai
+Yakutsk,1081,66,Russian in Asia,Amur,Irkutsk,Maritime Province-Northern,Maritime Province-Southern,Transbaikalia,Yeniseisk
+Yeniseisk,795,54,Russian in Asia,Urjanchai,Irkutsk,Omsk,Tobolsk,Yakutsk
+
+Denmark,182,146,Scandinavia,Norway,Sweden,Mecklenburg,Prussia-Hanover & Saxony,Northern England
+Iceland,39,27,Scandinavia,Norway,Ireland
+Norway,189,79,Scandinavia,Arkhangelsk,Denmark,Finland Grand Duchy,Sweden,Iceland,Scotland
+Sweden,221,90,Scandinavia,Denmark,Norway,Finland Grand Duchy,Reval Livland & Kurland,Prussia-Pomerania
+
+Central Siam,1045,589,Siam,Southern Siam,Lower Burma,Cambodia,Isaan,Northern Siam
+Isaan,1071,568,Siam,Cambodia,Laos,Central Siam,Northern Siam
+Northern Siam,1038,557,Siam,Lower Burma,Upper Burma,Laos,Central Siam,Isaan
+Southern Siam,1044,651,Siam,Central Siam,Malaya,Lower Burma
+
+Andalusia & Extramadura,71,340,Spain & Portugal,Portugal,Castille,Catalonia & Valencia,Spanish Morocco
+Aragon & Navarre,102,291,Spain & Portugal,SouthWestern France,Galicia & Asturias,Catalonia & Valencia,Castille
+Balearic Islands,136,318,Spain & Portugal,Catalonia & Valencia,Sardinia,Corsica,Algiers
+Castille,78,307,Spain & Portugal,Andalusia & Extramadura,Aragon & Navarre,Galicia & Asturias,Portugal,Catalonia & Valencia
+Catalonia & Valencia,117,300,Spain & Portugal,Castille,Balearic Islands,SouthWestern France,Southern France,Aragon & Navarre,Andalusia & Extramadura
+Galicia & Asturias,49,282,Spain & Portugal,Aragon & Navarre,Castille,Portugal,Ireland
+Portugal,38,318,Spain & Portugal,Andalusia & Extramadura,Castille,Galicia & Asturias,Spanish Sahara
+Spanish Morocco,73,368,Spain & Portugal,Algiers,Morocco,Andalusia & Extramadura
+Spanish Sahara,10,459,Spain & Portugal,Morocco,Mauritania,Algerian Southern Territories,Portugal
+
+Switzerland,178,241,Switzerland,Austria,Eastern France,Southern France,Alsace-Lorraine,Baden Wurttemberg & Hesse,Lombardy Piedmont & Venetia
+
+Kham,975,413,Tibet,Assam,Upper Burma,Kokonor,Szecgwab,Wei
+Ngari,858,392,Tibet,Kashmir,Nepal,Punjab,United Provinces of Agra & Oudh,Chinese Turkestan,Kokonor,Wei
+Wei,922,414,Tibet,Assam,Bhutan & Sikkim,Nepal,Kokonor,Kham,Ngari
