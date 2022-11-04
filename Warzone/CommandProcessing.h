@@ -15,6 +15,9 @@ public:
 	//Default constructor
 	Command();
 
+	//Another constructor useful for the saveCommand() method
+	Command(string cmdName);
+
 	//friend class
 	friend class CommandProcessor;
 
@@ -35,13 +38,8 @@ public:
 	CommandProcessor();
 
 	//methods
-	Command* getCommand();
-	void saveCommand(Command* command);
-	void saveEffect(string effectName);
-
-
-
-
-
+	void getCommand();
+	Command* saveCommand(string cmdName);
+	//void saveEffect(string effectName);
 
 };
