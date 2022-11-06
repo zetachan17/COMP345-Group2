@@ -2,8 +2,8 @@
 #include "GameEngine/GameEngine.h"
 #include <regex>
 #include "Map/Map.h"
-
 #include "CommandProcessing/CommandProcessing.h"
+
 #include <string>
 
 GameEngine::GameEngine()
@@ -39,41 +39,29 @@ std::istream& operator>>(std::istream& in, GameEngine& g)
 
 GameEngine::State GameEngine::StartGame(GameEngine::State state)
 {
-    std::string userInput;
+  
     MapLoader *mLoader = new MapLoader;
     
-    switch (state)
-    {
-
-    case GameEngine::State::Start:
+        std::string userInput;
+        CommandProcessor* cmdP = new CommandProcessor;
+        switch (state)
         {
-            std::regex loadmapRegex("loadmap ");
+
+        case GameEngine::State::Start:
             std::cout << "Welcome to Warzone!" << std::endl;
-            std::cout << "Please enter \"loadmap <filename>\" to load map" << std::endl;
-            std::getline(std::cin, userInput);
-            
-            if (std::regex_search(userInput, loadmapRegex))
+            cmdP->getCommand();
+            //validateCommand()
+            if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") //Just making sure that this is indeed the loadmap command
             {
-                std::size_t pos = userInput.find(" ");
-                std::string fileName = userInput.substr(pos + 1);
-                
-                //P2.1, load map file to the game
-                if (mLoader->readFile(fileName.c_str()))
-                {
-                    state = GameEngine::State::MapLoaded;
-                    break;
-                }
-                else
-                {
-                    break;
-                }
+                //loadMap();
+                state = GameEngine::State::MapLoaded;
+                //saveEffect()
+                break;
             }
-            else
-            {
+            else {
                 std::cout << "Invalid input, please try again!" << std::endl;
                 break;
             }
-        }
     case GameEngine::State::MapLoaded:
         std::cout << "Map Loaded! "<< std::endl;
         std::cout << "Do you want to load another map? Press Y to load another map, Enter \"validatemap\" to validate current map" << std::endl;

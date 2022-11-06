@@ -5,6 +5,7 @@
 #include "Orders/OrdersDriver.h"
 #include "Cards/CardsDriver.h"
 #include "GameEngine/GameEngineDriver.h"
+#include "CommandProcessing.h"
 
 int main()
 {
