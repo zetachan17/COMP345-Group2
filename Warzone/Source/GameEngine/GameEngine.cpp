@@ -1,6 +1,9 @@
 #include <iostream>
 #include "GameEngine/GameEngine.h"
 
+#include "CommandProcessing/CommandProcessing.h"
+#include <string>
+
 GameEngine::GameEngine()
 {
     this->state = GameEngine::State::Start;
@@ -35,32 +38,34 @@ std::istream& operator>>(std::istream& in, GameEngine& g)
 GameEngine::State GameEngine::StartGame(GameEngine::State state)
 {
     std::string userInput;
-    
+    CommandProcessor* cmdP = new CommandProcessor;
     switch (state)
     {
+
     case GameEngine::State::Start:
         std::cout << "Welcome to Warzone!" << std::endl;
-        std::cout << "Please enter \"loadmap\" to load map" << std::endl;
-        std::cin >> userInput;
-        if (userInput == "loadmap")
+        cmdP->getCommand();
+        //validateCommand()
+        if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") //
         {
             //loadMap();
             state = GameEngine::State::MapLoaded;
+            //saveEffect()
             break;
         }
-        else
-        {
+        else {
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
+
     case GameEngine::State::MapLoaded:
-        std::cout << "Map Loaded! "<< std::endl;
+        std::cout << "Map Loaded! " << std::endl;
         std::cout << "Do you want to load another map? Y/N" << std::endl;
         std::cin >> userInput;
         if (userInput == "Y" || userInput == "y")
         {
             //loadMap();
-            break;    
+            break;
         }
         else if (userInput == "N" || userInput == "n")
         {
@@ -95,7 +100,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     case GameEngine::State::PlayersAdded:
         std::cout << "Player Added! Want to add another player? Press N to assign countries. Y/N" << std::endl;
         std::cin >> userInput;
-        
+
         if (userInput == "Y" || userInput == "y")
         {
             // addPlayer();
@@ -194,7 +199,6 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     case GameEngine::State::End:
         break;
     }
-    
+
     return state;
 }
-

@@ -1,4 +1,4 @@
-#pragma once
+#include "GameEngine/GameEngine.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,6 +20,7 @@ public:
 
 	//friend class
 	friend class CommandProcessor;
+	friend GameEngine::State GameEngine::StartGame(GameEngine::State state);
 
 };
 
@@ -41,5 +42,8 @@ public:
 	void getCommand();
 	Command* saveCommand(string cmdName);
 	//void saveEffect(string effectName);
+
+	//friends
+	friend GameEngine::State GameEngine::StartGame(GameEngine::State state);
 
 };
