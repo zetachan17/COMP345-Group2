@@ -38,34 +38,38 @@ Cards &Cards::operator=(const Cards &card)
 	return *this;
 }
 
-// function to play the card from the hand
-void Cards::play(Cards *card)
+// function to play the card from the hand. Takes card that is being played and the orderlist of the player that played it to add orders to the right list
+void Cards::play(Cards *card, OrdersList* orders)
 {
 
 	std::cout << "Played card is " << cardsType[card->type] << std::endl;
 
-	createOrder(card);
+	createOrder(card, orders);
 }
 
 // function to create an order and add it to the players' list of orders
-void Cards::createOrder(Cards *card)
+void Cards::createOrder(Cards* card, OrdersList* orders)
 {
 
 	std::cout << "Creating order for card " << cardsType[card->type] << std::endl;
 
-	Order order;
-	Order *ptrO = &order;
-	ptrO->type = card->type;
-
-	addToOrders(ptrO);
-}
-
-// function to add the created order to the players' list of orders
-void OrdersList::addToOrders(Order *order)
-{
-
-	orderVector.push_back(order);
-	std::cout << "Order for " << cardsType[order->type] << " has been added to the list." << std::endl;
+	switch (card->type) {
+		case 0:
+			orders->addOrder(new Bomb());
+			break;
+		case 1:
+			//Reinforcement
+			break;
+		case 2:
+			orders->addOrder(new Blockade());
+			break;
+		case 3:
+			orders->addOrder(new Airlift());
+			break;
+		case 4:
+			orders->addOrder(new Negotiate());
+			break;
+	}
 }
 
 // Deck constructors

@@ -40,7 +40,8 @@ void testCards()
 	std::cout << "Playing cards (all 10)." << std::endl;
 	for (int i = 0; i < 10; i++)
 	{
-		ptrC1->play(ptrH1->playCard(ptrD1));
+		//commented out for order list
+		//ptrC1->play(ptrH1->playCard(ptrD1));
 	}
 
 	std::cout << "Printing Deck after playing cards." << std::endl;

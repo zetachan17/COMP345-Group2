@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Orders/Orders.h"
 
 class Player
 {
@@ -7,21 +8,7 @@ class Player
 public:
 };
 
-class Order
-{
-
-public:
-	int type;
-};
-
-class OrdersList
-{
-
-public:
-	void addToOrders(Order *order);
-};
-
-class Cards : public OrdersList
+class Cards
 {
 
 public:
@@ -33,8 +20,8 @@ public:
 	// card type: 0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
 	int type;
 
-	void play(Cards *card);
-	void createOrder(Cards *card);
+	void play(Cards* card, OrdersList* orders);
+	void createOrder(Cards *card, OrdersList* orders);
 };
 
 class Deck : public Cards
