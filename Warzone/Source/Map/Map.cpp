@@ -5,9 +5,8 @@
 #include <sstream>
 #include <fstream>
 
-void MapLoader::readFile(string fileName)
+bool MapLoader::readFile(string fileName)
 {
-
     std::fstream mapFile;
     mapFile.open(fileName, std::ios::in);
     // mapFile.open("002_I72_X-29.map", std::ios::in);
@@ -64,7 +63,7 @@ void MapLoader::readFile(string fileName)
         {
 
             Map *mapObj = new Map(); // DESTRUCTOR1
-
+            
             int i = 0;
             ContinentCounter = 0;
 
@@ -87,7 +86,7 @@ void MapLoader::readFile(string fileName)
                 mapObj->addContToContVector(contObj);
 
                 ContinentCounter++;
-                contObj = NULL; // Avoiding dangling pointer problems at the next initialization
+                contObj = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0; // Resetting the counter
@@ -115,7 +114,7 @@ void MapLoader::readFile(string fileName)
                 }
                 mapObj->addTerrToTerrVector(TerrObj);
                 TerritoryCounter++;
-                TerrObj = NULL; // Avoiding dangling pointer problems at the next initialization
+                TerrObj = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0;
@@ -135,7 +134,7 @@ void MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                terr = NULL; // Avoiding dangling pointer problems at the next initialization
+                terr = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0;
@@ -156,39 +155,40 @@ void MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                terr = NULL; // Avoiding dangling pointer problems at the next initialization
+                terr = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
             for (Continent *c : ContinentPointerArray)
             {
                 cout << *c;
             }
 
-            cout << *mapObj;
-
-            mapObj->validate();
+            map = *mapObj;
+            cout << map;
+            
             mapFile.close();
-            std::cin.get();
 
             for (Territory *terr : TerritoryPointerArray)
             { // Memory deallocation to avoid leaks
                 delete terr;
-                terr = NULL;
+                terr = nullptr;
             }
 
             for (Continent *cont : ContinentPointerArray)
             {
                 delete cont;
-                cont = NULL;
+                cont = nullptr;
             }
 
             delete mapObj;
-
-            mapObj = NULL; // Handling the pointers to avoid dangling pointers
+            mapObj = nullptr; // Handling the pointers to avoid dangling pointers
         }
+
+        return true;
     }
     else
     {
-        cout << "Error: The map file could not be opened, please try again with a different map file";
+        cout << "Error: The map file could not be opened, please try again with a different map file\n";
+        return false;
     }
 }
 
@@ -200,6 +200,11 @@ MapLoader::MapLoader(const MapLoader &MapLObj)
 {
     ContinentCounter = 0;
     TerritoryCounter = 0;
+}
+
+Map& MapLoader::getMap()
+{
+    return map;
 }
 
 MapLoader &MapLoader::operator=(const MapLoader &MapLObj)
@@ -317,12 +322,12 @@ Map::~Map()
     for (Continent *cont : ContinentPointerArray)
     {
         delete cont;
-        cont = NULL;
+        cont = nullptr;
     }
     for (Territory *terr : TerritoryPointerArray)
     {
         delete terr;
-        terr = NULL;
+        terr = nullptr;
     }
 }
 
@@ -372,13 +377,27 @@ Continent *Map::getContinent(string name)
 void Map::validate()
 {
     if (!isMapConnected())
+    {
         cout << "Map is not connected!" << endl;
-    else if (!isContinentsconected())
+        return;
+    }
+    cout << "Map is connected!" << endl;
+    
+    if (!isContinentsconected())
+    {
         cout << "Continent is not connected!" << endl;
-    else if (!isBelongOneContinent())
-        cout << "Terrtory does npt belong to only on continent!" << endl;
-    else
-        cout << "Map validated!" << endl;
+        return;
+    }
+    cout << "Continent is connected!" << endl;
+    
+    if (!isBelongOneContinent())
+    {
+        cout << "Terrtoriey does not belong to only on continent!" << endl;
+        return;
+    }
+    cout << "All terrtories belong to only on continent!" << endl;
+    
+    cout << "Map validated!" << endl;
 }
 
 bool Map::isMapConnected()
@@ -472,6 +491,7 @@ void Map::DFS(const Territory *Terr, vector<string> &visited)
         DFS(adjTerritory, visited);
     }
 }
+
 
 Territory *Map::getTerrObjByName(string TerrName)
 {

@@ -9,13 +9,13 @@
 int main()
 {
     //P1
-    testLoadMaps();
+    //testLoadMaps();
     //P2
-    testPlayers();
+    //testPlayers();
     //P3
-    testOrdersLists();
+    //testOrdersLists();
     //P4
-    testCards();
+    //testCards();
     //P5
     testGameStates();
 
