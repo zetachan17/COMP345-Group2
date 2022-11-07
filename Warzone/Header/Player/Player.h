@@ -38,8 +38,11 @@ public:
 	// the card is then removed from the player's cards
 	void issueOrder(string orderName); 
 
+	string getPlayerName();
 private:
 	vector<Territory*> territories;
 	Hand* hand;
 	OrdersList* ordersList;
+
+	string playerName;
 };
