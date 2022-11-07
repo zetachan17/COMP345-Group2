@@ -133,6 +133,8 @@ public:
 
     ~OrdersList(); // destructor
 
+    vector<Order*> getOrders();
+
 private:
     vector<Order *> m_orders;
 };

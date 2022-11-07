@@ -8,11 +8,7 @@ void testPlayers()
 {
     cout << "** PART 2: PLAYERS **\n\n";
 
-    vector<TerritoryStub*> playerTerritories{ new TerritoryStub("ireland"), new TerritoryStub("bresil"), new TerritoryStub("morocco") };
-    vector<CardStub*> playerCards{ new CardStub("bomb"), new CardStub("airlift"), new CardStub("diplomacy") };
-    vector<OrderStub*> playerOrdersList;
-
-    Player* player = new Player(playerTerritories, playerCards, playerOrdersList);
+    Player* player = new Player();
     cout << "*Created player*\n" << *player << endl;
 
     // testing toDefend()
@@ -66,22 +62,6 @@ void testPlayers()
     cout << player3 << endl;
 
     cout << *player << endl;
-
-    cout << "Demonstrating deep copies by assigning new cards to player2:" << endl;
-    vector<CardStub*> newcards{ new CardStub("blockade"), new CardStub("blockade"), new CardStub("blockade") };
-    HandStub* newhand = new HandStub(newcards);
-
-    cout << "Player states before:" << endl;
-    cout << "--player1-- \n" << *player << "\n" << endl;
-    cout << "--player2-- \n" << *player2 << "\n" << endl;
-    cout << "--player3-- \n" << player3 << "\n" << endl;
-
-    player2->hand = newhand;
-
-    cout << "Player states after:" << endl;
-    cout << "--player1-- \n" << *player << "\n" << endl;
-    cout << "--player2-- \n" << *player2 << "\n" << endl;
-    cout << "--player3-- \n" << player3 << "\n" << endl;
 
     delete player;
     delete player2;

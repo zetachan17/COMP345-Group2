@@ -229,6 +229,11 @@ void Hand::addToHand(Cards *card)
 	std::cout << "Card " << cardsType[card->type] << " has been added to the hand." << std::endl;
 }
 
+vector<Cards*> Hand::getCards()
+{
+	return cardsInHand;
+}
+
 // function to play card from hand and call the function to add it back to the deck
 Cards *Hand::playCard(Deck *deck)
 {
