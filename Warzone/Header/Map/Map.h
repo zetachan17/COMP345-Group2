@@ -25,6 +25,8 @@ public:
 	// methods
 	void addAdjTerr(Territory *x);
 
+	string getTerritoryName();
+	vector<Territory*> getAdjacentTerritories();
 	friend ostream &operator<<(ostream &os, const Territory &TerrObj);
 	friend class Map;
 	friend struct Continent;
