@@ -1,105 +1,57 @@
 #include "Player/Player.h"
+
+#include <vector>
 #include <iostream>
 using std::cout;
 using std::endl;
-
-//stub classes
-OrderStub::OrderStub(string name)
-{
-	this->name = name;
-}
-
-OrdersListStub::OrdersListStub(vector<OrderStub*> orders)
-{
-	this->orders = orders;
-}
-
-TerritoryStub::TerritoryStub(string name)
-{
-	this->name = name;
-}
-
-CardStub::CardStub(string name)
-{
-	this->name = name;
-}
-
-HandStub::HandStub(vector<CardStub*> cards)
-{
-	this->cards = cards;
-}
+using std::vector;
 
 Player::Player()
 {
 
 }
 
-Player::Player(vector<TerritoryStub*> territories, vector<CardStub*> cards, vector<OrderStub*> orders)
+Player::Player(vector<Territory*> territories, vector<Card*> cards, vector<Order*> orders)
 {
 	this->territories = territories;
-	this->hand = new HandStub(cards);
-	this->ordersList = new OrdersListStub(orders);
+	this->hand = new Hand(cards);
+	this->ordersList = new OrdersList(orders);
 }
 
-Player::Player(const Player &otherPlayer)
+Player::Player(const Player& otherPlayer)
 {
-	vector<CardStub*> cards;
-	for (CardStub* card : otherPlayer.hand->cards)
+	this->hand = new Hand(*otherPlayer.hand);
+
+	this->ordersList = new OrdersList(*otherPlayer.ordersList);
+
+	for (Territory* territory : otherPlayer.territories)
 	{
-		cards.push_back(new CardStub(card->name));
+		this->territories.push_back(new Territory(*territory));
 	}
-
-
-	vector<OrderStub*> orders;
-	for (OrderStub* order : otherPlayer.ordersList->orders)
-	{
-		orders.push_back(new OrderStub(order->name));
-	}
-
-	vector<TerritoryStub*> territories;
-	for (TerritoryStub* territory : otherPlayer.territories)
-	{
-		territories.push_back(new TerritoryStub(territory->name));
-	}
-
-	this->territories = territories;
-	this->hand = new HandStub(cards);
-	this->ordersList = new OrdersListStub(orders);
 }
 
 Player::~Player() 
 {
 	territories.clear();
-	hand->cards.clear();
-	ordersList->orders.clear();
+	hand->~Hand();
+	ordersList->~OrdersList();
 	delete hand;
 	delete ordersList;
 }
 
 Player &Player::operator=(const Player &otherPlayer)
 {
-	vector<CardStub*> cards;
-	for (CardStub* card : otherPlayer.hand->cards)
+	this->hand = otherPlayer.hand;
+	this->ordersList = otherPlayer.ordersList;
+	this->hand = otherPlayer.hand;
+
+
+	vector<Territory*> territories;
+	for (Territory* territory : otherPlayer.territories)
 	{
-		cards.push_back(new CardStub(card->name));
+		territories.push_back(new Territory(*territory));
 	}
-
-
-	vector<OrderStub*> orders;
-	for (OrderStub* order : otherPlayer.ordersList->orders)
-	{
-		orders.push_back(new OrderStub(order->name));
-	}
-
-	vector<TerritoryStub*> territories;
-	for (TerritoryStub* territory : otherPlayer.territories)
-	{
-		territories.push_back(new TerritoryStub(territory->name));
-	}
-
 	this->territories = territories;
-	this->hand = new HandStub(cards);
-	this->ordersList = new OrdersListStub(orders);
 
 	return *this;
 }
@@ -107,71 +59,78 @@ Player &Player::operator=(const Player &otherPlayer)
 ostream& operator<<(ostream& output, const Player& player)
 {
 	output << "Player owned territories:" << endl;
-	for (TerritoryStub* territory : player.territories)
+	for (Territory* territory : player.territories)
 	{
-		output << "\t" << territory->name << endl;
+		output << "\t" << territory << endl;
 	}
 
 	output << "Player cards in hand:" << endl;
-	for (CardStub* card : player.hand->cards)
+	for (Card* card : player.hand->getCards())
 	{
-		output << "\t" << card->name << endl;
+		output << "\t" << card << endl;
 	}
 
 	output << "Player orders list:" << endl;
-	for (OrderStub* order : player.ordersList->orders)
+	for (Order* order : player.ordersList->getOrders())
 	{
-		output << "\t" << order->name << endl;
+		output << "\t" << order << endl;
 	}
 
 	return output;
 }
 
-void Player::toAttack()
+vector<Territory*> Player::toAttack()
 {
-	cout << "Territories to be attacked:" << endl;
-	cout << "(list of territories adjacent to the player's owned territories, not owned by the player) " << endl;
+	vector<Territory*> allAdjacentTerritories;
+
+	for (Territory* territory : territories)
+	{
+		vector<Territory*> currentAdjacentTerritories = territory->getAdjacentTerritories();
+		allAdjacentTerritories.insert(allAdjacentTerritories.end(), currentAdjacentTerritories.begin(), currentAdjacentTerritories.end());
+	}
+
+	// remove duplicates
+	for (int i = 0; i < allAdjacentTerritories.size();)
+	{
+		for (int j = i+1; j < allAdjacentTerritories.size(); j++)
+		{
+			if (allAdjacentTerritories[i]->getName() == allAdjacentTerritories[j]->getName())
+			{
+				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
+				continue;
+			}
+			j++;
+		}
+	}
+
+	// remove the player's territories
+	for (int i = 0; i < territories.size(); i++)
+	{
+		for (int j = 0; j < allAdjacentTerritories.size();)
+		{
+			if (territories[i]->getName() == allAdjacentTerritories[j]->getName())
+			{
+				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
+				continue;
+			}
+			j++;
+		}
+	}
+
+	return allAdjacentTerritories;
 }
 
-void Player::toDefend()
+vector<Territory*> Player::toDefend()
 {
-	cout << "Territories to be defended:" << endl;
-	for (int i = 0; i < territories.size(); i++)
-		cout << "\t" << territories[i]->name << endl;
+	return territories;
 }
 
 vector<string> cardOrders{ "bomb", "blockade", "airlift", "diplomacy" };
 
 void Player::issueOrder(string orderName)
 {
+	//to be refactored
 	cout << "Handling order: " << orderName << endl;
-
-	bool isCardOrder = (std::find(cardOrders.begin(), cardOrders.end(), orderName) != cardOrders.end());
-
-
-	if (isCardOrder)
-	{
-		cout << "This order requires a card." << endl;
-
-		std::vector<CardStub*>::iterator it = (std::find_if(hand->cards.begin(), hand->cards.end(), [orderName](CardStub* card) { return card->name == orderName; }));
-
-		bool isCardInHand = it != hand->cards.end();
-
-		if (isCardInHand)
-		{
-			cout << "Removing card from the player's hand." << endl;
-			hand->cards.erase(it);
-			cout << "Issuing order" << endl;
-			this->ordersList->orders.push_back(new OrderStub(orderName));
-		}
-		else {
-			cout << "The player does not possess the card." << endl;
-		}
-	}
-	else {
-		cout << "Issuing order" << endl;
-		this->ordersList->orders.push_back(new OrderStub(orderName));
-	}
 }
 
 
