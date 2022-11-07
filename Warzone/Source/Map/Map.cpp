@@ -253,6 +253,16 @@ void Territory::addAdjTerr(Territory *Terr)
     arrOfAdjTerritories.push_back(Terr);
 }
 
+vector<Territory*> Territory::getAdjacentTerritories()
+{
+    return arrOfAdjTerritories;
+}
+
+string Territory::getTerritoryName()
+{
+    return TerritoryName;
+}
+
 Continent::Continent(int contID, string contName, int bonus)
 {
     ContinentID = contID;

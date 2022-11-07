@@ -16,7 +16,6 @@ class Player
 public:
 	// constructors
 	Player(); 
-	Player(vector<Territory*> territories, vector<Card*> cards, vector<Order*> orders);
 	Player(const Player &player);
 
 	// destructor

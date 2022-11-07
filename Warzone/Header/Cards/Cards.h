@@ -2,12 +2,6 @@
 #include <vector>
 #include "Orders/Orders.h"
 
-class Player
-{
-
-public:
-};
-
 class Cards
 {
 
@@ -59,6 +53,8 @@ public:
 	void addToHand(Cards *card);
 	void printHand();
 	Cards *playCard(Deck *deck);
+
+	vector<Cards*> getCards();
 
 private:
 	// creation of a vector of card pointers, this will be the player hand

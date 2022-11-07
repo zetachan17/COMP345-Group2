@@ -11,12 +11,6 @@ Player::Player()
 
 }
 
-Player::Player(vector<Territory*> territories, vector<Card*> cards, vector<Order*> orders)
-{
-	this->territories = territories;
-	this->hand = new Hand(cards);
-	this->ordersList = new OrdersList(orders);
-}
 
 Player::Player(const Player& otherPlayer)
 {
@@ -65,7 +59,7 @@ ostream& operator<<(ostream& output, const Player& player)
 	}
 
 	output << "Player cards in hand:" << endl;
-	for (Card* card : player.hand->getCards())
+	for (Cards* card : player.hand->getCards())
 	{
 		output << "\t" << card << endl;
 	}
@@ -94,7 +88,7 @@ vector<Territory*> Player::toAttack()
 	{
 		for (int j = i+1; j < allAdjacentTerritories.size(); j++)
 		{
-			if (allAdjacentTerritories[i]->getName() == allAdjacentTerritories[j]->getName())
+			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
@@ -108,7 +102,7 @@ vector<Territory*> Player::toAttack()
 	{
 		for (int j = 0; j < allAdjacentTerritories.size();)
 		{
-			if (territories[i]->getName() == allAdjacentTerritories[j]->getName())
+			if (territories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
