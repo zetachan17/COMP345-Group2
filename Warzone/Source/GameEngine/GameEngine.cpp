@@ -6,6 +6,8 @@
 
 #include <string>
 
+#include "Player/Player.h"
+
 GameEngine::GameEngine()
 {
     this->state = GameEngine::State::Start;
@@ -37,33 +39,45 @@ std::istream& operator>>(std::istream& in, GameEngine& g)
 }
 
 
+void GameEngine::addPlayer(string name)
+{
+    Player* p = new Player();
+    //p->name = name;
+    activePlayers.push_back(p);
+}
+
+MapLoader* mLoader = new MapLoader;
+
 GameEngine::State GameEngine::StartGame(GameEngine::State state)
 {
-  
-    MapLoader *mLoader = new MapLoader;
-    
-        std::string userInput;
-        CommandProcessor* cmdP = new CommandProcessor;
-        switch (state)
-        {
+    std::string userInput;
+    CommandProcessor* cmdP = new CommandProcessor;
 
-        case GameEngine::State::Start:
-            std::cout << "Welcome to Warzone!" << std::endl;
-            cmdP->getCommand();
-            //validateCommand()
-            if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") //Just making sure that this is indeed the loadmap command
-            {
-                //loadMap();
-                state = GameEngine::State::MapLoaded;
-                //saveEffect()
-                break;
-            }
-            else {
-                std::cout << "Invalid input, please try again!" << std::endl;
-                break;
-            }
+    switch (state)
+    {
+    case GameEngine::State::Start:
+        std::cout << "Welcome to Warzone!" << std::endl;
+        cmdP->getCommand();
+        //validateCommand()
+        
+        //Just making sure that this is indeed the loadmap command
+        if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") 
+        {
+            mLoader->readFile("Eurasia - WWI 1914.map");
+            //loadMap();
+            state = GameEngine::State::MapLoaded;
+            //saveEffect()
+            //break;
+        }
+        else
+        {
+            std::cout << "Invalid input, please try again!" << std::endl;
+            break;
+        }
+        
     case GameEngine::State::MapLoaded:
         std::cout << "Map Loaded! "<< std::endl;
+        distributeterritories(mLoader);
         std::cout << "Do you want to load another map? Press Y to load another map, Enter \"validatemap\" to validate current map" << std::endl;
         std::cin >> userInput;
         if (userInput == "Y" || userInput == "y")
@@ -74,7 +88,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         else if (userInput == "validatemap")
         {
             //P2.2, validate the map
-            mLoader->getMap().validate();
+            mLoader->getMap()->validate();
             state = GameEngine::State::MapValidated;
             break;
         }
@@ -83,12 +97,14 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
+        
     case GameEngine::State::MapValidated:
         std::cout << "Add Player? Y/N" << std::endl;
         std::cin >> userInput;
         if (userInput == "Y" || userInput == "y")
         {
-            //addPlayer();
+            //P2.3 add players
+            //addPlayer(name);
             state = GameEngine::State::PlayersAdded;
             break;
         }
@@ -108,7 +124,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
 
         if (userInput == "Y" || userInput == "y")
         {
-            // addPlayer();
+            //addPlayer(name);
             break;
         }
         else if (userInput == "N" || userInput == "n")
@@ -206,4 +222,14 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     }
 
     return state;
+}
+
+void GameEngine::distributeterritories(MapLoader* mLoader)
+{
+    vector<Territory*> territories = mLoader->getMap()->getTerritories();
+    for (Territory* t: territories)
+    {
+        std::cout << t->getTerritoryName() << std::endl;
+    }
+    
 }

@@ -1,9 +1,9 @@
+#pragma once
 #include "GameEngine/GameEngine.h"
 #include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
-
 
 struct Command
 {

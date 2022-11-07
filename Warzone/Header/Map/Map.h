@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -9,11 +11,11 @@ class Territory
 private:
 	int territoryID;
 	string TerritoryName;
-
+	
 	vector<Territory *> arrOfAdjTerritories;
 
 	int ContinentId; // Potentially to know which continent the territory belongs to?
-
+	
 public:
 	Territory(int TerrID, std::string TerrName, int ContID);
 	Territory(const Territory &TerrObj); // Copy constructor for Territory class
@@ -30,6 +32,8 @@ public:
 	friend ostream &operator<<(ostream &os, const Territory &TerrObj);
 	friend class Map;
 	friend struct Continent;
+
+	int numArmies;
 };
 
 struct Continent
@@ -85,7 +89,8 @@ public:
 	void DFS(const Territory *Terr, vector<string> &visited);
 	void continentDFS(const Territory *Terr, vector<string> &visited);
 	Territory *getTerrObjByName(string TerrName);
-
+	vector<Territory*> getTerritories();
+	
 	friend class MapLoader;
 
 	friend ostream &operator<<(ostream &os, const Map &mapObjPointer);
@@ -95,14 +100,15 @@ class MapLoader
 {
 	int ContinentCounter;
 	int TerritoryCounter;
+	Map* map;
 
 public:
 	bool readFile(string fileName);
-	Map map;
+	
 	
 	MapLoader();
 	MapLoader(const MapLoader &MapLObj);
-	Map& getMap();
+	Map* getMap();
 	// Destructor
 	~MapLoader();
 	MapLoader &operator=(const MapLoader &MapLObj);

@@ -1,5 +1,9 @@
-#include <iostream>
 #pragma once
+
+#include <iostream>
+
+#include "Map/Map.h"
+#include "Player/Player.h"
 
 class GameEngine
 {
@@ -27,11 +31,16 @@ public:
     friend std::ostream& operator << (std::ostream& out, const GameEngine& g);
     friend std::istream& operator >> (std::istream& in, GameEngine& g);
 
+    void addPlayer(std::string name);
+    
     //Start the game
     State StartGame(State state);
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER
     State state;
+    vector<Player*> activePlayers;
+
+    void distributeterritories(MapLoader* mLoader);
 };
 
