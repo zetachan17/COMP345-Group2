@@ -205,33 +205,33 @@ MapLoader::MapLoader()
 {
 }
 
-MapLoader::MapLoader(const MapLoader &MapLObj)
+MapLoader::MapLoader(const MapLoader &mapLoader)
 {
     ContinentCounter = 0;
     TerritoryCounter = 0;
 }
 
-MapLoader &MapLoader::operator=(const MapLoader &MapLObj)
+MapLoader &MapLoader::operator=(const MapLoader &mapLoader)
 {
-    ContinentCounter = MapLObj.ContinentCounter;
-    TerritoryCounter = MapLObj.TerritoryCounter;
+    ContinentCounter = mapLoader.ContinentCounter;
+    TerritoryCounter = mapLoader.TerritoryCounter;
     return *this;
 }
 
 Territory::Territory(int TerrID, string TerrName, int ContID)
 {
-    id = TerrID;
-    name = TerrName;
+    territoryId = TerrID;
+    territoryName = TerrName;
     continentId = ContID;
 }
 /* Important note: For the copy constructors and the overloaded assignment operators, we make it possible to have deep copies, but so far for assignment 1, we have never needed to actually use them!
 This implies that even though the new keyword is written, the code is never executed so the allocation on the heap is never made. For that reason, there is no need to delete these objects and handle the pointer values (make them NULL)*/
-Territory::Territory(const Territory &TerrObj)
+Territory::Territory(const Territory &otherTerritory)
 {
-    id = TerrObj.id;
-    name = TerrObj.name;
-    continentId = TerrObj.continentId;
-    for (Territory *terri : TerrObj.adjacentTerritories)
+    territoryId = otherTerritory.territoryId;
+    territoryName = otherTerritory.territoryName;
+    continentId = otherTerritory.continentId;
+    for (Territory *terri : otherTerritory.adjacentTerritories)
     {
         adjacentTerritories.push_back(terri);
     }
@@ -239,21 +239,21 @@ Territory::Territory(const Territory &TerrObj)
 
 Territory::~Territory() {}
 
-Territory &Territory::operator=(const Territory &TerrObj)
+Territory &Territory::operator=(const Territory & otherTerritory)
 { // Important note: Here we define
-    id = TerrObj.id;
-    name = TerrObj.name;
-    continentId= TerrObj.continentId;
-    for (Territory *terri : TerrObj.adjacentTerritories)
+    territoryId = otherTerritory.territoryId;
+    territoryName = otherTerritory.territoryName;
+    continentId= otherTerritory.continentId;
+    for (Territory *adjacentTerritory : otherTerritory.adjacentTerritories)
     {
-        adjacentTerritories.push_back(terri);
+        adjacentTerritories.push_back(adjacentTerritory);
     }
     return *this;
 }
 
-ostream &operator<<(ostream &os, const Territory &TerrObj)
+ostream &operator<<(ostream &os, const Territory &territory)
 {
-    os << "Territory name: " + TerrObj.name << " ID : " << TerrObj.id << " Continent ID: " << TerrObj.continentId << "\n\n";
+    os << "Territory name: " + territory.territoryName << " ID : " << territory.territoryId << " Continent ID: " << territory.continentId << "\n\n";
     return os;
 }
 
@@ -267,22 +267,22 @@ vector<Territory*> Territory::getAdjacentTerritories()
     return adjacentTerritories;
 }
 
-string Territory::getName()
+string Territory::getTerritoryName()
 {
-    return name;
+    return territoryName;
 }
 
-Continent::Continent(int contID, string contName, int bonus)
+Continent::Continent(int continentId, string continentName, int bonus)
 {
-    this->id = contID;
-    this->name = contName;
+    this->continentId = continentId;
+    this->continentName = continentName;
     this->bonus = bonus;
 }
 
 Continent::Continent(const Continent &continent)
 {
-    this->id = continent.id;
-    this->name = continent.name;
+    this->continentId = continent.continentId;
+    this->continentName= continent.continentName;
     this->bonus = continent.bonus;
 
     for (Territory *territory : continent.territories)
@@ -295,8 +295,8 @@ Continent::~Continent() {}
 
 Continent &Continent::operator=(const Continent & continent)
 {
-    this->id = continent.id;
-    this->name = continent.name;
+    this->continentId = continent.continentId;
+    this->continentName = continent.continentName;
     this->bonus = continent.bonus;
     for (Territory *territory : continent.territories)
     {
@@ -305,15 +305,15 @@ Continent &Continent::operator=(const Continent & continent)
     return *this;
 }
 
-void Continent::addTerritoryToContinent(Territory *terr)
+void Continent::addTerritoryToContinent(Territory *territory)
 {
-    territories.push_back(terr);
+    territories.push_back(territory);
 }
 
-ostream &operator<<(ostream &os, const Continent &Contobj)
+ostream &operator<<(ostream &os, const Continent &continent)
 {
-    os << "Coninent: " + Contobj.name << "ID and Bonus are: " << Contobj.id << " and " << Contobj.bonus << "\n\n";
-    for (Territory *y : Contobj.territories)
+    os << "Coninent: " + continent.continentName << "ID and Bonus are: " << continent.continentId << " and " << continent.bonus << "\n\n";
+    for (Territory *y : continent.territories)
     {
         os << *y;
     }
@@ -324,12 +324,12 @@ Map::Map()
 {
 }
 
-Map::Map(const Map &MapObj)
+Map::Map(const Map &otherMap)
 { // Here we define the copy constructor for the Map class
-    numberOfContinents = MapObj.numberOfContinents;
-    numberOfTerritories = MapObj.numberOfTerritories;
-    continents = MapObj.continents; // These are shallow copies, gotta iterate through the array of pointers to make deep copies
-    territories = MapObj.territories;
+    numberOfContinents = otherMap.numberOfContinents;
+    numberOfTerritories = otherMap.numberOfTerritories;
+    continents = otherMap.continents; // These are shallow copies, gotta iterate through the array of pointers to make deep copies
+    territories = otherMap.territories;
 }
 
 Map::~Map()
@@ -346,32 +346,32 @@ Map::~Map()
     }
 }
 
-Map &Map::operator=(const Map &MapObj)
+Map &Map::operator=(const Map & otherMap)
 { // generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
-    numberOfContinents = MapObj.numberOfContinents;
-    numberOfTerritories = MapObj.numberOfTerritories;
-    continents = MapObj.continents;
-    territories = MapObj.territories;
+    numberOfContinents = otherMap.numberOfContinents;
+    numberOfTerritories = otherMap.numberOfTerritories;
+    continents = otherMap.continents;
+    territories = otherMap.territories;
 
     return *this;
 }
 
-void Map::addContinent(Continent *Cont)
+void Map::addContinent(Continent *continent)
 {
-    continents.push_back(Cont);
+    continents.push_back(continent);
 }
 
-void Map::addTerritory(Territory *Terr)
+void Map::addTerritory(Territory *territory)
 {
-    territories.push_back(Terr);
+    territories.push_back(territory);
 }
-int Map::getContinentId(string ContName)
+int Map::getContinentId(string continentName)
 {
-    for (Continent *x : continents)
+    for (Continent *continent : continents)
     {
-        if ((x->name).compare(ContName) == 0)
+        if ((continent->continentName).compare(continentName) == 0)
         {
-            return x->id;
+            return continent->continentId;
         }
     }
     return -1;
@@ -379,11 +379,11 @@ int Map::getContinentId(string ContName)
 
 Continent *Map::getContinentByName(string name)
 {
-    for (Continent *x : continents)
+    for (Continent *continent : continents)
     {
-        if ((x->name).compare(name) == 0)
+        if ((continent->continentName).compare(name) == 0)
         {
-            return x;
+            return continent;
         }
     }
     return nullptr;
@@ -411,7 +411,7 @@ bool Map::isMapConnected()
 
         for (Territory *territory : territories)
         {
-            if (find(visited.begin(), visited.end(), territory->name) == visited.end())
+            if (find(visited.begin(), visited.end(), territory->territoryName) == visited.end())
             {
                 return false;
             }
@@ -434,7 +434,7 @@ bool Map::isContinentsConnected()
 
             for (Territory *territory : continentTerritories)
             {
-                if (find(visited.begin(), visited.end(), territory->name) == visited.end())
+                if (find(visited.begin(), visited.end(), territory->territoryName) == visited.end())
                 {
                     return false;
                 }
@@ -451,7 +451,7 @@ bool Map::isBelongOneContinent()
     {
         for (const Territory *territory : continent->territories)
         {
-            if (territory->continentId != continent->id)
+            if (territory->continentId != continent->continentId)
             {
                 return false;
             }
@@ -462,12 +462,12 @@ bool Map::isBelongOneContinent()
 
 void Map::continentDFS(const Territory *Terr, vector<string> &visited)
 {
-    if (find(visited.begin(), visited.end(), Terr->name) != visited.end())
+    if (find(visited.begin(), visited.end(), Terr->territoryName) != visited.end())
     {
         return;
     }
 
-    visited.push_back(Terr->name);
+    visited.push_back(Terr->territoryName);
 
     for (const Territory *adjTerritory : Terr->adjacentTerritories)
     {
@@ -480,12 +480,12 @@ void Map::continentDFS(const Territory *Terr, vector<string> &visited)
 
 void Map::DFS(const Territory *Terr, vector<string> &visited)
 {
-    if (find(visited.begin(), visited.end(), Terr->name) != visited.end())
+    if (find(visited.begin(), visited.end(), Terr->territoryName) != visited.end())
     {
         return;
     }
 
-    visited.push_back(Terr->name);
+    visited.push_back(Terr->territoryName);
 
     for (const Territory *adjTerritory : Terr->adjacentTerritories)
     {
@@ -497,7 +497,7 @@ Territory *Map::getTerritoryByName(string TerrName)
 {
     for (Territory *x : territories)
     {
-        if ((x->name).compare(TerrName) == 0)
+        if ((x->territoryName).compare(TerrName) == 0)
         { // For some reason declaring the Map class as a friend works, but not declaring the function as a friend fn
             return x;
         }
@@ -505,20 +505,20 @@ Territory *Map::getTerritoryByName(string TerrName)
     return nullptr;
 }
 
-ostream &operator<<(ostream &os, const Map &mapObjPointer)
+ostream &operator<<(ostream &os, const Map &map)
 {
-    for (Continent *x : mapObjPointer.continents)
+    for (Continent *x : map.continents)
     {
         os << *x; // important to dereference the object as they are of type Continent* not Continent
     }
-    for (Territory *y : mapObjPointer.territories)
+    for (Territory *y : map.territories)
     {
         os << *y;
     }
     return os;
 }
 
-ostream &operator<<(ostream &os, const MapLoader &mapLoaderObj)
+ostream &operator<<(ostream &os, const MapLoader &mapLoader)
 {
     os << "This is the printing statement for the MapLoader class!";
     return os;

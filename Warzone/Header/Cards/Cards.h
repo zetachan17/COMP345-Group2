@@ -27,7 +27,7 @@ public:
 	Card& operator=(const Card &card);
 	
 	// output stream operator
-	friend ostream& operator<<(ostream &output, const Card &card); 
+	friend ostream& operator<<(ostream& output, const Card& card); 
 
 	// REQUIRED - plays the card, creates the corresponding order and adds it to the orderlist
 	void play(Card* card, OrdersList *orders);

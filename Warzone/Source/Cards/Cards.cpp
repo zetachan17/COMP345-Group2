@@ -49,7 +49,7 @@ Card &Card::operator=(const Card &card)
 	return *this;
 }
 
-ostream& operator<<(ostream &output, const Card &card)
+ostream& operator<<(ostream& output, const Card& card)
 {
 	output << "Card: " << cardTypes[card.type] << endl;
 	return output;
