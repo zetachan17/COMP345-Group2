@@ -1,20 +1,21 @@
 #include "Cards/Cards.h"
 #include "Orders/Orders.h"
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <random>
 #include <string>
+using std::cout;
+using std::endl;
+using std::vector;
 
-// order vector
-std::vector<Order *> orderVector;
-
-// nbOfCards is the number of cards per type. 5 is the number of types there are so we multiply to get an even distribution of cards
-int nbOfCards = 3;
-int totalCards = nbOfCards * 5;
+// the number of cards in the deck defined as the number of cards per type multiplied by the number of types
+int cardsPerType = 3;
+int totalCardsInDeck = cardsPerType * 5;
 
 // array to convert number of card to its respective type
-std::string cardsType[5]{
+string cardTypes[5]{
 	// 0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
 	"Bomb",			 // 0
 	"Reinforcement", // 1
@@ -23,225 +24,177 @@ std::string cardsType[5]{
 	"Diplomacy"		 // 4
 };
 
-// Cards constructors
-Cards::Cards()
+Card::Card()
 {
 }
 
-Cards::Cards(const Cards &card)
+Card::Card(const int type)
 {
+	this->type = type;
 }
 
-Cards &Cards::operator=(const Cards &card)
+Card::Card(const Card &card)
 {
-	this->type = *new int(card.type);
+	this->type = card.type;
+}
+
+Card::~Card()
+{
+
+}
+
+Card &Card::operator=(const Card &card)
+{
+	this->type = card.type;
 	return *this;
 }
 
-// function to play the card from the hand. Takes card that is being played and the orderlist of the player that played it to add orders to the right list
-void Cards::play(Cards *card, OrdersList* orders)
+ostream& operator<<(ostream &output, const Card &card)
 {
-
-	std::cout << "Played card is " << cardsType[card->type] << std::endl;
-
-	createOrder(card, orders);
+	output << "Card: " << cardTypes[card.type] << endl;
+	return output;
 }
 
-// function to create an order and add it to the players' list of orders
-void Cards::createOrder(Cards* card, OrdersList* orders)
+void Card::play(Card* card, OrdersList* orders)
 {
+	cout << "Played card is " << cardTypes[card->type] << endl;
+	Order* newOrder = createOrder(card);
 
-	std::cout << "Creating order for card " << cardsType[card->type] << std::endl;
+	orders->addOrder(newOrder);
+}
 
+Order* Card::createOrder(Card* card)
+{
+	cout << "Creating order for card " << cardTypes[card->type] << endl;
 	switch (card->type) {
 		case 0:
-			orders->addOrder(new Bomb());
-			break;
+			return new Bomb();
 		case 1:
-			//Reinforcement
-			break;
+			//TODO: Reinforcement when it's implemented
+			return new Bomb();
 		case 2:
-			orders->addOrder(new Blockade());
-			break;
+			return new Blockade();
 		case 3:
-			orders->addOrder(new Airlift());
-			break;
+			return new Airlift();
 		case 4:
-			orders->addOrder(new Negotiate());
-			break;
+			return new Negotiate();
+		default:
+			return new Bomb(); //TODO: fix default order?
 	}
 }
 
-// Deck constructors
 Deck::Deck()
 {
 }
 
-Deck::~Deck()
-{
-	for (auto &card : deckOfCards)
-		delete card;
-	deckOfCards.clear();
-}
-
 Deck::Deck(const Deck &deck)
 {
+	this->cardsInDeck = *new vector<Card *>(deck.cardsInDeck);
+}
 
-	this->deckOfCards = *new std::vector<Cards *>(deck.deckOfCards);
-	this->tempDrawCard = new Cards(*(deck.tempDrawCard));
+Deck::~Deck()
+{
+	for (auto& card : cardsInDeck)
+		delete card;
+	cardsInDeck.clear();
 }
 
 Deck &Deck::operator=(const Deck &deck)
 {
 
-	this->deckOfCards = *new std::vector<Cards *>(deck.deckOfCards);
-	this->tempDrawCard = new Cards(*(deck.tempDrawCard));
+	this->cardsInDeck = *new vector<Card *>(deck.cardsInDeck);
 	return *this;
 }
 
-// function to create a deck of cards depending on how many were declared above. also shuffles the deck once it has been created
-void Deck::createDeck()
+ostream& operator<<(ostream& output, const Deck& deck)
 {
-	// to determine the type of the card and add it to the deck
-	int counter = 0;
-	for (int i = 0; i < totalCards; i++)
+	output << "Content of hand: " << endl;
+	for (Card* card : deck.cardsInDeck)
 	{
-		switch (counter)
-		{
-		case 0:
-		{
-			Cards *ptrC = new Cards();
-			ptrC->type = 0;
-			deckOfCards.push_back(ptrC);
-			counter++;
-			break;
-		}
-		case 1:
-		{
-			Cards *ptrC = new Cards();
-			ptrC->type = 1;
-			deckOfCards.push_back(ptrC);
-			counter++;
-			break;
-		}
-		case 2:
-		{
-			Cards *ptrC = new Cards();
-			ptrC->type = 2;
-			deckOfCards.push_back(ptrC);
-			counter++;
-			break;
-		}
-		case 3:
-		{
-			Cards *ptrC = new Cards();
-			ptrC->type = 3;
-			deckOfCards.push_back(ptrC);
-			counter++;
-			break;
-		}
-		case 4:
-		{
-			Cards *ptrC = new Cards();
-			ptrC->type = 4;
-			deckOfCards.push_back(ptrC);
-			counter = 0;
-			break;
-		}
-		}
+		output << card << endl;
 	}
 
-	// shuffle the deck of cards
+	return output;
+}
+
+// REQUIRED
+Card* Deck::draw()
+{
+	// shuffle deck before drawing
 	std::random_device rd;
 	std::mt19937 g(rd());
-	std::shuffle(deckOfCards.begin(), deckOfCards.end(), g);
-}
+	shuffle(cardsInDeck.begin(), cardsInDeck.end(), g);
 
-// function to print the contents of the deck
-void Deck::printDeck()
-{
-	std::cout << "Content of deck: " << std::endl;
-	for (int i = 0; i < deckOfCards.size(); i++)
-	{
-		std::cout << cardsType[deckOfCards[i]->type] << std::endl;
-	}
-}
 
-// function to draw a card from the deck, remove it from the deck, and return it
-Cards *Deck::draw()
-{
+	Card* tempDrawCard = cardsInDeck[0];
+	cardsInDeck.erase(cardsInDeck.begin());
 
-	tempDrawCard = deckOfCards[0];
-	deckOfCards.erase(deckOfCards.begin());
-
-	std::cout << "Drawn card is " << cardsType[tempDrawCard->type] << std::endl;
+	cout << "Drawn card is " << cardTypes[tempDrawCard->type] << endl;
 
 	return tempDrawCard;
 }
 
-// function to add the card back to the deck after it has been played
-void Deck::addToDeck(Cards *card)
+void Deck::createDeck()
 {
-
-	deckOfCards.push_back(card);
+	// to determine the type of the card and add it to the deck
+	for (int i = 0; i < totalCardsInDeck; i++)
+	{
+		Card* newCard = new Card(i%5);
+		cardsInDeck.push_back(newCard);
+	}
 }
 
-// Hand constructors
+void Deck::addToDeck(Card *card)
+{
+	cardsInDeck.push_back(card);
+}
+
 Hand::Hand()
 {
+}
+
+Hand::Hand(const Hand& hand)
+{
+	this->cardsInHand = *new vector<Card*>(hand.cardsInHand);
 }
 
 Hand::~Hand()
 {
 }
 
-Hand::Hand(const Hand &hand)
-{
-
-	this->cardsInHand = *new std::vector<Cards *>(hand.cardsInHand);
-	this->tempPlayCard = new Cards(*(hand.tempPlayCard));
-}
-
 Hand &Hand::operator=(const Hand &hand)
 {
-
-	this->cardsInHand = *new std::vector<Cards *>(hand.cardsInHand);
-	this->tempPlayCard = new Cards(*(hand.tempPlayCard));
+	this->cardsInHand = *new vector<Card *>(hand.cardsInHand);
 	return *this;
 }
 
-// function to print the contents of the hand
-void Hand::printHand()
+ostream& operator<<(ostream& output, const Hand& hand)
 {
-
-	std::cout << "Content of hand: " << std::endl;
-	for (int i = 0; i < cardsInHand.size(); i++)
+	output << "Content of hand: " << endl;
+	for (Card* card: hand.cardsInHand)
 	{
-		std::cout << cardsType[cardsInHand[i]->type] << std::endl;
+		output << card << endl;
 	}
+	return output;
 }
 
-// function to add the card that is drawn from the deck, into the hand
-void Hand::addToHand(Cards *card)
+Card* Hand::playCard(Deck* deck)
 {
-
-	cardsInHand.push_back(card);
-	std::cout << "Card " << cardsType[card->type] << " has been added to the hand." << std::endl;
-}
-
-vector<Cards*> Hand::getCards()
-{
-	return cardsInHand;
-}
-
-// function to play card from hand and call the function to add it back to the deck
-Cards *Hand::playCard(Deck *deck)
-{
-
-	tempPlayCard = cardsInHand[0];
+	Card* tempPlayCard = cardsInHand[0];
 	cardsInHand.erase(cardsInHand.begin());
 
 	deck->addToDeck(tempPlayCard);
 
 	return tempPlayCard;
+}
+
+void Hand::addToHand(Card *card)
+{
+	cardsInHand.push_back(card);
+	cout << "Card " << cardTypes[card->type] << " has been added to the hand." << endl;
+}
+
+vector<Card*> Hand::getCards()
+{
+	return this->cardsInHand;
 }
