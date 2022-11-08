@@ -248,14 +248,6 @@ OrdersList::OrdersList(const OrdersList &other)
         addOrder(o->clone());
 }
 
-OrdersList::OrdersList(const vector<Order*> orders)
-{
-    for (Order* order : orders)
-    {
-        this->addOrder(order);
-    }
-}
-
 // addOrder() adds an order to the list.
 void OrdersList::addOrder(Order *newOrder)
 {
@@ -293,11 +285,6 @@ void OrdersList::executeNextOrder()
 {
     m_orders[0]->execute();
     remove(1);
-}
-
-vector<Order*> OrdersList::getOrders()
-{
-    return m_orders;
 }
 
 // destructor deletes every Order object and then clears the underlying vector container
