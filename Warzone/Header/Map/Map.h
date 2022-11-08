@@ -31,10 +31,8 @@ public:
 	void addAdjacentTerritory(Territory *territory);
 
 	// getters
-	int getTerritoryId();
 	string getTerritoryName();
 	vector<Territory*> getAdjacentTerritories();
-	int getContinentId();
 
 	friend class Map;
 	friend class Continent;
