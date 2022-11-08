@@ -40,8 +40,11 @@ private:
     //ENUM, DOES NOT NEED TO BE A POINTER
     State state;
     vector<Player*> activePlayers;
-
+    
     //Part 2.4.a) fairly distribute all the territories to the players 
-    void distributeterritories(MapLoader* mLoader);
+    void distributeTerritories(MapLoader* mLoader);
+
+    //Part 2.4.b) determine randomly the order of play of the players in the game
+    void randomizPlayerOrder();
 };
 

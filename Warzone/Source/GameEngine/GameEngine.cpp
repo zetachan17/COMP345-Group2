@@ -1,5 +1,7 @@
 #include <iostream>
 #include "GameEngine/GameEngine.h"
+
+#include <random>
 #include <regex>
 #include "Map/Map.h"
 #include "CommandProcessing/CommandProcessing.h"
@@ -128,7 +130,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
             //addPlayer(name);
             Player* newPlayer = new Player("P2");
             activePlayers.push_back(newPlayer);
-            distributeterritories(mLoader);
+            distributeTerritories(mLoader);
             break;
         }
         else if (userInput == "N" || userInput == "n")
@@ -228,7 +230,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     return state;
 }
 
-void GameEngine::distributeterritories(MapLoader* mLoader)
+void GameEngine::distributeTerritories(MapLoader* mLoader)
 {
     vector<Territory*> territories = mLoader->getMap()->getTerritories();
 
@@ -256,4 +258,10 @@ void GameEngine::distributeterritories(MapLoader* mLoader)
         }
         std::cout << count << std::endl;
     }
+}
+
+void GameEngine::randomizPlayerOrder()
+{
+    auto randomizer = std::default_random_engine {};
+    std::shuffle(std::begin(activePlayers), std::end(activePlayers), randomizer);
 }
