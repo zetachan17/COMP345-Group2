@@ -1,64 +1,97 @@
 #pragma once
-#include <vector>
+
 #include "Orders/Orders.h"
 
-class Cards
+#include <vector>
+#include <string>
+#include <iostream>
+using std::ostream;
+using std::string;
+using std::vector; 
+
+class Card
 {
-
 public:
-	// constructors
-	Cards();
-	Cards(const Cards &card);
-	Cards &operator=(const Cards &card);
-
 	// card type: 0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
 	int type;
 
-	void play(Cards* card, OrdersList* orders);
-	void createOrder(Cards *card, OrdersList* orders);
+	// constructors
+	Card();
+	Card(const int type);
+	Card(const Card &card);
+
+	// destructor
+	~Card();
+
+	// assignment operator
+	Card& operator=(const Card &card);
+	
+	// output stream operator
+	friend ostream& operator<<(ostream &output, const Card &card); 
+
+	// REQUIRED - plays the card, creates the corresponding order and adds it to the orderlist
+	void play(Card* card, OrdersList *orders);
+
+	// creates an order from a card
+	Order* createOrder(Card *card);
 };
 
-class Deck : public Cards
+class Deck
 {
 
 public:
 	// constructors
 	Deck();
-	~Deck();
-	Deck(const Deck &card);
-	Deck &operator=(const Deck &card);
+	Deck(const Deck &deck);
 
+	// destructor
+	~Deck();
+	
+	// assignment operator
+	Deck &operator=(const Deck &deck);
+
+	// output stream operator
+	friend ostream& operator<<(ostream& output, const Deck& deck);
+	
+	// REQUIRED - draws a card at random from the deck
+	Card* draw();
+
+	// instantiates the cards in the deck
 	void createDeck();
-	void printDeck();
-	Cards *draw();
-	void addToDeck(Cards *card);
+
+	// adds a card to the deck
+	void addToDeck(Card* card);
 
 private:
-	// creation of a vector of card pointers, this will be the deck
-	std::vector<Cards *> deckOfCards;
-	// temporary card for deck drawing
-	Cards *tempDrawCard;
+	vector<Card *> cardsInDeck;
 };
 
-class Hand : public Cards
+class Hand
 {
 
 public:
 	// constructors
 	Hand();
+	Hand(const Hand &hand);
+	
+	// destructor
 	~Hand();
-	Hand(const Hand &card);
+
+	// assignment operator
 	Hand &operator=(const Hand &card);
 
-	void addToHand(Cards *card);
-	void printHand();
-	Cards *playCard(Deck *deck);
+	// output stream operator
+	friend ostream& operator<<(ostream& output, const Hand& hand);
 
-	vector<Cards*> getCards();
+	// adds a card to the hand
+	void addToHand(Card *card);
+
+	// plays card from hand and adds it back to the deck
+	Card *playCard(Deck *deck);
+
+	// getters
+	vector<Card*> getCards();
 
 private:
-	// creation of a vector of card pointers, this will be the player hand
-	std::vector<Cards *> cardsInHand;
-	// temporary card for playing from hand
-	Cards *tempPlayCard;
+	vector<Card*> cardsInHand;
 };
