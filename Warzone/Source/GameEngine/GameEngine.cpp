@@ -68,11 +68,19 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
         //Just making sure that this is indeed the loadmap command
         if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") 
         {
-            mLoader->readFile(((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(8));
-            //loadMap();
-            state = GameEngine::State::MapLoaded;
-            //saveEffect()
-            //break;
+            if (mLoader->readFile(((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(8)))
+            {
+                //loadMap();
+                state = GameEngine::State::MapLoaded;
+                //saveEffect()
+                //break;
+            }
+            else
+            {
+
+                break;
+            }
+
         }
         else
         {
