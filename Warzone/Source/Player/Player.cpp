@@ -1,4 +1,5 @@
 #include "Player/Player.h"
+#include "Cards/Cards.h"
 
 #include <vector>
 #include <iostream>
@@ -59,7 +60,7 @@ ostream& operator<<(ostream& output, const Player& player)
 	}
 
 	output << "Player cards in hand:" << endl;
-	for (Cards* card : player.hand->getCards())
+	for (Card* card : player.hand->getCards())
 	{
 		output << "\t" << card << endl;
 	}
@@ -71,6 +72,11 @@ ostream& operator<<(ostream& output, const Player& player)
 	}
 
 	return output;
+}
+
+vector<Territory*> Player::toDefend()
+{
+	return territories;
 }
 
 vector<Territory*> Player::toAttack()
@@ -88,7 +94,7 @@ vector<Territory*> Player::toAttack()
 	{
 		for (int j = i+1; j < allAdjacentTerritories.size(); j++)
 		{
-			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			if (allAdjacentTerritories[i]->getName() == allAdjacentTerritories[j]->getName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
@@ -102,7 +108,7 @@ vector<Territory*> Player::toAttack()
 	{
 		for (int j = 0; j < allAdjacentTerritories.size();)
 		{
-			if (territories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			if (territories[i]->getName() == allAdjacentTerritories[j]->getName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
@@ -113,13 +119,6 @@ vector<Territory*> Player::toAttack()
 
 	return allAdjacentTerritories;
 }
-
-vector<Territory*> Player::toDefend()
-{
-	return territories;
-}
-
-vector<string> cardOrders{ "bomb", "blockade", "airlift", "diplomacy" };
 
 void Player::issueOrder(string orderName)
 {
