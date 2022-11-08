@@ -2,6 +2,8 @@
 #include <Map/Map.h>
 #include <fstream>
 #include <iostream>
+using std::cout;
+using std::cin;
 #include <regex>
 #include <sstream>
 #include <string>

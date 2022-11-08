@@ -1,4 +1,5 @@
 #include "Player/Player.h"
+#include "Cards/Cards.h"
 
 #include <vector>
 #include <iostream>
@@ -8,9 +9,9 @@ using std::vector;
 
 Player::Player()
 {
-
+	this->hand = new Hand();
+	this->ordersList= new OrdersList();
 }
-
 
 Player::Player(const Player& otherPlayer)
 {
@@ -58,19 +59,19 @@ ostream& operator<<(ostream& output, const Player& player)
 		output << "\t" << territory << endl;
 	}
 
-	output << "Player cards in hand:" << endl;
-	for (Cards* card : player.hand->getCards())
-	{
-		output << "\t" << card << endl;
-	}
+	output << "Player cards in hand3:" << endl;
+	output << *player.hand << endl;
+	
 
 	output << "Player orders list:" << endl;
-	for (Order* order : player.ordersList->getOrders())
-	{
-		output << "\t" << order << endl;
-	}
+	output << *player.ordersList << endl;
 
 	return output;
+}
+
+vector<Territory*> Player::toDefend()
+{
+	return territories;
 }
 
 vector<Territory*> Player::toAttack()
@@ -113,13 +114,6 @@ vector<Territory*> Player::toAttack()
 
 	return allAdjacentTerritories;
 }
-
-vector<Territory*> Player::toDefend()
-{
-	return territories;
-}
-
-vector<string> cardOrders{ "bomb", "blockade", "airlift", "diplomacy" };
 
 void Player::issueOrder(string orderName)
 {

@@ -287,11 +287,6 @@ void OrdersList::executeNextOrder()
     remove(1);
 }
 
-vector<Order*> OrdersList::getOrders()
-{
-    return m_orders;
-}
-
 // destructor deletes every Order object and then clears the underlying vector container
 OrdersList::~OrdersList()
 {

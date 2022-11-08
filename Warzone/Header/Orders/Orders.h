@@ -10,28 +10,30 @@ using std::vector;
 class Order
 {
 public:
-    Order(string type); // constructor, sets the type of order to m_type
+    // constructors
+    Order(string type); 
+    Order(const Order &other);
 
-    Order(const Order &other); // copy constructor
+    // clones() creates a new order object identical to this
+    // order and returns a pointer to the new order
+    virtual Order* clone() const = 0;
 
-    virtual Order *clone() const = 0; // clones() creates a new order object identical to this
-                                      // order and returns a pointer to the new order
+    // destructor
+    virtual ~Order();
 
-    // verifies if the order is valid, each subclass overrides this function for their
+    // assignment operator
+    Order& operator=(const Order& rightSide);
+
+    // stream output operator
+    friend ostream& operator<<(ostream& output, const Order& order);
+    
+    // REQUIRED - verifies if the order is valid, each subclass overrides this function for their
     // own validity check
     virtual bool validate() const = 0;
 
-    // executes order, checks validity first, each subclass overrides this function for their own
+    // REQUIRED - executes order, checks validity first, each subclass overrides this function for their own
     // individual implementation resulting in some game action depending on the specific order
     virtual void execute() = 0;
-
-    // overloaded assignment operator, returns a copy of the RHS Order object
-    Order &operator=(const Order &rightSide);
-
-    // overloaded stream insertion operator, prints the order type (Deploy, Bomb, Advance, ...)
-    friend ostream &operator<<(ostream &output, const Order &order);
-
-    virtual ~Order(); // destructor
 
 private:
     string m_type;
@@ -108,33 +110,32 @@ public:
 class OrdersList
 {
 public:
-    OrdersList();                           // default constructor
+    // constructors
+    OrdersList();
+    OrdersList(const OrdersList &other);
 
-    OrdersList(const OrdersList &other);    // copy constructor
+    // destructor
+    ~OrdersList();
+    
+    // assignment operator
+    OrdersList& operator=(const OrdersList& ordersList);
 
-    void addOrder(Order *newOrder);         // adds an order to list
+    // stream output operator
+    friend ostream& operator<<(ostream& output, const OrdersList& ordersList);
+
+    // adds an order to list
+    void addOrder(Order *newOrder);
 
     // moves an order to a different position in the list, first int parameter represents the
     // current position of the order th ebe moved, second int indicated the target position
-    void move(int pos, int newPos);
+    void move(int position, int newPosition);
 
     // removes an order from the list, int parameter indicates position of order to remove
-    void remove(int pos);
+    void remove(int position);
 
     // executes the next order and then removes it from the list
     void executeNextOrder();
 
-    // overloaded assignment operator returning a hard copy of the RHS OrdersList object
-    OrdersList &operator=(const OrdersList &rightSide);
-
-    // overloaded stream insertion operator returning a numbered list representation of the
-    // current orders in the list.
-    friend ostream &operator<<(ostream &output, const OrdersList &orders);
-
-    ~OrdersList(); // destructor
-
-    vector<Order*> getOrders();
-
 private:
-    vector<Order *> m_orders;
+    vector<Order*> m_orders;
 };
