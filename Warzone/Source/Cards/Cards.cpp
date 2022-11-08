@@ -108,10 +108,17 @@ Deck &Deck::operator=(const Deck &deck)
 
 ostream& operator<<(ostream& output, const Deck& deck)
 {
-	output << "Content of hand: " << endl;
-	for (Card* card : deck.cardsInDeck)
+	if (deck.cardsInDeck.empty())
 	{
-		output << card << endl;
+		cout << "-DECK EMPTY-" << endl;
+		return output;
+	}
+	else
+	{
+		int i = 1;
+		for (auto& card : deck.cardsInDeck)
+			cout << i++ << ". " << *card << endl;
+		return output;
 	}
 
 	return output;
@@ -170,11 +177,19 @@ Hand &Hand::operator=(const Hand &hand)
 
 ostream& operator<<(ostream& output, const Hand& hand)
 {
-	output << "Content of hand: " << endl;
-	for (Card* card: hand.cardsInHand)
+	if (hand.cardsInHand.empty())
 	{
-		output << card << endl;
+		cout << "-HAND EMPTY-" << endl;
+		return output;
 	}
+	else
+	{
+		int i = 1;
+		for (auto& card : hand.cardsInHand)
+			cout << i++ << ". " << *card << endl;
+		return output;
+	}
+
 	return output;
 }
 
@@ -196,5 +211,5 @@ void Hand::addToHand(Card *card)
 
 vector<Card*> Hand::getCards()
 {
-	return this->cardsInHand;
+	return cardsInHand;
 }

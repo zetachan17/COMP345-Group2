@@ -20,10 +20,10 @@ void testCards()
 	ptrD1->createDeck();
 
 	std::cout << "Printing Deck before drawing cards:" << std::endl;
-	std::cout << ptrD1 << std::endl;
+	std::cout << *ptrD1 << std::endl;
 
 	std::cout << "Printing Hand before drawing cards:" << std::endl;
-	std::cout << ptrH1 << std::endl;
+	std::cout << *ptrH1 << std::endl;
 
 	std::cout << "Drawing and adding card to hand (10 times)." << std::endl;
 	for (int i = 0; i < 10; i++)
@@ -32,10 +32,10 @@ void testCards()
 	}
 
 	std::cout << "Printing Deck after drawing cards:" << std::endl;
-	std::cout << ptrD1 << std::endl;
+	std::cout << *ptrD1 << std::endl;
 
 	std::cout << "Printing Hand after drawing cards:" << std::endl;
-	std::cout << ptrH1 << std::endl;
+	std::cout << *ptrH1 << std::endl;
 
 	std::cout << "Playing cards (all 10)." << std::endl;
 	for (int i = 0; i < 10; i++)
@@ -45,10 +45,10 @@ void testCards()
 	}
 
 	std::cout << "Printing Deck after playing cards." << std::endl;
-	std::cout << ptrD1 << std::endl;
+	std::cout << *ptrD1 << std::endl;
 
 	std::cout << "Printing Hand after playing cards." << std::endl;
-	std::cout << ptrH1 << std::endl;
+	std::cout << *ptrH1 << std::endl;
 
 	// deleting to avoid memory leaks
 	delete ptrD1;

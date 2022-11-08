@@ -143,7 +143,7 @@ public:
 	// output stream operator
 	friend ostream& operator<<(ostream &os, const MapLoader &mapLoader);
 
-	// --additional functions--
+	// reads a map file
 	void readFile(string fileName);
 	
 	friend class Map;
