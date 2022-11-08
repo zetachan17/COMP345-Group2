@@ -41,6 +41,7 @@ private:
     State state;
     vector<Player*> activePlayers;
 
+    //Part 2.4.a) fairly distribute all the territories to the players 
     void distributeterritories(MapLoader* mLoader);
 };
 

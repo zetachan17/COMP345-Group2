@@ -63,7 +63,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         //Just making sure that this is indeed the loadmap command
         if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") 
         {
-            mLoader->readFile("Eurasia - WWI 1914.map");
+            mLoader->readFile(((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(8));
             //loadMap();
             state = GameEngine::State::MapLoaded;
             //saveEffect()
@@ -77,7 +77,6 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         
     case GameEngine::State::MapLoaded:
         std::cout << "Map Loaded! "<< std::endl;
-        distributeterritories(mLoader);
         std::cout << "Do you want to load another map? Press Y to load another map, Enter \"validatemap\" to validate current map" << std::endl;
         std::cin >> userInput;
         if (userInput == "Y" || userInput == "y")
@@ -104,7 +103,9 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         if (userInput == "Y" || userInput == "y")
         {
             //P2.3 add players
-            //addPlayer(name);
+            Player* newPlayer = new Player("P1");
+            activePlayers.push_back(newPlayer);
+            
             state = GameEngine::State::PlayersAdded;
             break;
         }
@@ -125,6 +126,9 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         if (userInput == "Y" || userInput == "y")
         {
             //addPlayer(name);
+            Player* newPlayer = new Player("P2");
+            activePlayers.push_back(newPlayer);
+            distributeterritories(mLoader);
             break;
         }
         else if (userInput == "N" || userInput == "n")
@@ -227,9 +231,29 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
 void GameEngine::distributeterritories(MapLoader* mLoader)
 {
     vector<Territory*> territories = mLoader->getMap()->getTerritories();
-    for (Territory* t: territories)
+
+    while (!territories.empty())
     {
-        std::cout << t->getTerritoryName() << std::endl;
+        for (Player* player : activePlayers)
+        {
+            if (territories.empty())
+                break;
+
+            player->addTerritory(territories.back());
+            territories.pop_back();
+        }
     }
-    
+
+    for (Player* player : activePlayers)
+    {
+        int count = 0;
+        std::cout << player->getPlayerName() << std::endl;
+        
+        for (Territory* terr :player->getTerritories())
+        {
+            std::cout << terr->getTerritoryName() << std::endl;
+            count++;
+        }
+        std::cout << count << std::endl;
+    }
 }

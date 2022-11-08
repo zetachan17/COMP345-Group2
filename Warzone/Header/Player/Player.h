@@ -15,7 +15,8 @@ class Player
 {
 public:
 	// constructors
-	Player(); 
+	Player();
+	Player(string playerName);
 	Player(const Player &player);
 
 	// destructor
@@ -38,8 +39,15 @@ public:
 	// the card is then removed from the player's cards
 	void issueOrder(string orderName); 
 
+	string getPlayerName();
+	
+	void addTerritory(Territory* territory);
+
+	vector<Territory*> getTerritories();
 private:
 	vector<Territory*> territories;
 	Hand* hand;
 	OrdersList* ordersList;
+	
+	string playerName;
 };
