@@ -92,8 +92,13 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
         else if (userInput == "validatemap")
         {
             //P2.2, validate the map
-            mLoader->getMap()->validate();
-            state = GameEngine::State::MapValidated;
+            if (mLoader->getMap()->validate())
+            {
+                state = GameEngine::State::MapValidated;
+                break;
+            }
+            
+            std::cout << "Invalid map! Please select another map!" << std::endl;
             break;
         }
         else
@@ -257,18 +262,18 @@ void GameEngine::distributeTerritories(MapLoader* mLoader)
     }
 
     // some printing messages
-    // for (Player* player : activePlayers)
-    // {
-    //     int count = 0;
-    //     std::cout << player->getPlayerName() << std::endl;
-    //     
-    //     for (Territory* terr :player->getTerritories())
-    //     {
-    //         std::cout << terr->getTerritoryName() << std::endl;
-    //         count++;
-    //     }
-    //     std::cout << count << std::endl;
-    // }
+    for (Player* player : activePlayers)
+    {
+        int count = 0;
+        std::cout << player->getPlayerName() << std::endl;
+        
+        for (Territory* terr :player->getTerritories())
+        {
+            std::cout << terr->getTerritoryName() << std::endl;
+            count++;
+        }
+        std::cout << count << std::endl;
+    }
 }
 
 void GameEngine::randomizPlayerOrder()
