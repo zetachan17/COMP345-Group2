@@ -248,6 +248,14 @@ OrdersList::OrdersList(const OrdersList &other)
         addOrder(o->clone());
 }
 
+OrdersList::OrdersList(const vector<Order*> orders)
+{
+    for (Order* order : orders)
+    {
+        this->addOrder(order);
+    }
+}
+
 // addOrder() adds an order to the list.
 void OrdersList::addOrder(Order *newOrder)
 {
