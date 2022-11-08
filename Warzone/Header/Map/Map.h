@@ -116,8 +116,8 @@ private:
 	// verifies that the continents are connected subgraphs
 	bool isContinentsConnected();
 
-	// 
-	bool isBelongOneContinent();
+	// verifies that all territories belong to one and only one continent
+	bool territoriesBelongToOneContinent();
 	void DFS(const Territory *territory, vector<string> &visited);
 	void continentDFS(const Territory *territory, vector<string> &visited);
 	

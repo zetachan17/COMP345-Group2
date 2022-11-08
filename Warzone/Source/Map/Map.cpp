@@ -257,9 +257,9 @@ ostream &operator<<(ostream &os, const Territory &territory)
     return os;
 }
 
-void Territory::addAdjacentTerritory(Territory *Terr)
+void Territory::addAdjacentTerritory(Territory *territory)
 {
-    adjacentTerritories.push_back(Terr);
+    adjacentTerritories.push_back(territory);
 }
 
 vector<Territory*> Territory::getAdjacentTerritories()
@@ -334,15 +334,15 @@ Map::Map(const Map &otherMap)
 
 Map::~Map()
 {
-    for (Continent *cont : continents)
+    for (Continent *continent : continents)
     {
-        delete cont;
-        cont = NULL;
+        delete continent;
+        continent = NULL;
     }
-    for (Territory *terr : territories)
+    for (Territory *territory : territories)
     {
-        delete terr;
-        terr = NULL;
+        delete territory;
+        territory = NULL;
     }
 }
 
@@ -395,8 +395,8 @@ void Map::validate()
         cout << "Map is not connected!" << endl;
     else if (!isContinentsConnected())
         cout << "Continent is not connected!" << endl;
-    else if (!isBelongOneContinent())
-        cout << "Terrtory does npt belong to only on continent!" << endl;
+    else if (!territoriesBelongToOneContinent())
+        cout << "Terrtory does not belong to only on continent!" << endl;
     else
         cout << "Map validated!" << endl;
 }
@@ -445,7 +445,7 @@ bool Map::isContinentsConnected()
     return true;
 }
 
-bool Map::isBelongOneContinent()
+bool Map::territoriesBelongToOneContinent()
 {
     for (Continent *continent : continents)
     {
@@ -460,44 +460,44 @@ bool Map::isBelongOneContinent()
     return true;
 }
 
-void Map::continentDFS(const Territory *Terr, vector<string> &visited)
+void Map::continentDFS(const Territory *territory, vector<string> &visited)
 {
-    if (find(visited.begin(), visited.end(), Terr->territoryName) != visited.end())
+    if (find(visited.begin(), visited.end(), territory->territoryName) != visited.end())
     {
         return;
     }
 
-    visited.push_back(Terr->territoryName);
+    visited.push_back(territory->territoryName);
 
-    for (const Territory *adjTerritory : Terr->adjacentTerritories)
+    for (const Territory *adjTerritory : territory->adjacentTerritories)
     {
-        if (Terr->continentId == adjTerritory->continentId)
+        if (territory->continentId == adjTerritory->continentId)
         {
             continentDFS(adjTerritory, visited);
         }
     }
 }
 
-void Map::DFS(const Territory *Terr, vector<string> &visited)
+void Map::DFS(const Territory * territory, vector<string> &visited)
 {
-    if (find(visited.begin(), visited.end(), Terr->territoryName) != visited.end())
+    if (find(visited.begin(), visited.end(), territory->territoryName) != visited.end())
     {
         return;
     }
 
-    visited.push_back(Terr->territoryName);
+    visited.push_back(territory->territoryName);
 
-    for (const Territory *adjTerritory : Terr->adjacentTerritories)
+    for (const Territory *adjTerritory : territory->adjacentTerritories)
     {
         DFS(adjTerritory, visited);
     }
 }
 
-Territory *Map::getTerritoryByName(string TerrName)
+Territory *Map::getTerritoryByName(string name)
 {
     for (Territory *x : territories)
     {
-        if ((x->territoryName).compare(TerrName) == 0)
+        if ((x->territoryName).compare(name) == 0)
         { // For some reason declaring the Map class as a friend works, but not declaring the function as a friend fn
             return x;
         }
