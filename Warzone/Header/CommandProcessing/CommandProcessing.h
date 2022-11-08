@@ -20,7 +20,7 @@ public:
 
 	//friend class
 	friend class CommandProcessor;
-	friend GameEngine::State GameEngine::StartGame(GameEngine::State state);
+	friend GameEngine::State GameEngine::StartEngine(GameEngine::State state);
 
 };
 
@@ -44,6 +44,6 @@ public:
 	//void saveEffect(string effectName);
 
 	//friends
-	friend GameEngine::State GameEngine::StartGame(GameEngine::State state);
+	friend GameEngine::State GameEngine::StartEngine(GameEngine::State state);
 
 };

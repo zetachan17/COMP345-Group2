@@ -8,7 +8,7 @@ void testGameStates()
     
     while (currentState != GameEngine::State::End)
     {
-        currentState = gameEngine->StartGame(currentState);
+        currentState = gameEngine->StartEngine(currentState);
     }
 
     delete gameEngine;

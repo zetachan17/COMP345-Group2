@@ -8,12 +8,13 @@ using std::vector;
 
 Player::Player()
 {
-
+	this->numArmies = 0;
 }
 
 Player::Player(string playerName)
 {
 	this->playerName = playerName;
+	this->numArmies = 0;
 }
 
 
@@ -29,6 +30,7 @@ Player::Player(const Player& otherPlayer)
 	}
 
 	this->playerName = otherPlayer.playerName;
+	this->numArmies = otherPlayer.numArmies;
 }
 
 Player::~Player() 
@@ -149,6 +151,23 @@ void Player::addTerritory(Territory* territory)
 vector<Territory*> Player::getTerritories()
 {
 	return territories;
+}
+
+Hand* Player::getHand()
+{
+	return hand;
+}
+
+int Player::getNumArmies()
+{
+	return numArmies;
+}
+
+void Player::addNumArmies(int newArmies)
+{
+	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;
+	numArmies += newArmies;
+	cout << "Now they have " << getNumArmies() << " armies" << endl;
 }
 
 

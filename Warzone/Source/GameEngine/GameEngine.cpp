@@ -13,6 +13,8 @@
 GameEngine::GameEngine()
 {
     this->state = GameEngine::State::Start;
+    //TODO:: PASS DECK FROM CARD.CPP TO HERE
+    this->deck = new Deck();
 }
 
 GameEngine::GameEngine(const GameEngine& game)
@@ -48,9 +50,10 @@ void GameEngine::addPlayer(string name)
     activePlayers.push_back(p);
 }
 
+//TODO: THIS IS SO UGLY, NEEDS TO BE FIXED
 MapLoader* mLoader = new MapLoader;
 
-GameEngine::State GameEngine::StartGame(GameEngine::State state)
+GameEngine::State GameEngine::StartEngine(GameEngine::State state)
 {
     std::string userInput;
     CommandProcessor* cmdP = new CommandProcessor;
@@ -105,6 +108,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
         if (userInput == "Y" || userInput == "y")
         {
             //P2.3 add players
+            //TODO: find a better place to add players
             Player* newPlayer = new Player("P1");
             activePlayers.push_back(newPlayer);
             
@@ -130,11 +134,16 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
             //addPlayer(name);
             Player* newPlayer = new Player("P2");
             activePlayers.push_back(newPlayer);
-            distributeTerritories(mLoader);
             break;
         }
         else if (userInput == "N" || userInput == "n")
         {
+            //TODO: IS THIS THE CORRECT PLACE?
+            distributeTerritories(mLoader);
+            giveInitialArmies();
+            randomizPlayerOrder();
+            //drawInitialCards();
+            
             state = GameEngine::State::AssignReinforcement;
             break;
         }
@@ -230,6 +239,7 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     return state;
 }
 
+
 void GameEngine::distributeTerritories(MapLoader* mLoader)
 {
     vector<Territory*> territories = mLoader->getMap()->getTerritories();
@@ -246,22 +256,42 @@ void GameEngine::distributeTerritories(MapLoader* mLoader)
         }
     }
 
-    for (Player* player : activePlayers)
-    {
-        int count = 0;
-        std::cout << player->getPlayerName() << std::endl;
-        
-        for (Territory* terr :player->getTerritories())
-        {
-            std::cout << terr->getTerritoryName() << std::endl;
-            count++;
-        }
-        std::cout << count << std::endl;
-    }
+    // some printing messages
+    // for (Player* player : activePlayers)
+    // {
+    //     int count = 0;
+    //     std::cout << player->getPlayerName() << std::endl;
+    //     
+    //     for (Territory* terr :player->getTerritories())
+    //     {
+    //         std::cout << terr->getTerritoryName() << std::endl;
+    //         count++;
+    //     }
+    //     std::cout << count << std::endl;
+    // }
 }
 
 void GameEngine::randomizPlayerOrder()
 {
     auto randomizer = std::default_random_engine {};
     std::shuffle(std::begin(activePlayers), std::end(activePlayers), randomizer);
+}
+
+void GameEngine::giveInitialArmies()
+{
+    for (Player* player : activePlayers)
+    {
+        player->addNumArmies(50);
+    }
+}
+
+void GameEngine::drawInitialCards()
+{
+    for (Player* player : activePlayers)
+    {
+        //draw two initial cards
+        player->getHand()->addToHand(deck->draw());
+        player->getHand()->addToHand(deck->draw());
+    }
+    
 }

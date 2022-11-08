@@ -44,10 +44,17 @@ public:
 	void addTerritory(Territory* territory);
 
 	vector<Territory*> getTerritories();
+
+	Hand* getHand();
+	
+	int getNumArmies();
+
+	void addNumArmies(int newArmies);
 private:
 	vector<Territory*> territories;
 	Hand* hand;
 	OrdersList* ordersList;
 	
 	string playerName;
+	int numArmies;
 };

@@ -34,11 +34,12 @@ public:
     void addPlayer(std::string name);
     
     //Start the game
-    State StartGame(State state);
+    State StartEngine(State state);
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER
     State state;
+    Deck* deck;
     vector<Player*> activePlayers;
     
     //Part 2.4.a) fairly distribute all the territories to the players 
@@ -46,5 +47,11 @@ private:
 
     //Part 2.4.b) determine randomly the order of play of the players in the game
     void randomizPlayerOrder();
+
+    //Part 2.4.c) give 50 initial army units to the players
+    void giveInitialArmies();
+
+    // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck’s draw() method
+    void drawInitialCards();
 };
 
