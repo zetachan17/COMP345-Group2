@@ -1,5 +1,9 @@
+
 #include <iostream>
+
 #pragma once
+
+class CommandProcessor;
 
 class GameEngine
 {
@@ -28,7 +32,13 @@ public:
     friend std::istream& operator >> (std::istream& in, GameEngine& g);
 
     //Start the game
-    State StartGame(State state);
+    GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP);
+
+    //methods
+    State getState();
+    std::string stateToString(State state);
+
+    friend class GameProcessor;
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER

@@ -37,87 +37,128 @@ std::istream& operator>>(std::istream& in, GameEngine& g)
 }
 
 
-GameEngine::State GameEngine::StartGame(GameEngine::State state)
+GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP)
 {
   
     MapLoader *mLoader = new MapLoader;
     
         std::string userInput;
-        CommandProcessor* cmdP = new CommandProcessor;
+        
         switch (state)
         {
 
         case GameEngine::State::Start:
             std::cout << "Welcome to Warzone!" << std::endl;
-            cmdP->getCommand();
-            //validateCommand()
-            if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") //Just making sure that this is indeed the loadmap command
+            cmdP->getCommand(); //Getting the command from the user
+            bool cmdValidateValue;
+            cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this); //validating the command
+            std::cout << cmdValidateValue;
+            if (cmdValidateValue)
             {
-                //loadMap();
-                state = GameEngine::State::MapLoaded;
-                //saveEffect()
+                if (((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(0, 7) == "loadmap") //Just making sure that this is indeed the loadmap command
+                {
+                    std::cout << "Making sure that this is gone intpo"<<endl;
+                    //loadMap();
+                    this->state = GameEngine::State::MapLoaded;
+                    cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], stateToString(this->state));//Saving the effect inside the Command object as a string
+                    //std::cout << cmdP->listCommands[cmdP->nbCommands]->commandEffect;
+                    cmdP->nbCommands++;//Keeping track of the number of Commands
+                    break;
+                }
                 break;
             }
             else {
                 std::cout << "Invalid input, please try again!" << std::endl;
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], ("This command was invalid in the "+stateToString(this->getState())+" state"));//Saving the effect inside the Command object as a string
+                cmdP->nbCommands++;
                 break;
             }
     case GameEngine::State::MapLoaded:
-        std::cout << "Map Loaded! "<< std::endl;
-        std::cout << "Do you want to load another map? Press Y to load another map, Enter \"validatemap\" to validate current map" << std::endl;
-        std::cin >> userInput;
-        if (userInput == "Y" || userInput == "y")
+
+        std::cout << this->stateToString(getState());
+
+        cmdP->getCommand();
+        std::cout << this->stateToString(this->getState());
+        cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this); //validating the command
+        std::cout << cmdValidateValue;
+        //cmdP->nbCommands++;//Keeping track of the number of Commands
+        if (cmdValidateValue)
         {
-            state = GameEngine::State::Start;
-            break;    
-        }
-        else if (userInput == "validatemap")
-        {
-            //P2.2, validate the map
-            mLoader->getMap().validate();
-            state = GameEngine::State::MapValidated;
-            break;
+            if ((cmdP->listCommands[cmdP->nbCommands])->commandName == "validatemap")
+            {
+                //P2.2, validate the map
+                mLoader->getMap().validate();
+                this->state = GameEngine::State::MapValidated;
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+                cmdP->nbCommands++;//Keeping track of the number of Commands
+                break;
+            }
+            else//In this case the command entered must have been "loadmap <filename>
+            {
+                //loadMap();
+                this->state = GameEngine::State::MapLoaded;
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], stateToString(this->state));//Saving the effect inside the Command object as a string
+                //std::cout << cmdP->listCommands[cmdP->nbCommands]->commandEffect;
+                cmdP->nbCommands++;//Keeping track of the number of Commands
+                break;
+            }
+            
         }
         else
         {
+            cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], ("This command was invalid in the " + stateToString(this->getState()) + " state"));//Saving the effect inside the Command object as a string
+            cmdP->nbCommands++;
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
     case GameEngine::State::MapValidated:
-        std::cout << "Add Player? Y/N" << std::endl;
-        std::cin >> userInput;
-        if (userInput == "Y" || userInput == "y")
+        
+        cmdP->getCommand();
+        cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this);
+        if (cmdValidateValue)
         {
             //addPlayer();
-            state = GameEngine::State::PlayersAdded;
-            break;
-        }
-        else if (userInput == "N" || userInput == "n")
-        {
-            state = GameEngine::State::PlayersAdded;
+            this->state = GameEngine::State::PlayersAdded;
+            cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+            cmdP->nbCommands++;//Keeping track of the number of Commands
             break;
         }
         else
         {
+            cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], ("This command was invalid in the " + stateToString(this->getState()) + " state"));//Saving the effect inside the Command object as a string
+            cmdP->nbCommands++;
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
     case GameEngine::State::PlayersAdded:
-        std::cout << "Player Added! Want to add another player? Press N to assign countries. Y/N" << std::endl;
-        std::cin >> userInput;
-
-        if (userInput == "Y" || userInput == "y")
-        {
-            // addPlayer();
-            break;
-        }
-        else if (userInput == "N" || userInput == "n")
-        {
-            state = GameEngine::State::AssignReinforcement;
-            break;
+        cmdP->getCommand();
+        cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this);
+        if (cmdValidateValue)
+        {   
+            if ((cmdP->listCommands[cmdP->nbCommands]->commandName).substr(0, 9) == "addplayer")
+            {
+                // addPlayer();
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+                cmdP->nbCommands++;
+                break;
+            }
+            else //In this case, the command must be "gamestart"
+            {
+                //gamestart() function?
+                this->state = GameEngine::State::AssignReinforcement;
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+                cmdP->nbCommands++;
+                for (Command* cmd : cmdP->listCommands)
+                {
+                    std::cout << "The name of the command is :" + cmd->commandName + " its corresponding effect is :" + cmd->commandEffect<<endl;
+                }
+                break;
+            }
         }
         else
         {
+            cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], ("This command was invalid in the " + stateToString(this->getState()) + " state"));//Saving the effect inside the Command object as a string
+            cmdP->nbCommands++;
             std::cout << "Invalid input, please try again!" << std::endl;
             break;
         }
@@ -183,22 +224,31 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
             break;
         }
     case GameEngine::State::Win:
-        std::cout << "Want to play again? Y/N" << std::endl;
-        std::cin >> userInput;
-
-        if (userInput == "Y" || userInput == "y")
+        
+        cmdP->getCommand();
+        cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this);
+        if (cmdValidateValue)
         {
-            state = GameEngine::State::Start;
-            break;
-        }
-        else if (userInput == "N" || userInput == "n")
-        {
-            state = GameEngine::State::End;
-            break;
+            if (cmdP->listCommands[cmdP->nbCommands]->commandName == "replay")
+            {
+                this->state = GameEngine::State::Start;    
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+                cmdP->nbCommands++;
+                break;
+            }
+            else //In this case the command must have been "quit"
+            {
+                this->state = GameEngine::State::End;
+                cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+                cmdP->nbCommands++;
+                break;
+            }
         }
         else
         {
             std::cout << "Invalid input, please try again!" << std::endl;
+            cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
+            cmdP->nbCommands++;
             break;
         }
     case GameEngine::State::End:
@@ -206,4 +256,42 @@ GameEngine::State GameEngine::StartGame(GameEngine::State state)
     }
 
     return state;
+}
+
+GameEngine::State GameEngine::getState()
+{
+    return this->state;
+}
+
+std::string GameEngine::stateToString(State state)
+{
+    if (state == GameEngine::State::Start)
+    {
+        return "Start";
+    }
+    else if (state == GameEngine::State::MapLoaded)
+    {
+        return "MapLoaded";
+    }
+    else if (state == GameEngine::State::MapValidated)
+    {
+        return "MapValidated";
+    }
+    else if (state == GameEngine::State::PlayersAdded)
+    {
+        return "PlayersAdded";
+    }
+    else if (state == GameEngine::State::PlayersAdded)
+    {
+        return "PlayersAdded";
+    }
+    else if (state == GameEngine::State::Win)
+    {
+        return "Win";
+    }
+    else
+    {
+        return "End";
+    }
+    
 }

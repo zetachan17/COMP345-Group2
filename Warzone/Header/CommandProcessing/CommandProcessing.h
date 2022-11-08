@@ -20,7 +20,7 @@ public:
 
 	//friend class
 	friend class CommandProcessor;
-	friend GameEngine::State GameEngine::StartGame(GameEngine::State state);
+	friend GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP);
 
 };
 
@@ -41,9 +41,11 @@ public:
 	//methods
 	void getCommand();
 	Command* saveCommand(string cmdName);
-	//void saveEffect(string effectName);
+	void saveEffect(Command* cmd, string effectName);
+	bool validate(Command* cmd, GameEngine* gameEngine);
 
 	//friends
-	friend GameEngine::State GameEngine::StartGame(GameEngine::State state);
+	friend GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP);
+	friend GameEngine::State GameEngine::getState();
 
 };
