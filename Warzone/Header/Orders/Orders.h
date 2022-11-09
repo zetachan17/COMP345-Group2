@@ -113,7 +113,6 @@ public:
     // constructors
     OrdersList();
     OrdersList(const OrdersList &other);
-    OrdersList(const vector<Order*> orders);
 
     // destructor
     ~OrdersList();
@@ -136,9 +135,6 @@ public:
 
     // executes the next order and then removes it from the list
     void executeNextOrder();
-
-    // getter for m_orders
-    vector<Order*> getOrders();
 
 private:
     vector<Order*> m_orders;
