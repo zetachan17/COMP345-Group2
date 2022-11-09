@@ -2,12 +2,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "LoggingObserver/LoggingObserver.h"
 using std::ostream;
 using std::string;
 using std::vector;
 
 /// Base Order class representing an order issued by the player to then be executed
-class Order
+class Order : public Subject, public ILoggable
 {
 public:
     // constructors
@@ -107,7 +108,7 @@ public:
 
 /// OrdersList manages a list of Order objects representing the sequential orders issued by a
 /// player. Orders can be added, moved around, removed, and executed.
-class OrdersList
+class OrdersList : public Subject, public ILoggable
 {
 public:
     // constructors

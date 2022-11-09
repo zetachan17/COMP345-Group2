@@ -252,6 +252,7 @@ OrdersList::OrdersList(const OrdersList &other)
 void OrdersList::addOrder(Order *newOrder)
 {
     m_orders.push_back(newOrder);
+    Notify();
 }
 
 // move() takes in the current position of an order, from a list of current orders shown to the
