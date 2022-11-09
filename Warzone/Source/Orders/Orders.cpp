@@ -286,6 +286,7 @@ void OrdersList::executeNextOrder()
 {
     m_orders[0]->execute();
     remove(1);
+    Notify();
 }
 
 // destructor deletes every Order object and then clears the underlying vector container
