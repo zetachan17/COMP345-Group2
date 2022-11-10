@@ -32,7 +32,7 @@ public:
     friend std::istream& operator >> (std::istream& in, GameEngine& g);
 
     //Start the game
-    GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP);
+    State StartGame(State state, CommandProcessor* cmdP);
 
     //methods
     State getState();

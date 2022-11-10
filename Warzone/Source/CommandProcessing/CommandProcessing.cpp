@@ -170,7 +170,46 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 	else {
 		return false;
 	}
-	
-
-	
 }
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filename) : CommandProcessor()
+{
+	inputstream.open("CommandFile/" + filename);
+}
+
+string FileCommandProcessorAdapter::readCommand()
+{
+	if (inputstream.eof())
+	{
+		
+	}
+
+	string command;
+	getline(inputstream, command);
+	if (command == "")
+	{
+		
+	}
+
+	return command;
+}
+
+FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
+{
+	inputstream.close();
+	std::cout << "Close file command processor adapter" << std::endl;
+}
+
+FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
+{
+	return *this;
+}
+
+std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& adapter)
+{
+	std::cout << "This is a file command processor adapter." <<  std::endl;
+	return output;
+}
+
+
+

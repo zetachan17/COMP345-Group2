@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+
 using namespace std;
 
 
@@ -20,7 +22,7 @@ public:
 
 	//friend class
 	friend class CommandProcessor;
-	friend GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP);
+	friend GameEngine::State GameEngine::StartGame(GameEngine::State state, CommandProcessor* cmdP);
 
 };
 
@@ -32,7 +34,9 @@ private:
 	//This is the collection of Command objects
 	vector<Command*> listCommands;
 	int nbCommands;
-	string readCommand();
+
+protected:
+	virtual string readCommand();
 
 public:
 	//Default constructor
@@ -43,9 +47,22 @@ public:
 	Command* saveCommand(string cmdName);
 	void saveEffect(Command* cmd, string effectName);
 	bool validate(Command* cmd, GameEngine* gameEngine);
-
+	
 	//friends
-	friend GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP);
+	friend GameEngine::State GameEngine::StartGame(GameEngine::State state, CommandProcessor* cmdP);
 	friend GameEngine::State GameEngine::getState();
 
+};
+
+class FileCommandProcessorAdapter: public CommandProcessor
+{
+	FileCommandProcessorAdapter(string filename);
+	~FileCommandProcessorAdapter();
+
+	FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& adapter);
+	friend std::ostream& operator<<(std::ostream& output, const FileCommandProcessorAdapter& adapter);
+
+protected:
+	ifstream inputstream;
+	string readCommand() override;
 };
