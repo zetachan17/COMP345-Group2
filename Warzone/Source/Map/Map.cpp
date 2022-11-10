@@ -7,10 +7,25 @@
 #include <fstream>
 using std::cout;
 using std::endl;
-using std::string;
 using std::regex;
+using std::string;
 
+//
+// added by raf to implement order execution
+//
+void Territory::addUnits(int armyUnits)
+{
+    units = armyUnits;
+}
 
+int Territory::getUnits()
+{
+    return units;
+}
+
+//
+// original methods from assignment 1 
+//
 void MapLoader::readFile(string fileName)
 {
 
@@ -19,11 +34,11 @@ void MapLoader::readFile(string fileName)
     // mapFile.open("002_I72_X-29.map", std::ios::in);
 
     // arrays that will store the Continents and Territory string data
-    vector<string> continentsData; 
+    vector<string> continentsData;
     vector<string> territoriesData;
-    
+
     // arrays of pointers to Continent and Territory objects
-    vector<Continent *> continents; 
+    vector<Continent *> continents;
     vector<Territory *> territories;
 
     if (mapFile.is_open())
@@ -231,6 +246,7 @@ Territory::Territory(const Territory &otherTerritory)
     territoryId = otherTerritory.territoryId;
     territoryName = otherTerritory.territoryName;
     continentId = otherTerritory.continentId;
+    units = otherTerritory.units;
     for (Territory *terri : otherTerritory.adjacentTerritories)
     {
         adjacentTerritories.push_back(terri);
@@ -239,11 +255,12 @@ Territory::Territory(const Territory &otherTerritory)
 
 Territory::~Territory() {}
 
-Territory &Territory::operator=(const Territory & otherTerritory)
+Territory &Territory::operator=(const Territory &otherTerritory)
 { // Important note: Here we define
     territoryId = otherTerritory.territoryId;
     territoryName = otherTerritory.territoryName;
-    continentId= otherTerritory.continentId;
+    continentId = otherTerritory.continentId;
+    units = otherTerritory.units;
     for (Territory *adjacentTerritory : otherTerritory.adjacentTerritories)
     {
         adjacentTerritories.push_back(adjacentTerritory);
@@ -262,7 +279,7 @@ void Territory::addAdjacentTerritory(Territory *territory)
     adjacentTerritories.push_back(territory);
 }
 
-vector<Territory*> Territory::getAdjacentTerritories()
+vector<Territory *> Territory::getAdjacentTerritories()
 {
     return adjacentTerritories;
 }
@@ -282,7 +299,7 @@ Continent::Continent(int continentId, string continentName, int bonus)
 Continent::Continent(const Continent &continent)
 {
     this->continentId = continent.continentId;
-    this->continentName= continent.continentName;
+    this->continentName = continent.continentName;
     this->bonus = continent.bonus;
 
     for (Territory *territory : continent.territories)
@@ -293,7 +310,7 @@ Continent::Continent(const Continent &continent)
 
 Continent::~Continent() {}
 
-Continent &Continent::operator=(const Continent & continent)
+Continent &Continent::operator=(const Continent &continent)
 {
     this->continentId = continent.continentId;
     this->continentName = continent.continentName;
@@ -346,7 +363,7 @@ Map::~Map()
     }
 }
 
-Map &Map::operator=(const Map & otherMap)
+Map &Map::operator=(const Map &otherMap)
 { // generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
     numberOfContinents = otherMap.numberOfContinents;
     numberOfTerritories = otherMap.numberOfTerritories;
@@ -478,7 +495,7 @@ void Map::continentDFS(const Territory *territory, vector<string> &visited)
     }
 }
 
-void Map::DFS(const Territory * territory, vector<string> &visited)
+void Map::DFS(const Territory *territory, vector<string> &visited)
 {
     if (find(visited.begin(), visited.end(), territory->territoryName) != visited.end())
     {

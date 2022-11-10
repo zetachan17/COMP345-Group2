@@ -1,9 +1,18 @@
 #include "Orders/Orders.h"
+#include "Map/Map.h"
+#include "Player/Player.h"
+
 #include <iostream>
+#include <algorithm>
 using std::cout;
 using std::endl;
+using std::find;
 
-Order::Order(string type) : m_type(type) {}
+
+// to remove once all suborders are implemented
+Order::Order(string type) : m_type(type), m_player(NULL) {}
+
+Order::Order(string type, Player *player) : m_type(type), m_player(player) {}
 
 Order::Order(const Order &other)
 {
@@ -24,7 +33,8 @@ ostream &operator<<(ostream &output, const Order &order)
 
 Order::~Order() {}
 
-Deploy::Deploy() : Order("Deploy") {}
+Deploy::Deploy(Player *player, int armyUnits, Territory *target)
+    : Order("Deploy", player), m_units(armyUnits), m_territory(target) {}
 
 Order *Deploy::clone() const
 {
@@ -35,16 +45,15 @@ Order *Deploy::clone() const
 // demonstrate it can be accessed to check validity.
 bool Deploy::validate() const
 {
-    if (true)
+    vector<Territory *> toDefend = m_player->toDefend();
+    if (find(toDefend.begin(), toDefend.end(), m_territory) != toDefend.end())
     {
         cout << *this << " order validated.\n";
         return true;
     }
-    else if (false)
-    {
-        cout << *this << " order not valid.\n";
-        return false;
-    }
+
+    cout << *this << " order not valid.\n";
+    return false;
 }
 
 // execute() not fully implemented yet for part 1, for now it simply calls validate()
@@ -54,6 +63,9 @@ void Deploy::execute()
 {
     if (validate())
     {
+        m_territory->addUnits(m_units);
+        m_player->addReinforcements(-m_units);
+
         cout << *this << " order executed.\n";
     }
 }
@@ -279,15 +291,19 @@ void OrdersList::remove(int p)
     }
 }
 
-// executes the top order in the list (position 0 in the vector), deletes Order object
-// and removes it from the list
-void OrdersList::executeNextOrder()
+Order *OrdersList::nextOrder()
 {
-    m_orders[0]->execute();
-    remove(1);
+    Order *temp = NULL;
+    if (!(m_orders.empty()))
+    {
+        temp = m_orders.front();
+        m_orders.erase(m_orders.begin());
+        return temp;
+    }
+
+    return temp;
 }
 
-// destructor deletes every Order object and then clears the underlying vector container
 OrdersList::~OrdersList()
 {
     for (auto &order : m_orders)

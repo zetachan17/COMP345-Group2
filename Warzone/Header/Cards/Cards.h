@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Orders/Orders.h"
-
 #include <vector>
 #include <string>
 #include <iostream>
 using std::ostream;
 using std::string;
-using std::vector; 
+using std::vector;
+
+class Order;
+class OrdersList;
 
 class Card
 {
@@ -24,16 +25,16 @@ public:
 	~Card();
 
 	// assignment operator
-	Card& operator=(const Card &card);
-	
+	Card &operator=(const Card &card);
+
 	// output stream operator
-	friend ostream& operator<<(ostream& output, const Card& card); 
+	friend ostream &operator<<(ostream &output, const Card &card);
 
 	// REQUIRED - plays the card, creates the corresponding order and adds it to the orderlist
-	void play(Card* card, OrdersList *orders);
+	void play(Card *card, OrdersList *orders);
 
 	// creates an order from a card
-	Order* createOrder(Card *card);
+	Order *createOrder(Card *card);
 };
 
 class Deck
@@ -46,21 +47,21 @@ public:
 
 	// destructor
 	~Deck();
-	
+
 	// assignment operator
 	Deck &operator=(const Deck &deck);
 
 	// output stream operator
-	friend ostream& operator<<(ostream& output, const Deck& deck);
-	
+	friend ostream &operator<<(ostream &output, const Deck &deck);
+
 	// REQUIRED - draws a card at random from the deck
-	Card* draw();
+	Card *draw();
 
 	// instantiates the cards in the deck
 	void createDeck();
 
 	// adds a card to the deck
-	void addToDeck(Card* card);
+	void addToDeck(Card *card);
 
 private:
 	vector<Card *> cardsInDeck;
@@ -73,7 +74,7 @@ public:
 	// constructors
 	Hand();
 	Hand(const Hand &hand);
-	
+
 	// destructor
 	~Hand();
 
@@ -81,7 +82,7 @@ public:
 	Hand &operator=(const Hand &card);
 
 	// output stream operator
-	friend ostream& operator<<(ostream& output, const Hand& hand);
+	friend ostream &operator<<(ostream &output, const Hand &hand);
 
 	// adds a card to the hand
 	void addToHand(Card *card);
@@ -90,8 +91,8 @@ public:
 	Card *playCard(Deck *deck);
 
 	// getters
-	vector<Card*> getCards();
+	vector<Card *> getCards();
 
 private:
-	vector<Card*> cardsInHand;
+	vector<Card *> cardsInHand;
 };

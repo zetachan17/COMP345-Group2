@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -10,32 +12,42 @@ class Territory
 private:
 	int territoryId;
 	string territoryName;
-	vector<Territory*> adjacentTerritories;
-	int continentId; 
+	vector<Territory *> adjacentTerritories;
+	int continentId;
+
+	// added by raf to implement order execution:
+	int units;
 
 public:
 	// constructors
 	Territory(int territoryId, string territoryName, int continentId);
-	Territory(const Territory &territory); 
+	Territory(const Territory &territory);
 
-	//destructor
+	// destructor
 	~Territory();
 
 	// assignment operator
 	Territory &operator=(const Territory &territory);
 
 	// stream output operator
-	friend ostream& operator<<(ostream& os, const Territory& territory);
+	friend ostream &operator<<(ostream &os, const Territory &territory);
 
 	// adds a territory to the list of adjacent territories
 	void addAdjacentTerritory(Territory *territory);
 
 	// getters
 	string getTerritoryName();
-	vector<Territory*> getAdjacentTerritories();
+	vector<Territory *> getAdjacentTerritories();
 
 	friend class Map;
 	friend class Continent;
+
+	//
+	// following methods were added by raf to implement order execution
+	//
+	void addUnits(int armyUnits);
+
+	int getUnits();
 };
 
 class Continent
@@ -44,7 +56,7 @@ private:
 	int continentId;
 	string continentName;
 	int bonus;
-	vector<Territory*> territories;
+	vector<Territory *> territories;
 
 public:
 	// constructors
@@ -58,21 +70,20 @@ public:
 	Continent &operator=(const Continent &continent);
 
 	// stream output operator
-	friend ostream& operator<<(ostream& os, const Continent& continent);
+	friend ostream &operator<<(ostream &os, const Continent &continent);
 
 	// adds a territory to the list of territory in this continent
 	void addTerritoryToContinent(Territory *territory);
 
 	friend class Map;
 	friend class Territory;
-
 };
 
 class Map
 {
 private:
-	vector<Continent*> continents; 
-	vector<Territory*> territories;
+	vector<Continent *> continents;
+	vector<Territory *> territories;
 	int numberOfContinents;
 	int numberOfTerritories;
 
@@ -88,12 +99,12 @@ public:
 	Map &operator=(const Map &map);
 
 	// output stream operator
-	friend ostream& operator<<(ostream& os, const Map& map);
+	friend ostream &operator<<(ostream &os, const Map &map);
 
 	// REQUIRED - validates the map is a connected graph, continents are connected subgraphs and each territory belongs
 	// to one and only one continent
 	void validate();
-	
+
 private:
 	// adds continent to the map
 	void addContinent(Continent *continent);
@@ -105,10 +116,10 @@ private:
 	int getContinentId(string continentName);
 
 	// gets the continent matching the passed name
-	Continent* getContinentByName(string continentName);
+	Continent *getContinentByName(string continentName);
 
 	// gets the territory maching the passed name
-	Territory* getTerritoryByName(string territoryName);
+	Territory *getTerritoryByName(string territoryName);
 
 	// verifies that the map is a connected graph
 	bool isMapConnected();
@@ -120,7 +131,7 @@ private:
 	bool territoriesBelongToOneContinent();
 	void DFS(const Territory *territory, vector<string> &visited);
 	void continentDFS(const Territory *territory, vector<string> &visited);
-	
+
 	friend class MapLoader;
 };
 
@@ -138,13 +149,13 @@ public:
 	~MapLoader();
 
 	// assignment operator
-	MapLoader& operator=(const MapLoader &mapLoader);
+	MapLoader &operator=(const MapLoader &mapLoader);
 
 	// output stream operator
-	friend ostream& operator<<(ostream &os, const MapLoader &mapLoader);
+	friend ostream &operator<<(ostream &os, const MapLoader &mapLoader);
 
 	// reads a map file
 	void readFile(string fileName);
-	
+
 	friend class Map;
 };

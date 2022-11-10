@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Map/Map.h"
-#include "Cards/Cards.h"
-#include "Orders/Orders.h"
+class Territory;
+class Hand;
+class Order;
+class OrdersList;
 
 #include <vector>
 #include <string>
@@ -15,31 +16,47 @@ class Player
 {
 public:
 	// constructors
-	Player(); 
+	Player();
 	Player(const Player &player);
 
 	// destructor
 	~Player();
 
-	//assignment operator
-	Player& operator=(const Player &player); 
+	// assignment operator
+	Player &operator=(const Player &player);
 
-	//output stream operator
-	friend ostream& operator<<(ostream& output, const Player &player); 
+	// output stream operator
+	friend ostream &operator<<(ostream &output, const Player &player);
 
 	// REQUIRED - lists territories that the player needs to defend
-	vector<Territory*> toDefend(); 
+	vector<Territory *> toDefend();
 
 	// REQUIRED - lists territories that the player is able to attack
-	vector<Territory*> toAttack();
+	vector<Territory *> toAttack();
 
 	// REQUIRED - issues an order by adding it to the player's ordersList.
 	// if the order requires a card, the player's cards are checked before issuing the order
 	// the card is then removed from the player's cards
-	void issueOrder(string orderName); 
+	// void issueOrder(string orderName);
+
+	//
+	// following methods were added or modified by raf to implement order execution
+	//
+	void issueOrder(Order *order);
+
+	Order *nextOrder();
+
+	void addTerritory(Territory *territory);
+
+	void addReinforcements(int units);
+
+	int getReinforcementPool();
 
 private:
-	vector<Territory*> territories;
-	Hand* hand;
-	OrdersList* ordersList;
+	vector<Territory *> territories;
+	Hand *hand;
+	OrdersList *ordersList;
+
+	// added by raf to implement order execution
+	int reinforcementPool;
 };

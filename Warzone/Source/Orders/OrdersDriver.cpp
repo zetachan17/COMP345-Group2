@@ -1,10 +1,65 @@
+#include "Map/Map.h"
+#include "Player/Player.h"
 #include "Orders/Orders.h"
-#include "Orders/OrdersDriver.h"
+class Territory;
+
 #include <iostream>
 using std::cout;
+using std::endl;
 
-/// Tests the functionality of the Orders & OrdersList classes.
+void testOrderExecution()
+{
+     cout << "** PART 4: ORDER EXECUTION IMPLEMENTATION **\n\n";
+
+     Territory *brazil = new Territory(0, "Brazil", 1);
+     Territory *chile = new Territory(0, "Chile", 1);
+
+     cout << "*Created test territories*\n"
+          << "-------------------------------------------\n"
+          << *brazil
+          << *chile
+          << "-------------------------------------------\n";
+
+     Player *tristan = new Player;
+     tristan->addTerritory(brazil);
+     tristan->addReinforcements(10);
+     Deploy *o = new Deploy(tristan, 4, brazil);
+     tristan->issueOrder(o);
+
+     cout << "*Created test player*\n"
+          << "*Added 'Brazil' territory to player*\n"
+          << "*Added 10 reinforcements to player*\n"
+          << "*Issued 'Deploy' order*\n"
+          << "-------------------------------------------\n"
+          << *tristan
+          << "-------------------------------------------\n";
+
+     Order *next = tristan->nextOrder();
+
+     cout << "*Removed top order to execute*\n"
+          << "Next order: " << *next << endl
+          << "-------------------------------------------\n"
+          << *tristan
+          << "-------------------------------------------\n"
+          << "Player's units before order execution: " << tristan->getReinforcementPool() << endl
+          << "Brazil's units before order execution: " << brazil->getUnits() << endl
+          << "-------------------------------------------\n";
+
+     next->execute();
+
+     cout << "-------------------------------------------\n"
+          << "*Executed Deploy*\n"
+          << "Tristan's units after order execution: " << tristan->getReinforcementPool() << endl
+          << "Brazil's units after order execution: " << brazil->getUnits() << endl;
+
+     cout << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
+}
+
+/*
+/// First driver, testing the initial functionality of the Orders & OrdersList classes.
 /// Orders are created and added to the list, removed, moved around, and then executed.
+/// A few methods have since been deleted or rewritten.
 void testOrdersLists()
 {
      cout << "** PART 3: ORDERS LIST **\n\n";
@@ -173,16 +228,17 @@ void testOrdersLists()
           << *orders
           << "-------------------------------------------\n";
      cout << "*Execute next order*\n";
-     orders->executeNextOrder();
+     // orders->executeNextOrder();
      cout << "-------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
           << "-------------------------------------------\n";
      cout << "*Execute next order*\n";
-     orders->executeNextOrder();
+     // orders->executeNextOrder();
      cout << "-------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
           << "-------------------------------------------\n"
           << "-------------------------------------------\n";
 }
+*/

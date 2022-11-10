@@ -1,4 +1,8 @@
 #pragma once
+
+class Territory;
+class Player;
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -11,29 +15,31 @@ class Order
 {
 public:
     // constructors
-    Order(string type); 
+    Order(string type, Player *player);
     Order(const Order &other);
+    Order(string type); // to delete when all subclasses are implemented
 
-    // clones() creates a new order object identical to this
-    // order and returns a pointer to the new order
-    virtual Order* clone() const = 0;
+    // clone() creates new order object identical to this order, returns a pointer to the new order
+    virtual Order *clone() const = 0;
 
     // destructor
     virtual ~Order();
 
     // assignment operator
-    Order& operator=(const Order& rightSide);
+    Order &operator=(const Order &rightSide);
 
     // stream output operator
-    friend ostream& operator<<(ostream& output, const Order& order);
-    
-    // REQUIRED - verifies if the order is valid, each subclass overrides this function for their
-    // own validity check
+    friend ostream &operator<<(ostream &output, const Order &order);
+
+    // REQUIRED - verifies if order is valid; subclasses override this for their own verification
     virtual bool validate() const = 0;
 
-    // REQUIRED - executes order, checks validity first, each subclass overrides this function for their own
-    // individual implementation resulting in some game action depending on the specific order
+    // REQUIRED - executes order; checks validity first, each subclass overrides this for their own
+    // implementation resulting in some game action depending on the specific order
     virtual void execute() = 0;
+
+protected:
+    Player *m_player;
 
 private:
     string m_type;
@@ -43,11 +49,15 @@ private:
 class Deploy : public Order
 {
 public:
-    Deploy();
+    Deploy(Player *player, int armyUnits, Territory *target);
     Order *clone() const override;
     bool validate() const override;
     void execute() override;
     ~Deploy();
+
+private:
+    int m_units;
+    Territory *m_territory;
 };
 
 /// Order subclass representing an Advance order
@@ -116,26 +126,26 @@ public:
 
     // destructor
     ~OrdersList();
-    
+
     // assignment operator
-    OrdersList& operator=(const OrdersList& ordersList);
+    OrdersList &operator=(const OrdersList &ordersList);
 
     // stream output operator
-    friend ostream& operator<<(ostream& output, const OrdersList& ordersList);
+    friend ostream &operator<<(ostream &output, const OrdersList &ordersList);
 
-    // adds an order to list
+    // adds an order to the list
     void addOrder(Order *newOrder);
 
-    // moves an order to a different position in the list, first int parameter represents the
-    // current position of the order th ebe moved, second int indicated the target position
+    // moves an order to a different position in the list; first int parameter represents the
+    // current position of the order to be moved, second int indicates the target position
     void move(int position, int newPosition);
 
     // removes an order from the list, int parameter indicates position of order to remove
     void remove(int position);
 
-    // executes the next order and then removes it from the list
-    void executeNextOrder();
+    // returns the next order and removes it from the list
+    Order *nextOrder();
 
 private:
-    vector<Order*> m_orders;
+    vector<Order *> m_orders;
 };
