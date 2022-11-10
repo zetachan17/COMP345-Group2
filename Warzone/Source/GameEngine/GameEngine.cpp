@@ -235,6 +235,10 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
         }
         else if (userInput == "N" || userInput == "n")
         {
+            // TODO: DELETE MORE POINTERS
+            delete mLoader->getMap();
+            delete mLoader;
+            mLoader = nullptr;
             state = GameEngine::State::End;
             break;
         }
@@ -244,6 +248,7 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
             break;
         }
     case GameEngine::State::End:
+
         break;
     }
 
