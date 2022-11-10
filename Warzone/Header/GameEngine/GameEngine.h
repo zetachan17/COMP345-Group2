@@ -34,7 +34,7 @@ public:
     void addPlayer(std::string name);
     
     //Start the game
-    State StartEngine(State state);
+    State startupPhase(State state);
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER

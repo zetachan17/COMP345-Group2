@@ -54,7 +54,7 @@ void GameEngine::addPlayer(string name)
 //TODO: THIS IS SO UGLY, NEEDS TO BE FIXED
 MapLoader* mLoader = new MapLoader;
 
-GameEngine::State GameEngine::StartEngine(GameEngine::State state)
+GameEngine::State GameEngine::startupPhase(GameEngine::State state)
 {
     std::string userInput;
     CommandProcessor* cmdP = new CommandProcessor;

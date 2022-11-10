@@ -17,6 +17,6 @@ int main()
     //P4
     //testCards();
     //P5
-    testGameStates();
+    testStartupPhase();
 
 }
