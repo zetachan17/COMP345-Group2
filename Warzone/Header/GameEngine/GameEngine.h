@@ -46,7 +46,7 @@ private:
     void distributeTerritories(MapLoader* mLoader);
 
     //Part 2.4.b) determine randomly the order of play of the players in the game
-    void randomizPlayerOrder();
+    void randomizePlayerOrder();
 
     //Part 2.4.c) give 50 initial army units to the players
     void giveInitialArmies();

@@ -15,6 +15,7 @@ GameEngine::GameEngine()
     this->state = GameEngine::State::Start;
     //TODO:: PASS DECK FROM CARD.CPP TO HERE
     this->deck = new Deck();
+    deck->createDeck();
 }
 
 GameEngine::GameEngine(const GameEngine& game)
@@ -77,10 +78,8 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
             }
             else
             {
-
                 break;
             }
-
         }
         else
         {
@@ -151,12 +150,6 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
         }
         else if (userInput == "N" || userInput == "n")
         {
-            //TODO: IS THIS THE CORRECT PLACE?
-            distributeTerritories(mLoader);
-            giveInitialArmies();
-            randomizPlayerOrder();
-            //drawInitialCards();
-            
             state = GameEngine::State::AssignReinforcement;
             break;
         }
@@ -166,9 +159,14 @@ GameEngine::State GameEngine::StartEngine(GameEngine::State state)
             break;
         }
     case GameEngine::State::AssignReinforcement:
+        //TODO: IS THIS THE CORRECT PLACE?
+        distributeTerritories(mLoader);
+        giveInitialArmies();
+        randomizePlayerOrder();
+        //drawInitialCards();
         std::cout << "Please enter \"issueorder\" to order issue" << std::endl;
         std::cin >> userInput;
-
+        
         if (userInput == "issueorder")
         {
             //issueOrder();
@@ -257,6 +255,9 @@ void GameEngine::distributeTerritories(MapLoader* mLoader)
 {
     vector<Territory*> territories = mLoader->getMap()->getTerritories();
 
+    auto randomizer = std::default_random_engine {};
+    std::shuffle(std::begin(territories), std::end(territories), randomizer);
+    
     while (!territories.empty())
     {
         for (Player* player : activePlayers)
@@ -280,11 +281,11 @@ void GameEngine::distributeTerritories(MapLoader* mLoader)
             std::cout << terr->getTerritoryName() << std::endl;
             count++;
         }
-        std::cout << count << std::endl;
+        std::cout << "Player " << player->getPlayerName() <<  " has " << count << " armies." << std::endl;
     }
 }
 
-void GameEngine::randomizPlayerOrder()
+void GameEngine::randomizePlayerOrder()
 {
     auto randomizer = std::default_random_engine {};
     std::shuffle(std::begin(activePlayers), std::end(activePlayers), randomizer);
