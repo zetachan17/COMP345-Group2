@@ -11,9 +11,8 @@ using std::string;
 using std::regex;
 
 
-void MapLoader::readFile(string fileName)
+bool MapLoader::readFile(string fileName)
 {
-
     std::fstream mapFile;
     mapFile.open(fileName, std::ios::in);
     // mapFile.open("002_I72_X-29.map", std::ios::in);
@@ -73,12 +72,13 @@ void MapLoader::readFile(string fileName)
         {
 
             Map *mapObj = new Map(); // DESTRUCTOR1
-
+            
             int i = 0;
             ContinentCounter = 0;
 
             while (i < continentsData.size())
             { // This part of the code is to be able to visualize how the arrays store the data on Continents and Territories
+
                 std::cout << "Continent: " << continentsData[i] + " ";
                 mapObj->numberOfContinents = ContinentCounter; // Here because we're going through all the continents,we'll assign IDs as we count them
 
@@ -89,14 +89,14 @@ void MapLoader::readFile(string fileName)
 
                 if (continentsData[i].compare("|") == 0)
                 {
-                    std::cout << "\n";
+                    //std::cout << "\n";
                     i++;
                 }
                 // cout << *contObj;
                 mapObj->addContinent(contObj);
 
                 ContinentCounter++;
-                contObj = NULL; // Avoiding dangling pointer problems at the next initialization
+                contObj = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0; // Resetting the counter
@@ -108,9 +108,11 @@ void MapLoader::readFile(string fileName)
                 i = i + 3;
                 std::cout << " Continent belonged: " << territoriesData[i] + " ";
 
+
                 Territory *TerrObj = new Territory(TerritoryCounter, territoriesData[i - 3], mapObj->getContinentId(territoriesData[i])); //    Destructor!
 
                 i++;
+
                 std::cout << "Adj territories: ";
                 while (territoriesData[i].compare("|") != 0)
                 {
@@ -119,12 +121,12 @@ void MapLoader::readFile(string fileName)
                 }
                 if (territoriesData[i].compare("|") == 0)
                 {
-                    std::cout << "\n";
+                    //std::cout << "\n";
                     i++;
                 }
                 mapObj->addTerritory(TerrObj);
                 TerritoryCounter++;
-                TerrObj = NULL; // Avoiding dangling pointer problems at the next initialization
+                TerrObj = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0;
@@ -144,7 +146,7 @@ void MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                terr = NULL; // Avoiding dangling pointer problems at the next initialization
+                terr = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
 
             i = 0;
@@ -165,39 +167,41 @@ void MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                terr = NULL; // Avoiding dangling pointer problems at the next initialization
+                terr = nullptr; // Avoiding dangling pointer problems at the next initialization
             }
             for (Continent *c : continents)
             {
                 cout << *c;
             }
 
-            cout << *mapObj;
-
-            mapObj->validate();
+            map = mapObj;
+            
             mapFile.close();
-            std::cin.get();
-
-            for (Territory *terr : territories)
-            { // Memory deallocation to avoid leaks
-                delete terr;
-                terr = NULL;
-            }
-
-            for (Continent *cont : continents)
-            {
-                delete cont;
-                cont = NULL;
-            }
-
-            delete mapObj;
-
-            mapObj = NULL; // Handling the pointers to avoid dangling pointers
+            
+            //TODO: FIND A PLACE TO DELETE THESE FUCKING POINTERS
+            // for (Territory *terr : territories)
+            // { // Memory deallocation to avoid leaks
+            //     delete terr;
+            //     terr = NULL;
+            // }
+            //
+            // for (Continent *cont : continents)
+            // {
+            //     delete cont;
+            //     cont = NULL;
+            // }
+            //
+            // delete mapObj;
+            //
+            // mapObj = NULL; // Handling the pointers to avoid dangling pointers
         }
+
+        return true;
     }
     else
     {
-        cout << "Error: The map file could not be opened, please try again with a different map file";
+        cout << "Error: The map file could not be opened, please try again with a different map file\n";
+        return false;
     }
 }
 
@@ -210,6 +214,12 @@ MapLoader::MapLoader(const MapLoader &mapLoader)
     ContinentCounter = 0;
     TerritoryCounter = 0;
 }
+
+Map* MapLoader::getMap()
+{
+    return map;
+}
+
 
 MapLoader &MapLoader::operator=(const MapLoader &mapLoader)
 {
@@ -247,6 +257,8 @@ Territory &Territory::operator=(const Territory & otherTerritory)
     for (Territory *adjacentTerritory : otherTerritory.adjacentTerritories)
     {
         adjacentTerritories.push_back(adjacentTerritory);
+        //erritory *newTerritory = new Territory(*terri);
+        //arrOfAdjTerritories.push_back(newTerritory);
     }
     return *this;
 }
@@ -302,6 +314,14 @@ Continent &Continent::operator=(const Continent & continent)
     {
         this->territories.push_back(new Territory(*territory));
     }
+    
+    // for (Territory *terri : continent.arrOfTerrInContinent)
+    // {
+    //     Territory *newTerritory = new Territory(terri->territoryID, terri->TerritoryName, terri->territoryID);
+    //     arrOfTerrInContinent.push_back(newTerritory);
+    //     terri = new Territory(terri->territoryID, terri->TerritoryName, terri->ContinentId);
+    // }
+    
     return *this;
 }
 
@@ -324,12 +344,27 @@ Map::Map()
 {
 }
 
+// Here we define the copy constructor for the Map class
 Map::Map(const Map &otherMap)
-{ // Here we define the copy constructor for the Map class
+{
     numberOfContinents = otherMap.numberOfContinents;
     numberOfTerritories = otherMap.numberOfTerritories;
     continents = otherMap.continents; // These are shallow copies, gotta iterate through the array of pointers to make deep copies
     territories = otherMap.territories;
+    
+    // for (int i = 0; i < otherMap.ContinentPointerArray.size(); ++i)
+    // {
+    //     Continent *newContinent;
+    //     newContinent = otherMap.ContinentPointerArray[i];
+    //     ContinentPointerArray.push_back(newContinent);
+    // }
+    //
+    // for (int i = 0; i < otherMap.TerritoryPointerArray.size(); ++i)
+    // {
+    //     Territory *newTerritory;
+    //     newTerritory = otherMap.TerritoryPointerArray[i];
+    //     TerritoryPointerArray.push_back(newTerritory);
+    // }
 }
 
 Map::~Map()
@@ -337,21 +372,34 @@ Map::~Map()
     for (Continent *continent : continents)
     {
         delete continent;
-        continent = NULL;
+        continent = nullptr;
     }
     for (Territory *territory : territories)
     {
         delete territory;
-        territory = NULL;
+        territory = nullptr;
     }
 }
 
+// generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
 Map &Map::operator=(const Map & otherMap)
-{ // generally speaking what goes in the assignment operator is the same as the copy constructor, what might be different is checking for self assignment
+{ 
     numberOfContinents = otherMap.numberOfContinents;
     numberOfTerritories = otherMap.numberOfTerritories;
     continents = otherMap.continents;
     territories = otherMap.territories;
+    
+    // for (int i = 0; i < otherMap.ContinentPointerArray.size(); ++i)
+    // {
+    //     Continent *newContinent = new Continent(*otherMap.ContinentPointerArray[i]);
+    //     ContinentPointerArray.push_back(newContinent);
+    // }
+    //
+    // for (int i = 0; i < otherMap.TerritoryPointerArray.size(); ++i)
+    // {
+    //     Territory *newTerritory = new Territory(*otherMap.TerritoryPointerArray[i]);
+    //     TerritoryPointerArray.push_back(newTerritory);
+    // }
 
     return *this;
 }
@@ -389,16 +437,31 @@ Continent *Map::getContinentByName(string name)
     return nullptr;
 }
 
-void Map::validate()
+bool Map::validate()
 {
     if (!isMapConnected())
+    {
         cout << "Map is not connected!" << endl;
-    else if (!isContinentsConnected())
+        return false;
+    }
+    cout << "Map is connected!" << endl;
+    
+    if (!isContinentsConnected())
+    {
         cout << "Continent is not connected!" << endl;
-    else if (!territoriesBelongToOneContinent())
-        cout << "Terrtory does not belong to only on continent!" << endl;
-    else
-        cout << "Map validated!" << endl;
+        return false;
+    }
+    cout << "Continent is connected!" << endl;
+    
+    if (!territoriesBelongToOneContinent())
+    {
+        cout << "Territory is not belonged to only on continent!" << endl;
+        return false;
+    }
+    cout << "All territories are belonged to only on continent!" << endl;
+    
+    cout << "Map validated!" << endl;
+    return true;
 }
 
 bool Map::isMapConnected()
@@ -493,6 +556,7 @@ void Map::DFS(const Territory * territory, vector<string> &visited)
     }
 }
 
+
 Territory *Map::getTerritoryByName(string name)
 {
     for (Territory *x : territories)
@@ -504,6 +568,12 @@ Territory *Map::getTerritoryByName(string name)
     }
     return nullptr;
 }
+
+vector<Territory*> Map::getTerritories()
+{
+    return territories;
+}
+
 
 ostream &operator<<(ostream &os, const Map &map)
 {

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="27b90f01-5aba-486a-94c6-03d63e98cffe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Warzone/Eurasia - WWI 1914.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Eurasia - WWII 1939.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Header/Cards/CardsDriver.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Header/GameEngine/GameEngineDriver.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Header/Orders/OrdersDriver.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Header/Player/PlayerDriver.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Mongol Empire 1294.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Pangaea.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Source/Cards/CardsDriver.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Source/GameEngine/GameEngineDriver.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Source/Orders/OrdersDriver.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/Source/Player/PlayerDriver.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Warzone/World 2007.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Header/Cards/Cards.h" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Header/Cards/Cards.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Header/GameEngine/GameEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Header/GameEngine/GameEngine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Header/Map/Map.h" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Header/Map/Map.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Header/Orders/Orders.h" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Header/Orders/Orders.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Header/Player/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Header/Player/Player.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Maps/001_I72_Ghtroc 720.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Maps/001_I72_Ghtroc 720/001_I72_Ghtroc 720.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Maps/001_I72_Ghtroc 720/001_I72_Ghtroc 720.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Maps/001_I72_Ghtroc 720/001_I72_Ghtroc 720_README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Source/Cards/Cards.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Source/Cards/Cards.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Source/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Source/GameEngine/GameEngine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Source/Map/Map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Source/Map/Map.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Source/Map/MapDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Source/Map/MapDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Source/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Source/Orders/Orders.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Source/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Source/Player/Player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Warzone.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Warzone.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Warzone.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Warzone.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Warzone/Warzone.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/Warzone/Warzone.vcxproj.filters" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2H0v4kjY0zK1WtMxA96H50T6Av3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="27b90f01-5aba-486a-94c6-03d63e98cffe" name="Default Changelist" comment="" />
+      <created>1667434628168</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1667434628168</updated>
+    </task>
+    <servers />
+  </component>
+</project>

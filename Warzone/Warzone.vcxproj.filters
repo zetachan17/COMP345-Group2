@@ -45,6 +45,15 @@
     <ClCompile Include="Source\Player\PlayerDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Map\MapDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CommandProcessing\CommandProcessingDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Map\Map.h">
@@ -73,8 +82,14 @@
     </ClInclude>
     <ClInclude Include="Header\Player\PlayerDriver.h">
       <Filter>Header Files</Filter>
-     </ClInclude>
+    </ClInclude>
     <ClInclude Include="Header\Cards\CardsDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\CommandProcessing\CommandProcessing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
