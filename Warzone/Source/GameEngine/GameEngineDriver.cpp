@@ -2,7 +2,7 @@
 #include "GameEngine/GameEngine.h"
 #include "CommandProcessing/CommandProcessing.h"
 
-void testGameStates()
+void testStartupPhase()
 {
     GameEngine* gameEngine = new GameEngine();
     CommandProcessor* cmdP = new CommandProcessor();
@@ -10,7 +10,7 @@ void testGameStates()
     
     while (currentState != GameEngine::State::End)
     {
-        currentState = gameEngine->StartGame(gameEngine->getState(), cmdP);
+        currentState = gameEngine->startupPhase(gameEngine->getState(), cmdP);
     }
 
     delete gameEngine;

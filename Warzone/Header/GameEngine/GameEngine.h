@@ -37,7 +37,7 @@ public:
     void addPlayer(std::string name);
     
     //Start the game
-    State StartGame(State state, CommandProcessor* cmdP);
+    State startupPhase(State state, CommandProcessor* cmdP);
 
     //methods
     State getState();

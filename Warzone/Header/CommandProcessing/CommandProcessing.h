@@ -22,7 +22,7 @@ public:
 
 	//friend class
 	friend class CommandProcessor;
-	friend GameEngine::State GameEngine::StartGame(GameEngine::State state, CommandProcessor* cmdP);
+	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor* cmdP);
 
 };
 
@@ -49,7 +49,7 @@ public:
 	bool validate(Command* cmd, GameEngine* gameEngine);
 	
 	//friends
-	friend GameEngine::State GameEngine::StartGame(GameEngine::State state, CommandProcessor* cmdP);
+	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor* cmdP);
 	friend GameEngine::State GameEngine::getState();
 
 };
