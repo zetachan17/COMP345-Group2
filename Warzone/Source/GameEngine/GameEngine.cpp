@@ -110,7 +110,7 @@ GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP)
             if ((cmdP->listCommands[cmdP->nbCommands])->commandName == "validatemap")
             {
                 //P2.2, validate the map
-                mLoader->getMap().validate();
+                mLoader->getMap()->validate();
                 this->state = GameEngine::State::MapValidated;
                 cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
                 cmdP->nbCommands++;//Keeping track of the number of Commands
@@ -207,7 +207,7 @@ GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP)
         {
             //issueOrder();
             std::cout << "Reinforcements assigned!" << std::endl;
-            state = GameEngine::State::IssueOrders;
+            this->state = GameEngine::State::IssueOrders;
             break;
         }
         else
@@ -227,7 +227,7 @@ GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP)
         else if (userInput == "endissueorders")
         {
             //executeOrder();
-            state = GameEngine::State::ExecuteOrders;
+            this->state = GameEngine::State::ExecuteOrders;
         }
         else
         {
@@ -245,14 +245,14 @@ GameEngine::State GameEngine::StartGame(State state, CommandProcessor* cmdP)
         }
         else if (userInput == "endexecorders")
         {
-            state = GameEngine::State::AssignReinforcement;
+            this->state = GameEngine::State::AssignReinforcement;
             break;
         }
         // temporary testing win condition
         //if (/*some win condition*/)
         else if (userInput == "win")
         {
-            state = GameEngine::State::Win;
+            this->state = GameEngine::State::Win;
             break;
         }
         else
@@ -330,7 +330,6 @@ std::string GameEngine::stateToString(State state)
     {
         return "End";
     }
-    return state;
 }
 
 
@@ -390,6 +389,4 @@ void GameEngine::drawInitialCards()
         player->getHand()->addToHand(deck->draw());
         player->getHand()->addToHand(deck->draw());
     }
-
-    return state;
 }

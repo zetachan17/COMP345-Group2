@@ -107,7 +107,7 @@ Command* CommandProcessor::saveCommand(string cmdName) //remember to track where
 {
 	Command* cmd = new Command(cmdName);
 	listCommands.push_back(cmd);
-	std::cout << "The command's name is : " << cmd->commandName;
+	std::cout << "The command's name is : " << cmd->commandName << std::endl;
 	return cmd;
 
 }
