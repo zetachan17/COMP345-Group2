@@ -1,9 +1,12 @@
 #pragma once
+#include <iostream>
 
 #include <iostream>
 
 #include "Map/Map.h"
 #include "Player/Player.h"
+
+class CommandProcessor;
 
 class GameEngine
 {
@@ -34,7 +37,13 @@ public:
     void addPlayer(std::string name);
     
     //Start the game
-    State StartEngine(State state);
+    State StartGame(State state, CommandProcessor* cmdP);
+
+    //methods
+    State getState();
+    std::string stateToString(State state);
+
+    friend class GameProcessor;
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER
@@ -51,7 +60,7 @@ private:
     //Part 2.4.c) give 50 initial army units to the players
     void giveInitialArmies();
 
-    // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck’s draw() method
+    // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck��s draw() method
     void drawInitialCards();
 };
 

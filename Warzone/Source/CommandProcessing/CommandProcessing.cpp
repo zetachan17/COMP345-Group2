@@ -25,7 +25,7 @@ CommandProcessor::CommandProcessor()
 
 string CommandProcessor::readCommand()
 {
-	string userInput;
+	std::string userInput;
 	std::string delimiter = " ";
 	std::string secondInput;
 	int condition = 0;
@@ -68,6 +68,11 @@ string CommandProcessor::readCommand()
 			std::cout << "We will begin the game" << endl;
 			condition = 1;
 		}
+		else if (userInput == "validatemap")
+		{
+			std::cout << "We will validate the map" << endl;
+			condition = 1;
+		}
 		else if (userInput == "replay")
 		{
 			std::cout << "We will begin a new game" << endl;
@@ -81,6 +86,7 @@ string CommandProcessor::readCommand()
 		else
 		{
 			std::cout << "That was not a valid input, please try again" << endl;
+			condition = 1;
 		}
 
 
@@ -93,7 +99,7 @@ string CommandProcessor::readCommand()
 
 void CommandProcessor::getCommand()
 {
-	string cmdName = readCommand();
+	std::string cmdName = readCommand();
 	saveCommand(cmdName);
 }
 
@@ -101,8 +107,109 @@ Command* CommandProcessor::saveCommand(string cmdName) //remember to track where
 {
 	Command* cmd = new Command(cmdName);
 	listCommands.push_back(cmd);
-
 	std::cout << "The command's name is : " << cmd->commandName;
 	return cmd;
 
 }
+
+void CommandProcessor::saveEffect(Command* cmd, std::string effectName)
+{
+	cmd->commandEffect = effectName;
+}
+
+bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
+{
+	if ((cmd->commandName).substr(0, 7) == "loadmap")
+	{
+		if (gameEngine->getState() == GameEngine::State::MapLoaded || gameEngine->getState() == GameEngine::State::Start)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else if ((cmd->commandName).substr(0, 9) == "addplayer")
+	{
+		if (gameEngine->getState() == GameEngine::State::MapValidated || gameEngine->getState() == GameEngine::State::PlayersAdded)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else if (cmd->commandName == "validatemap")
+	{
+		if (gameEngine->getState() == GameEngine::State::MapLoaded)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else if (cmd->commandName == "gamestart")
+	{
+		if (gameEngine->getState() == GameEngine::State::PlayersAdded)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else if (cmd->commandName == "replay")
+	{
+		if (gameEngine->getState() == GameEngine::State::Win)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else if (cmd->commandName == "quit")
+	{
+		if (gameEngine->getState() == GameEngine::State::Win)
+		{
+			return true;
+		}
+		else return false;
+	}
+	else {
+		return false;
+	}
+}
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filename) : CommandProcessor()
+{
+	inputstream.open("CommandFile/" + filename);
+}
+
+string FileCommandProcessorAdapter::readCommand()
+{
+	if (inputstream.eof())
+	{
+		
+	}
+
+	string command;
+	getline(inputstream, command);
+	if (command == "")
+	{
+		
+	}
+
+	return command;
+}
+
+FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
+{
+	inputstream.close();
+	std::cout << "Close file command processor adapter" << std::endl;
+}
+
+FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
+{
+	return *this;
+}
+
+std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& adapter)
+{
+	std::cout << "This is a file command processor adapter." <<  std::endl;
+	return output;
+}
+
+
+
