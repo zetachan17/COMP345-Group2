@@ -6,9 +6,10 @@
 using std::cout;
 using std::endl;
 
-Order::Order() : m_player(NULL), m_description(""), m_effect("") {}
+Order::Order() : m_player(NULL), m_type("BLANK ORDER"), m_description(""), m_effect("") {}
 
-Order::Order(Player *player) : m_player(player), m_description(""), m_effect("") {}
+Order::Order(string type, Player *player) : m_player(player), m_type(type), m_description(""),
+                                            m_effect("") {}
 
 // to remove once all suborders are implemented
 Order::Order(const string &type) : m_player(NULL), m_description(type), m_effect("") {}
@@ -16,6 +17,7 @@ Order::Order(const string &type) : m_player(NULL), m_description(type), m_effect
 Order::Order(const Order &other)
 {
     m_player = other.m_player;
+    m_type = other.m_type;
     m_description = other.m_description;
     m_effect = other.m_effect;
 }
@@ -23,6 +25,7 @@ Order::Order(const Order &other)
 Order &Order::operator=(const Order &rightSide)
 {
     m_player = rightSide.m_player;
+    m_type = rightSide.m_type;
     m_description = rightSide.m_description;
     m_effect = rightSide.m_effect;
     return *this;
@@ -36,6 +39,21 @@ ostream &operator<<(ostream &output, const Order &order)
 
 Order::~Order() {}
 
+string Order::effect() const
+{
+    return m_effect;
+}
+
+string Order::player() const
+{
+    return m_player->getPlayerName();
+}
+
+string Order::type() const
+{
+    return m_type;
+}
+
 Player *Order::m_neutralPlayer = NULL;
 
 Player *Order::neutralPlayer()
@@ -43,10 +61,12 @@ Player *Order::neutralPlayer()
     return m_neutralPlayer;
 }
 
-Deploy::Deploy(Player *player, int armyUnits, Territory *target)
-    : Order(player), m_units(armyUnits), m_territory(target)
+Deploy::Deploy(Player *player, int armyUnits, Territory *target) : Order("Deploy", player),
+                                                                   m_units(armyUnits),
+                                                                   m_territory(target)
 {
-    m_description = "Deploy " + std::to_string(armyUnits) + " units to " + target->getTerritoryName();
+    m_description = "Deploy " + std::to_string(armyUnits) + " units to " +
+                    target->getTerritoryName();
 }
 
 Order *Deploy::clone() const
@@ -74,22 +94,15 @@ void Deploy::execute()
         m_territory->setArmyUnits(m_territory->getArmyUnits() + m_units);
         m_player->addReinforcements(-m_units);
 
-        m_effect = "Player " + m_player->getPlayerName() + " deployed " + std::to_string(m_units);
-        m_effect += " units to " + m_territory->getTerritoryName() + ".";
-
-        // m_effect = "Player: " + m_player->getPlayerName() + "     Order: Deploy     Effect: ";
-        // m_effect += std::to_string(m_units) + " units deployed to ";
-        // m_effect += m_territory->getTerritoryName();
+        m_effect = "Player " + m_player->getPlayerName() + " deployed " + std::to_string(m_units) +
+                   " units to " + m_territory->getTerritoryName() + ".";
 
         cout << m_effect << endl;
     }
     else
     {
-        m_effect = "Player " + m_player->getPlayerName() + " deploy order invalid, no effect. ";
-        m_effect += m_territory->getTerritoryName() + " is not a valid target territory.";
-
-        // m_effect = "Player: " + m_player->getPlayerName() + "     Order: Deploy     Effect: Invalid, no ";
-        // m_effect += "effect. " +  m_territory->getTerritoryName() + " is not a valid territory";
+        m_effect = "Player " + m_player->getPlayerName() + " deploy order invalid, no effect. " +
+                   m_territory->getTerritoryName() + " is not a valid target territory.";
 
         cout << m_effect << endl;
     }
@@ -135,7 +148,7 @@ Advance::~Advance() {}
 
 Bomb::Bomb() : Order() {}
 
-Bomb::Bomb(Player *player, Territory *target) : Order(player), m_territory(target)
+Bomb::Bomb(Player *player, Territory *target) : Order("Bomb", player), m_territory(target)
 {
     m_description = "Bomb " + target->getTerritoryName();
 }
@@ -173,16 +186,16 @@ void Bomb::execute()
         int remainingUnits = m_territory->getArmyUnits();
         int lostUnits = units - remainingUnits;
 
-        m_effect = "Player " + m_player->getPlayerName() + " bombed " + territory + ". ";
-        m_effect += std::to_string(lostUnits) + " units killed. ";
-        m_effect += territory + " now has " + std::to_string(remainingUnits) + " units.";
+        m_effect = "Player " + m_player->getPlayerName() + " bombed " + territory + ". " +
+                   std::to_string(lostUnits) + " units killed. " + territory + " now has " +
+                   std::to_string(remainingUnits) + " units.";
 
         cout << m_effect << endl;
     }
     else
     {
-        m_effect = "Player " + m_player->getPlayerName() + " bomb order invalid, no effect. ";
-        m_effect += m_territory->getTerritoryName() + " is not a valid target territory.";
+        m_effect = "Player " + m_player->getPlayerName() + " bomb order invalid, no effect. " +
+                   m_territory->getTerritoryName() + " is not a valid target territory.";
 
         cout << m_effect << endl;
     }
@@ -192,7 +205,8 @@ Bomb::~Bomb() {}
 
 Blockade::Blockade() : Order() {}
 
-Blockade::Blockade(Player *player, Territory *target) : Order(player), m_territory(target)
+Blockade::Blockade(Player *player, Territory *target) : Order("Blockade", player),
+                                                        m_territory(target)
 {
     m_description = "Blockade " + target->getTerritoryName();
 }
@@ -233,16 +247,17 @@ void Blockade::execute()
         string territory = m_territory->getTerritoryName();
         string units = std::to_string(m_territory->getArmyUnits());
 
-        m_effect = "Player " + m_player->getPlayerName() + " blockaded " + territory + ". ";
-        m_effect += neutralCreated;
-        m_effect += territory + " now has " + units + " units and belongs to the Neutral player.";
+        m_effect = "Player " + m_player->getPlayerName() + " blockaded " + territory + ". " +
+                   neutralCreated + territory + " now has " + units +
+                   " units and belongs to the Neutral player.";
 
         cout << m_effect << endl;
     }
     else
     {
-        m_effect = "Player " + m_player->getPlayerName() + " blockade order invalid, no effect. ";
-        m_effect += m_territory->getTerritoryName() + " is not a valid target territory.";
+        m_effect = "Player " + m_player->getPlayerName() +
+                   " blockade order invalid, no effect. " + m_territory->getTerritoryName() +
+                   " is not a valid target territory.";
 
         cout << m_effect << endl;
     }

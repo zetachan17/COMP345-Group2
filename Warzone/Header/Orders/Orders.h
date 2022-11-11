@@ -16,9 +16,9 @@ class Order
 public:
     // constructors
     Order();
-    Order(Player *player);
-    Order(const Order &other);
+    Order(string type, Player *player);
     Order(const string &type); // to delete when all subclasses are implemented
+    Order(const Order &other);
 
     // clone() creates new order object identical to this order, returns a pointer to the new order
     virtual Order *clone() const = 0;
@@ -39,10 +39,17 @@ public:
     // implementation resulting in some game action depending on the specific order
     virtual void execute() = 0;
 
+    string type() const;
+
+    string player() const;
+
+    string effect() const;
+
     static Player *neutralPlayer();
 
 protected:
     Player *m_player;
+    string m_type;
     string m_effect;
     string m_description;
     static Player *m_neutralPlayer;
@@ -80,7 +87,7 @@ class Bomb : public Order
 {
 public:
     Bomb();
-    Bomb(Player *player, Territory* target);
+    Bomb(Player *player, Territory *target);
 
     Order *clone() const override;
     bool validate() const override;
@@ -88,7 +95,7 @@ public:
     ~Bomb();
 
 private:
-    Territory* m_territory;
+    Territory *m_territory;
 };
 
 /// Order subclass representing a Blockade order
