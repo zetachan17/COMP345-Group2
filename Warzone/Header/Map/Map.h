@@ -16,8 +16,6 @@ private:
 	string territoryName;
 	vector<Territory *> adjacentTerritories;
 	int continentId;
-
-	// added by raf to implement order execution:
 	int units;
 	Player *owner;
 
@@ -45,9 +43,6 @@ public:
 	friend class Map;
 	friend class Continent;
 
-	//
-	// following methods were added by raf to implement order execution
-	//
 	void addUnits(int armyUnits);
 
 	int getUnits() const;
@@ -101,7 +96,7 @@ public:
 
 	// destructor
 	~Map();
-
+	
 	// assignment operator
 	Map &operator=(const Map &map);
 
@@ -110,8 +105,11 @@ public:
 
 	// REQUIRED - validates the map is a connected graph, continents are connected subgraphs and each territory belongs
 	// to one and only one continent
-	void validate();
+	bool validate();
 
+	// gets all the territories
+	vector<Territory*> getTerritories();
+	
 private:
 	// adds continent to the map
 	void addContinent(Continent *continent);
@@ -146,6 +144,7 @@ class MapLoader
 {
 	int ContinentCounter;
 	int TerritoryCounter;
+	Map* map;
 
 public:
 	// constructors
@@ -162,7 +161,9 @@ public:
 	friend ostream &operator<<(ostream &os, const MapLoader &mapLoader);
 
 	// reads a map file
-	void readFile(string fileName);
+	bool readFile(string fileName);
 
+	// getters
+	Map* getMap();
 	friend class Map;
 };

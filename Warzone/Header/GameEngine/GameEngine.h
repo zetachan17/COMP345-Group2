@@ -1,5 +1,9 @@
-#include <iostream>
 #pragma once
+
+#include <iostream>
+
+#include "Map/Map.h"
+#include "Player/Player.h"
 
 class GameEngine
 {
@@ -27,11 +31,27 @@ public:
     friend std::ostream& operator << (std::ostream& out, const GameEngine& g);
     friend std::istream& operator >> (std::istream& in, GameEngine& g);
 
+    void addPlayer(std::string name);
+    
     //Start the game
-    State StartGame(State state);
+    State startupPhase(State state);
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER
     State state;
+    Deck* deck;
+    vector<Player*> activePlayers;
+    
+    //Part 2.4.a) fairly distribute all the territories to the players 
+    void distributeTerritories(MapLoader* mLoader);
+
+    //Part 2.4.b) determine randomly the order of play of the players in the game
+    void randomizePlayerOrder();
+
+    //Part 2.4.c) give 50 initial army units to the players
+    void giveInitialArmies();
+
+    // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck’s draw() method
+    void drawInitialCards();
 };
 

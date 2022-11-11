@@ -58,6 +58,17 @@ public:
 
 	const string& getName() const;
 
+	string getPlayerName();
+	
+	void addTerritory(Territory* territory);
+
+	vector<Territory*> getTerritories();
+
+	Hand* getHand();
+	
+	int getNumArmies();
+
+	void addNumArmies(int newArmies);
 private:
 	vector<Territory *> territories;
 	Hand *hand;
@@ -67,4 +78,7 @@ private:
 	// added by raf to implement order execution
 	int reinforcementPool;
 	string name;
+	
+	string playerName;
+	int numArmies;
 };

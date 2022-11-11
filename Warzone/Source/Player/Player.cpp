@@ -72,6 +72,9 @@ Player::Player(const Player &otherPlayer)
 		territories.push_back(new Territory(*territory));
 		territories.back()->setOwner(this);
 	}
+
+	this->playerName = otherPlayer.playerName;
+	this->numArmies = otherPlayer.numArmies;
 }
 
 Player::~Player()
@@ -158,3 +161,45 @@ vector<Territory *> Player::toAttack()
 
 	return allAdjacentTerritories;
 }
+
+void Player::issueOrder(string orderName)
+{
+	//to be refactored
+	cout << "Handling order: " << orderName << endl;
+}
+
+string Player::getPlayerName()
+{
+	return playerName;
+}
+
+void Player::addTerritory(Territory* territory)
+{
+	territories.push_back(territory);
+}
+
+vector<Territory*> Player::getTerritories()
+{
+	return territories;
+}
+
+Hand* Player::getHand()
+{
+	return hand;
+}
+
+int Player::getNumArmies()
+{
+	return numArmies;
+}
+
+void Player::addNumArmies(int newArmies)
+{
+	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;
+	numArmies += newArmies;
+	cout << "Now they have " << getNumArmies() << " armies" << endl;
+}
+
+
+
+
