@@ -7,29 +7,43 @@ class Territory;
 using std::cout;
 using std::endl;
 
+// clang++ -std=c++11 test_Orders.cpp OrdersDriver.cpp Map.cpp Player.cpp Orders.cpp Cards.cpp
+
 void testOrderExecution()
 {
-     cout << "** PART 4: ORDER EXECUTION IMPLEMENTATION **\n\n";
+     cout << "-------------------------------------------\n"
+          << "** PART 4: ORDER EXECUTION IMPLEMENTATION **\n\n";
 
      Territory *brazil = new Territory(0, "Brazil", 1);
-     Territory *chile = new Territory(0, "Chile", 1);
+     Territory *chile = new Territory(1, "Chile", 1);
+     Territory *canada = new Territory(2, "Canada", 2);
 
      cout << "*Created test territories*\n"
           << "-------------------------------------------\n"
           << *brazil
           << *chile
+          << *canada
           << "-------------------------------------------\n";
 
-     Player *tristan = new Player;
+     Player *tristan = new Player("Tristan");
      tristan->addTerritory(brazil);
+     tristan->addTerritory(chile);
      tristan->addReinforcements(10);
-     Deploy *o = new Deploy(tristan, 4, brazil);
-     tristan->issueOrder(o);
+     Order *o1 = new Deploy(tristan, 4, chile);
+     chile->addUnits(6);
+     brazil->addUnits(2);
+     Order *o2 = new Blockade(tristan, chile);
+     Order *o3 = new Blockade(tristan, canada);
+     Order *o4 = new Blockade(tristan, brazil);
+     tristan->issueOrder(o1);
+     tristan->issueOrder(o2);
+     tristan->issueOrder(o3);
+     tristan->issueOrder(o4);
 
      cout << "*Created test player*\n"
           << "*Added 'Brazil' territory to player*\n"
           << "*Added 10 reinforcements to player*\n"
-          << "*Issued 'Deploy' order*\n"
+          << "*Issued order*\n"
           << "-------------------------------------------\n"
           << *tristan
           << "-------------------------------------------\n";
@@ -41,19 +55,52 @@ void testOrderExecution()
           << "-------------------------------------------\n"
           << *tristan
           << "-------------------------------------------\n"
-          << "Player's units before order execution: " << tristan->getReinforcementPool() << endl
-          << "Brazil's units before order execution: " << brazil->getUnits() << endl
-          << "-------------------------------------------\n";
+          << "Player's units : " << tristan->getReinforcementPool() << endl
+          // << "Brazil's units before order execution: " << brazil->getUnits() << endl
+          << "Chile's units : " << chile->getUnits() << endl
+          << "Chile's owner : " << chile->getOwner()->getName() << endl;
+
+     if (Order::neutralPlayer() == NULL)
+          cout << "Neutral player not created\n";
+     else
+          cout << *Order::neutralPlayer() << endl;
+
+     cout << "-------------------------------------------\n";
 
      next->execute();
 
      cout << "-------------------------------------------\n"
-          << "*Executed Deploy*\n"
-          << "Tristan's units after order execution: " << tristan->getReinforcementPool() << endl
-          << "Brazil's units after order execution: " << brazil->getUnits() << endl;
+          << "Tristan's units : " << tristan->getReinforcementPool() << endl
+          // << "Brazil's units after order execution: " << brazil->getUnits() << endl
+          << "Chile's units : " << chile->getUnits() << endl
+          << "Chile's owner : " << chile->getOwner()->getName() << endl
+          << "-------------------------------------------\n";
+
+     if (Order::neutralPlayer() == NULL)
+          cout
+              << "Neutral player not created\n";
+     else
+          cout << *Order::neutralPlayer() << endl;
+
+     cout << *tristan
+          << "-------------------------------------------\n"
+          << "-------------------------------------------\n";
+
+     next = tristan->nextOrder();
+     next->execute();
+     next = tristan->nextOrder();
+     next->execute();
+     next = tristan->nextOrder();
+     next->execute();
+
+     if (Order::neutralPlayer() == NULL)
+          cout
+              << "Neutral player not created\n";
+     else
+          cout << *Order::neutralPlayer() << endl;
 
      cout << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
+          << *tristan;
 }
 
 /*

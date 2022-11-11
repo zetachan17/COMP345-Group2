@@ -15,16 +15,26 @@ using std::string;
 //
 void Territory::addUnits(int armyUnits)
 {
-    units = armyUnits;
+    units += armyUnits;
 }
 
-int Territory::getUnits()
+int Territory::getUnits() const
 {
     return units;
 }
 
+void Territory::setOwner(Player *player)
+{
+    owner = player;
+}
+
+const Player *Territory::getOwner() const
+{
+    return owner;
+}
+
 //
-// original methods from assignment 1 
+// original methods from assignment 1
 //
 void MapLoader::readFile(string fileName)
 {
@@ -238,6 +248,8 @@ Territory::Territory(int TerrID, string TerrName, int ContID)
     territoryId = TerrID;
     territoryName = TerrName;
     continentId = ContID;
+    units = 0;
+    owner = NULL;
 }
 /* Important note: For the copy constructors and the overloaded assignment operators, we make it possible to have deep copies, but so far for assignment 1, we have never needed to actually use them!
 This implies that even though the new keyword is written, the code is never executed so the allocation on the heap is never made. For that reason, there is no need to delete these objects and handle the pointer values (make them NULL)*/
@@ -247,6 +259,7 @@ Territory::Territory(const Territory &otherTerritory)
     territoryName = otherTerritory.territoryName;
     continentId = otherTerritory.continentId;
     units = otherTerritory.units;
+    owner = otherTerritory.owner;
     for (Territory *terri : otherTerritory.adjacentTerritories)
     {
         adjacentTerritories.push_back(terri);
@@ -261,6 +274,7 @@ Territory &Territory::operator=(const Territory &otherTerritory)
     territoryName = otherTerritory.territoryName;
     continentId = otherTerritory.continentId;
     units = otherTerritory.units;
+    owner = otherTerritory.owner;
     for (Territory *adjacentTerritory : otherTerritory.adjacentTerritories)
     {
         adjacentTerritories.push_back(adjacentTerritory);

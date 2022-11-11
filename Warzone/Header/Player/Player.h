@@ -42,21 +42,29 @@ public:
 	//
 	// following methods were added or modified by raf to implement order execution
 	//
+	Player(const string &name);
+
 	void issueOrder(Order *order);
 
 	Order *nextOrder();
 
 	void addTerritory(Territory *territory);
 
+	void removeTerritory(Territory *territory);
+
 	void addReinforcements(int units);
 
-	int getReinforcementPool();
+	int getReinforcementPool() const;
+
+	const string& getName() const;
 
 private:
 	vector<Territory *> territories;
 	Hand *hand;
 	OrdersList *ordersList;
 
+	//
 	// added by raf to implement order execution
 	int reinforcementPool;
+	string name;
 };

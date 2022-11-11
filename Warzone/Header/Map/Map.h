@@ -1,5 +1,7 @@
 #pragma once
 
+class Player;
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -17,6 +19,7 @@ private:
 
 	// added by raf to implement order execution:
 	int units;
+	Player *owner;
 
 public:
 	// constructors
@@ -47,7 +50,11 @@ public:
 	//
 	void addUnits(int armyUnits);
 
-	int getUnits();
+	int getUnits() const;
+
+	void setOwner(Player *player);
+
+	const Player *getOwner() const;
 };
 
 class Continent

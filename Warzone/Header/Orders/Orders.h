@@ -15,9 +15,10 @@ class Order
 {
 public:
     // constructors
-    Order(string type, Player *player);
+    Order();
+    Order(Player *player);
     Order(const Order &other);
-    Order(string type); // to delete when all subclasses are implemented
+    Order(const string &type); // to delete when all subclasses are implemented
 
     // clone() creates new order object identical to this order, returns a pointer to the new order
     virtual Order *clone() const = 0;
@@ -38,11 +39,13 @@ public:
     // implementation resulting in some game action depending on the specific order
     virtual void execute() = 0;
 
+    static Player *neutralPlayer();
+
 protected:
     Player *m_player;
-
-private:
-    string m_type;
+    string m_effect;
+    string m_description;
+    static Player *m_neutralPlayer;
 };
 
 /// Order subclass representing a Deploy order
@@ -50,6 +53,7 @@ class Deploy : public Order
 {
 public:
     Deploy(Player *player, int armyUnits, Territory *target);
+
     Order *clone() const override;
     bool validate() const override;
     void execute() override;
@@ -86,11 +90,16 @@ public:
 class Blockade : public Order
 {
 public:
-    Blockade();
+    Blockade(Player *player, Territory *target);
+    Blockade(); // redo later, have to change Cards.cpp
+
     Order *clone() const override;
     bool validate() const override;
     void execute() override;
     ~Blockade();
+
+private:
+    Territory *m_territory;
 };
 
 /// Order subclass representing an Airlift order

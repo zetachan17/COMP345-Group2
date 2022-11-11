@@ -12,9 +12,22 @@ using std::vector;
 //
 // added by raf to implement order execution
 //
+Player::Player(const string &name) : name(name), hand(new Hand), ordersList(new OrdersList) {}
+
 void Player::addTerritory(Territory *territory)
 {
 	territories.push_back(territory);
+	territory->setOwner(this);
+}
+
+void Player::removeTerritory(Territory *territory)
+{
+	vector<Territory *>::iterator i = find(territories.begin(), territories.end(), territory);
+	if (i != territories.end())
+	{
+		territories.erase(i);
+		territory->setOwner(NULL);
+	}
 }
 
 void Player::issueOrder(Order *order)
@@ -32,29 +45,32 @@ void Player::addReinforcements(int units)
 	reinforcementPool += units;
 }
 
-int Player::getReinforcementPool()
+int Player::getReinforcementPool() const
 {
 	return reinforcementPool;
+}
+
+const string &Player::getName() const
+{
+	return name;
 }
 
 //
 // original definitions from assignment 1
 //
-Player::Player()
-{
-	this->hand = new Hand();
-	this->ordersList = new OrdersList();
-}
+Player::Player() : name(""), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
 
 Player::Player(const Player &otherPlayer)
 {
-	this->hand = new Hand(*otherPlayer.hand);
-
-	this->ordersList = new OrdersList(*otherPlayer.ordersList);
+	name = otherPlayer.name;
+	reinforcementPool = otherPlayer.reinforcementPool;
+	hand = new Hand(*otherPlayer.hand);
+	ordersList = new OrdersList(*otherPlayer.ordersList);
 
 	for (Territory *territory : otherPlayer.territories)
 	{
-		this->territories.push_back(new Territory(*territory));
+		territories.push_back(new Territory(*territory));
+		territories.back()->setOwner(this);
 	}
 }
 
@@ -67,33 +83,32 @@ Player::~Player()
 
 Player &Player::operator=(const Player &otherPlayer)
 {
-	this->hand = otherPlayer.hand;
-	this->ordersList = otherPlayer.ordersList;
-	this->hand = otherPlayer.hand;
+	name = otherPlayer.name;
+	hand = otherPlayer.hand;
+	ordersList = otherPlayer.ordersList;
+	reinforcementPool = otherPlayer.reinforcementPool;
 
-	vector<Territory *> territories;
 	for (Territory *territory : otherPlayer.territories)
 	{
 		territories.push_back(new Territory(*territory));
+		territories.back()->setOwner(this);
 	}
-	this->territories = territories;
 
 	return *this;
 }
 
 ostream &operator<<(ostream &output, const Player &player)
 {
-	output << "Player owned territories:" << endl;
+	output << "Player: " << player.name << endl
+		   << "\nOwned territories: " << endl;
 	for (Territory *territory : player.territories)
-	{
-		output << "\t" << *territory << endl;
-	}
+		output << "    " << territory->getTerritoryName() << endl;
 
-	output << "Player cards in hand:" << endl;
-	output << *player.hand << endl;
+	output << "\nCards in hand:" << endl
+		   << *player.hand << endl;
 
-	output << "Player orders list:" << endl;
-	output << *player.ordersList << endl;
+	output << "Orders list:" << endl
+		   << *player.ordersList << endl;
 
 	return output;
 }
