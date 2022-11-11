@@ -12,12 +12,13 @@ using std::vector;
 class Territory
 {
 private:
-	int territoryId;
-	string territoryName;
 	vector<Territory *> adjacentTerritories;
-	int continentId;
-	int units;
 	Player *owner;
+	string territoryName;
+	int territoryId;
+	int continentId;
+	int armyUnits;
+	
 
 public:
 	// constructors
@@ -40,16 +41,16 @@ public:
 	string getTerritoryName();
 	vector<Territory *> getAdjacentTerritories();
 
-	friend class Map;
-	friend class Continent;
+	void addArmyUnits(int armyUnits);
 
-	void addUnits(int armyUnits);
-
-	int getUnits() const;
+	int getArmyUnits() const;
 
 	void setOwner(Player *player);
 
-	const Player *getOwner() const;
+	Player *getOwner() const;
+
+	friend class Map;
+	friend class Continent;
 };
 
 class Continent

@@ -17,6 +17,7 @@ class Player
 public:
 	// constructors
 	Player();
+	Player(const string &name);
 	Player(const Player &player);
 
 	// destructor
@@ -37,13 +38,6 @@ public:
 	// REQUIRED - issues an order by adding it to the player's ordersList.
 	// if the order requires a card, the player's cards are checked before issuing the order
 	// the card is then removed from the player's cards
-	// void issueOrder(string orderName);
-
-	//
-	// following methods were added or modified by raf to implement order execution
-	//
-	Player(const string &name);
-
 	void issueOrder(Order *order);
 
 	Order *nextOrder();
@@ -56,29 +50,15 @@ public:
 
 	int getReinforcementPool() const;
 
-	const string& getName() const;
+	const string &getPlayerName() const;
 
-	string getPlayerName();
-	
-	void addTerritory(Territory* territory);
+	Hand *getHand();
 
-	vector<Territory*> getTerritories();
-
-	Hand* getHand();
-	
-	int getNumArmies();
-
-	void addNumArmies(int newArmies);
 private:
 	vector<Territory *> territories;
 	Hand *hand;
 	OrdersList *ordersList;
-
-	//
-	// added by raf to implement order execution
-	int reinforcementPool;
 	string name;
-	
 	string playerName;
-	int numArmies;
+	int reinforcementPool;
 };

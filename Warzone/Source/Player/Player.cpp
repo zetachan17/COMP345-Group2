@@ -9,10 +9,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-//
-// added by raf to implement order execution
-//
-Player::Player(const string &name) : name(name), hand(new Hand), ordersList(new OrdersList) {}
+Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList) {}
 
 void Player::addTerritory(Territory *territory)
 {
@@ -50,19 +47,19 @@ int Player::getReinforcementPool() const
 	return reinforcementPool;
 }
 
-const string &Player::getName() const
+const string &Player::getPlayerName() const
 {
-	return name;
+	return playerName;
 }
 
 //
 // original definitions from assignment 1
 //
-Player::Player() : name(""), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
+Player::Player() : playerName(""), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
 
 Player::Player(const Player &otherPlayer)
 {
-	name = otherPlayer.name;
+	playerName = otherPlayer.playerName;
 	reinforcementPool = otherPlayer.reinforcementPool;
 	hand = new Hand(*otherPlayer.hand);
 	ordersList = new OrdersList(*otherPlayer.ordersList);
@@ -72,9 +69,6 @@ Player::Player(const Player &otherPlayer)
 		territories.push_back(new Territory(*territory));
 		territories.back()->setOwner(this);
 	}
-
-	this->playerName = otherPlayer.playerName;
-	this->numArmies = otherPlayer.numArmies;
 }
 
 Player::~Player()
@@ -86,7 +80,7 @@ Player::~Player()
 
 Player &Player::operator=(const Player &otherPlayer)
 {
-	name = otherPlayer.name;
+	playerName = otherPlayer.playerName;
 	hand = otherPlayer.hand;
 	ordersList = otherPlayer.ordersList;
 	reinforcementPool = otherPlayer.reinforcementPool;
@@ -102,7 +96,7 @@ Player &Player::operator=(const Player &otherPlayer)
 
 ostream &operator<<(ostream &output, const Player &player)
 {
-	output << "Player: " << player.name << endl
+	output << "Player: " << player.playerName << endl
 		   << "\nOwned territories: " << endl;
 	for (Territory *territory : player.territories)
 		output << "    " << territory->getTerritoryName() << endl;
@@ -162,37 +156,12 @@ vector<Territory *> Player::toAttack()
 	return allAdjacentTerritories;
 }
 
-void Player::issueOrder(string orderName)
-{
-	//to be refactored
-	cout << "Handling order: " << orderName << endl;
-}
-
-string Player::getPlayerName()
-{
-	return playerName;
-}
-
-void Player::addTerritory(Territory* territory)
-{
-	territories.push_back(territory);
-}
-
-vector<Territory*> Player::getTerritories()
-{
-	return territories;
-}
-
 Hand* Player::getHand()
 {
 	return hand;
 }
 
-int Player::getNumArmies()
-{
-	return numArmies;
-}
-
+// used by Runze (same thing as addReinforcement but prints changes?)
 void Player::addNumArmies(int newArmies)
 {
 	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;

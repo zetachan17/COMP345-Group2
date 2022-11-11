@@ -10,29 +10,6 @@ using std::endl;
 using std::regex;
 using std::string;
 
-//
-// added by raf to implement order execution
-//
-void Territory::addUnits(int armyUnits)
-{
-    units += armyUnits;
-}
-
-int Territory::getUnits() const
-{
-    return units;
-}
-
-void Territory::setOwner(Player *player)
-{
-    owner = player;
-}
-
-const Player *Territory::getOwner() const
-{
-    return owner;
-}
-
 bool MapLoader::readFile(string fileName)
 {
     std::fstream mapFile;
@@ -295,6 +272,26 @@ ostream &operator<<(ostream &os, const Territory &territory)
 {
     os << "Territory name: " + territory.territoryName << " ID : " << territory.territoryId << " Continent ID: " << territory.continentId << "\n\n";
     return os;
+}
+
+void Territory::addUnits(int armyUnits)
+{
+    units += armyUnits;
+}
+
+int Territory::getUnits() const
+{
+    return units;
+}
+
+void Territory::setOwner(Player *player)
+{
+    owner = player;
+}
+
+const Player *Territory::getOwner() const
+{
+    return owner;
 }
 
 void Territory::addAdjacentTerritory(Territory *territory)
