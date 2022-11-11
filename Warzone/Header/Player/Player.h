@@ -54,6 +54,12 @@ public:
 
 	Hand *getHand();
 
+	// used by Runze, eventually merge with addReinforcements() ?
+	void addNumArmies(int newArmies);
+
+	// used by Runze, eventually merge with getReinforcements() ?
+	int getNumArmies();
+
 private:
 	vector<Territory *> territories;
 	Hand *hand;
@@ -61,4 +67,7 @@ private:
 	string name;
 	string playerName;
 	int reinforcementPool;
+
+	// used by Runze, eventually use only reinforcementPool?
+	int numArmies;
 };

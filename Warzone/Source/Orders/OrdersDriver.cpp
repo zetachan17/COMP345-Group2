@@ -4,6 +4,7 @@
 class Territory;
 
 #include <iostream>
+#include <iomanip>
 using std::cout;
 using std::endl;
 
@@ -11,96 +12,194 @@ using std::endl;
 
 void testOrderExecution()
 {
-     cout << "-------------------------------------------\n"
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "** PART 4: ORDER EXECUTION IMPLEMENTATION **\n\n";
 
-     Territory *brazil = new Territory(0, "Brazil", 1);
+     Territory *territories[6] = {new Territory(0, "Eritrea", 4), new Territory(1, "Chile", 1),
+                                  new Territory(2, "Croatia", 2), new Territory(3, "Australia", 3),
+                                  new Territory(4, "Ecuador", 1), new Territory(5, "Palau", 3)};
+     /*
+     Territory *eritrea = new Territory(0, "Eritrea", 4);
      Territory *chile = new Territory(1, "Chile", 1);
-     Territory *canada = new Territory(2, "Canada", 2);
+     Territory *croatia = new Territory(2, "Croatia", 2);
+     Territory *australia = new Territory(3, "Australia", 3);
+     Territory *ecuador = new Territory(4, "Ecuador", 1);
+     Territory *palau = new Territory(5, "Palau", 3);
+     */
 
-     cout << "*Created test territories*\n"
-          << "-------------------------------------------\n"
-          << *brazil
-          << *chile
-          << *canada
-          << "-------------------------------------------\n";
+     territories[3]->addAdjacentTerritory(territories[5]);
+     territories[5]->addAdjacentTerritory(territories[3]);
+
+     cout << "----------------------------------------------------------\n"
+          << "*Created test territories*\n\n";
+     for (Territory *territory : territories)
+          cout << *territory;
+     cout << "----------------------------------------------------------\n";
 
      Player *tristan = new Player("Tristan");
-     tristan->addTerritory(brazil);
-     tristan->addTerritory(chile);
+     tristan->addTerritory(territories[0]);
+     tristan->addTerritory(territories[1]);
+     tristan->addTerritory(territories[5]);
      tristan->addReinforcements(10);
-     Order *o1 = new Deploy(tristan, 4, chile);
-     chile->addUnits(6);
-     brazil->addUnits(2);
-     Order *o2 = new Blockade(tristan, chile);
-     Order *o3 = new Blockade(tristan, canada);
-     Order *o4 = new Blockade(tristan, brazil);
+     Order *o1 = new Deploy(tristan, 4, territories[1]);
+     Order *o2 = new Deploy(tristan, 6, territories[4]);
+     Order *o3 = new Blockade(tristan, territories[1]);
+     Order *o4 = new Blockade(tristan, territories[2]);
+     Order *o5 = new Blockade(tristan, territories[0]);
+     Order *o6 = new Bomb(tristan, territories[4]);
+     Order *o7 = new Bomb(tristan, territories[3]);
      tristan->issueOrder(o1);
      tristan->issueOrder(o2);
      tristan->issueOrder(o3);
      tristan->issueOrder(o4);
+     tristan->issueOrder(o5);
+     tristan->issueOrder(o6);
+     tristan->issueOrder(o7);
 
      cout << "*Created test player*\n"
-          << "*Added 'Brazil' territory to player*\n"
-          << "*Added 10 reinforcements to player*\n"
-          << "*Issued order*\n"
-          << "-------------------------------------------\n"
+          << "*Assigned 'Eritrea', 'Chile', 'Palau' to player*\n"
+          << "*Added 10 units to player's reinforcement pool*\n"
+          << "*Issued test orders*\n\n"
           << *tristan
-          << "-------------------------------------------\n";
+          << "Player's reinforcement pool : " << tristan->getReinforcementPool() << endl
+          << "----------------------------------------------------------\n";
 
+     territories[3]->setArmyUnits(5);
+     territories[0]->setArmyUnits(4);
+     territories[2]->setArmyUnits(3);
+
+     cout << "*Assigned random army units for testing*\n";
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+
+     // test execution of first deploy order
      Order *next = tristan->nextOrder();
+     cout << "\n      **Execute first order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
 
-     cout << "*Removed top order to execute*\n"
-          << "Next order: " << *next << endl
-          << "-------------------------------------------\n"
+     cout << "Effect: ";
+     next->execute();
+
+     cout << "\n*Player & Territory units after order execution*\n"
+          << "\tPlayer's reinforcement pool : " << tristan->getReinforcementPool() << endl;
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+
+     // test execution of second deploy order
+     next = tristan->nextOrder();
+     cout << "\n      **Execute next order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
+
+     cout << "Effect: ";
+     next->execute();
+
+     cout << "\n*Player & Territory units after order execution*\n"
+          << "\tPlayer's reinforcement pool : " << tristan->getReinforcementPool() << endl;
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+
+     // test execution of first blockade order
+     next = tristan->nextOrder();
+     cout << "\n      **Execute next order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
+
+     cout << "Effect: ";
+     next->execute();
+
+     cout << "\n*Territory units after order execution*\n";
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "*Neutral player has been created*\n\n"
+          << *Order::neutralPlayer()
+          << "----------------------------------------------------------\n"
+          << "*Player status after execution*\n\n"
           << *tristan
-          << "-------------------------------------------\n"
-          << "Player's units : " << tristan->getReinforcementPool() << endl
-          // << "Brazil's units before order execution: " << brazil->getUnits() << endl
-          << "Chile's units : " << chile->getUnits() << endl
-          << "Chile's owner : " << chile->getOwner()->getName() << endl;
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
-     if (Order::neutralPlayer() == NULL)
-          cout << "Neutral player not created\n";
-     else
-          cout << *Order::neutralPlayer() << endl;
-
-     cout << "-------------------------------------------\n";
-
-     next->execute();
-
-     cout << "-------------------------------------------\n"
-          << "Tristan's units : " << tristan->getReinforcementPool() << endl
-          // << "Brazil's units after order execution: " << brazil->getUnits() << endl
-          << "Chile's units : " << chile->getUnits() << endl
-          << "Chile's owner : " << chile->getOwner()->getName() << endl
-          << "-------------------------------------------\n";
-
-     if (Order::neutralPlayer() == NULL)
-          cout
-              << "Neutral player not created\n";
-     else
-          cout << *Order::neutralPlayer() << endl;
-
-     cout << *tristan
-          << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
-
+     // test execution of second blockade order
      next = tristan->nextOrder();
-     next->execute();
-     next = tristan->nextOrder();
-     next->execute();
-     next = tristan->nextOrder();
+     cout << "\n      **Execute next order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
+
+     cout << "Effect: ";
      next->execute();
 
-     if (Order::neutralPlayer() == NULL)
-          cout
-              << "Neutral player not created\n";
-     else
-          cout << *Order::neutralPlayer() << endl;
+     cout << "\n*Territory units after order execution*\n";
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "*Neutral player after execution*\n\n"
+          << *Order::neutralPlayer()
+          << "----------------------------------------------------------\n"
+          << "*Player status after execution*\n\n"
+          << *tristan
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
-     cout << "-------------------------------------------\n"
-          << *tristan;
+     // test execution of third blockade order
+     next = tristan->nextOrder();
+     cout << "\n      **Execute next order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
+
+     cout << "Effect: ";
+     next->execute();
+
+     cout << "\n*Territory units after order execution*\n";
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "*Neutral player after execution*\n\n"
+          << *Order::neutralPlayer()
+          << "----------------------------------------------------------\n"
+          << "*Player status after execution*\n\n"
+          << *tristan
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+
+     // test execution of first bomb order
+     next = tristan->nextOrder();
+     cout << "\n      **Execute next order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
+
+     cout << "Effect: ";
+     next->execute();
+
+     cout << "\n*Territory units after order execution*\n";
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+
+     // test execution of second bomb order
+     next = tristan->nextOrder();
+     cout << "\n      **Execute next order: " << *next << "**\n\n"
+          << "----------------------------------------------------------\n";
+
+     cout << "Effect: ";
+     next->execute();
+
+     cout << "\n*Territory units after order execution*\n";
+     for (Territory *territory : territories)
+          cout << "\t" << std::left << std::setw(9) << territory->getTerritoryName()
+               << ": " << territory->getArmyUnits() << " units\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 }
 
 /*
@@ -122,10 +221,10 @@ void testOrdersLists()
      orders->addOrder(new Airlift());
      orders->addOrder(new Blockade());
      cout << "*Created & placed the 6 different orders into the orders list*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
 
      orders->addOrder(new Bomb());
      orders->addOrder(new Airlift());
@@ -133,109 +232,109 @@ void testOrdersLists()
      orders->addOrder(new Airlift());
      orders->addOrder(new Advance());
      cout << "*Created & placed 5 additional orders*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // testing remove() on different orders and positions of the list
      orders->remove(1);
      cout << "*Removed order #1 (Negotiate)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(10);
      cout << "*Removed order #10 (Advance)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(6);
      cout << "*Removed order #6 (Bomb)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(3);
      cout << "*Removed order #3 (Deploy)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(3);
      cout << "*Removed order #3 (Airlift)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(3);
      cout << "*Removed order #3 (Blockade)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // testing move() on the different orders and positions of the list
      orders->move(1, 5);
      cout << "*Moved order #1 (Bomb) to position #5*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->move(3, 1);
      cout << "*Moved order #3 (Negotiate) to position #1*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->move(5, 2);
      cout << "*Moved order #5 (Bomb) to position #2*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->move(5, 1);
      cout << "*Moved order #5 (Airlift) to position #1*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // Testing emptying the list
      orders->remove(1);
      cout << "*Removed order #1 (Airlift)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(2);
      cout << "*Removed order #2 (Bomb)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(3);
      cout << "*Removed order #3 (Airlift)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(1);
      cout << "*Removed order #1 (Negotiate)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->remove(1);
      cout << "*Removed order #1 (Advance)*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      orders->addOrder(new Bomb());
      orders->addOrder(new Advance());
      orders->addOrder(new Negotiate());
@@ -243,49 +342,49 @@ void testOrdersLists()
      orders->addOrder(new Blockade());
      orders->addOrder(new Airlift());
      cout << "*Added 6 different orders to the list*\n"
-          << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // executing and validating orders
-     cout << "*Execute first order*\n";
-     orders->executeNextOrder();
-     cout << "-------------------------------------------\n"
+     cout << "\n      **Execute first order*\n";
+     orders*\n->executeNextOrder();
+     cout << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
-     cout << "*Execute next order*\n";
-     orders->executeNextOrder();
-     cout << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "\n      **Execute next order*\n";
+     orders-*\n>executeNextOrder();
+     cout << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
-     cout << "*Execute next order*\n";
-     orders->executeNextOrder();
-     cout << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "\n      **Execute next order*\n";
+     orders-*\n>executeNextOrder();
+     cout << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
-     cout << "*Execute next order*\n";
-     orders->executeNextOrder();
-     cout << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "\n      **Execute next order*\n";
+     orders-*\n>executeNextOrder();
+     cout << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
-     cout << "*Execute next order*\n";
-     // orders->executeNextOrder();
-     cout << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "\n      **Execute next order*\n";
+     // orde*\nrs->executeNextOrder();
+     cout << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n";
-     cout << "*Execute next order*\n";
-     // orders->executeNextOrder();
-     cout << "-------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "\n      **Execute next order*\n";
+     // orde*\nrs->executeNextOrder();
+     cout << "----------------------------------------------------------\n"
           << "CURRENT ORDER LIST:\n"
           << *orders
-          << "-------------------------------------------\n"
-          << "-------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 }
 */

@@ -2,6 +2,7 @@
 #include "Map/Map.h"
 #include "Player/Player.h"
 #include <iostream>
+#include <algorithm>
 using std::cout;
 using std::endl;
 
@@ -70,7 +71,7 @@ void Deploy::execute()
 {
     if (validate())
     {
-        m_territory->addArmyUnits(m_units);
+        m_territory->setArmyUnits(m_territory->getArmyUnits() + m_units);
         m_player->addReinforcements(-m_units);
 
         m_effect = "Player " + m_player->getPlayerName() + " deployed " + std::to_string(m_units);
@@ -132,7 +133,12 @@ void Advance::execute()
 
 Advance::~Advance() {}
 
-Bomb::Bomb() : Order("Bomb") {}
+Bomb::Bomb() : Order() {}
+
+Bomb::Bomb(Player *player, Territory *target) : Order(player), m_territory(target)
+{
+    m_description = "Bomb " + target->getTerritoryName();
+}
 
 Order *Bomb::clone() const
 {
@@ -143,16 +149,14 @@ Order *Bomb::clone() const
 // demonstrate it can be accessed to check validity.
 bool Bomb::validate() const
 {
-    if (true)
-    {
-        cout << *this << " order validated.\n";
+    vector<Territory *> toAttack = m_player->toAttack();
+
+    bool adjacent = std::find(toAttack.begin(), toAttack.end(), m_territory) != toAttack.end();
+
+    if (!(m_territory->getOwner() == m_player) && adjacent)
         return true;
-    }
-    else if (false)
-    {
-        cout << *this << " order not valid.\n";
-        return false;
-    }
+
+    return false;
 }
 
 // execute() not fully implemented yet for part 1, for now it simply calls validate()
@@ -162,7 +166,25 @@ void Bomb::execute()
 {
     if (validate())
     {
-        cout << *this << " order executed.\n";
+        int units = m_territory->getArmyUnits();
+        m_territory->setArmyUnits(units / 2);
+
+        string territory = m_territory->getTerritoryName();
+        int remainingUnits = m_territory->getArmyUnits();
+        int lostUnits = units - remainingUnits;
+
+        m_effect = "Player " + m_player->getPlayerName() + " bombed " + territory + ". ";
+        m_effect += std::to_string(lostUnits) + " units killed. ";
+        m_effect += territory + " now has " + std::to_string(remainingUnits) + " units.";
+
+        cout << m_effect << endl;
+    }
+    else
+    {
+        m_effect = "Player " + m_player->getPlayerName() + " bomb order invalid, no effect. ";
+        m_effect += m_territory->getTerritoryName() + " is not a valid target territory.";
+
+        cout << m_effect << endl;
     }
 }
 
@@ -170,8 +192,7 @@ Bomb::~Bomb() {}
 
 Blockade::Blockade() : Order() {}
 
-Blockade::Blockade(Player *player, Territory *target)
-    : Order(player), m_territory(target)
+Blockade::Blockade(Player *player, Territory *target) : Order(player), m_territory(target)
 {
     m_description = "Blockade " + target->getTerritoryName();
 }
@@ -198,7 +219,7 @@ void Blockade::execute()
 {
     if (validate())
     {
-        m_territory->addArmyUnits(m_territory->getArmyUnits());
+        m_territory->setArmyUnits(m_territory->getArmyUnits() * 2);
         m_player->removeTerritory(m_territory);
 
         string neutralCreated = "";

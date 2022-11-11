@@ -80,18 +80,23 @@ class Bomb : public Order
 {
 public:
     Bomb();
+    Bomb(Player *player, Territory* target);
+
     Order *clone() const override;
     bool validate() const override;
     void execute() override;
     ~Bomb();
+
+private:
+    Territory* m_territory;
 };
 
 /// Order subclass representing a Blockade order
 class Blockade : public Order
 {
 public:
+    Blockade();
     Blockade(Player *player, Territory *target);
-    Blockade(); // redo later, have to change Cards.cpp
 
     Order *clone() const override;
     bool validate() const override;

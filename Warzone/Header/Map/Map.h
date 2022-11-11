@@ -18,7 +18,6 @@ private:
 	int territoryId;
 	int continentId;
 	int armyUnits;
-	
 
 public:
 	// constructors
@@ -39,15 +38,16 @@ public:
 
 	// getters
 	string getTerritoryName();
+	
 	vector<Territory *> getAdjacentTerritories();
 
-	void addArmyUnits(int armyUnits);
+	void setArmyUnits(int armyUnits);
 
 	int getArmyUnits() const;
 
 	void setOwner(Player *player);
 
-	Player *getOwner() const;
+	const Player *getOwner() const;
 
 	friend class Map;
 	friend class Continent;
@@ -97,7 +97,7 @@ public:
 
 	// destructor
 	~Map();
-	
+
 	// assignment operator
 	Map &operator=(const Map &map);
 
@@ -109,8 +109,8 @@ public:
 	bool validate();
 
 	// gets all the territories
-	vector<Territory*> getTerritories();
-	
+	vector<Territory *> getTerritories();
+
 private:
 	// adds continent to the map
 	void addContinent(Continent *continent);
@@ -145,7 +145,7 @@ class MapLoader
 {
 	int ContinentCounter;
 	int TerritoryCounter;
-	Map* map;
+	Map *map;
 
 public:
 	// constructors
@@ -165,6 +165,6 @@ public:
 	bool readFile(string fileName);
 
 	// getters
-	Map* getMap();
+	Map *getMap();
 	friend class Map;
 };

@@ -126,8 +126,9 @@ vector<Territory *> Player::toAttack()
 	}
 
 	// remove duplicates
-	for (int i = 0; i < allAdjacentTerritories.size();)
+	for (int i = 0; i < allAdjacentTerritories.size(); i++)
 	{
+
 		for (int j = i + 1; j < allAdjacentTerritories.size(); j++)
 		{
 			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
@@ -135,7 +136,6 @@ vector<Territory *> Player::toAttack()
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
 			}
-			j++;
 		}
 	}
 
@@ -152,16 +152,15 @@ vector<Territory *> Player::toAttack()
 			j++;
 		}
 	}
-
 	return allAdjacentTerritories;
 }
 
-Hand* Player::getHand()
+Hand *Player::getHand()
 {
 	return hand;
 }
 
-// used by Runze (same thing as addReinforcement but prints changes?)
+// used by Runze, eventually merge with addReinforcements()
 void Player::addNumArmies(int newArmies)
 {
 	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;
@@ -169,6 +168,8 @@ void Player::addNumArmies(int newArmies)
 	cout << "Now they have " << getNumArmies() << " armies" << endl;
 }
 
-
-
-
+// used by Runze, eventually merge with getReinforcements() ?
+int Player::getNumArmies()
+{
+	return numArmies;
+}
