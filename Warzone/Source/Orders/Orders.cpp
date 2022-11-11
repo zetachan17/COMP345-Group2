@@ -1,7 +1,10 @@
 #include "Orders/Orders.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 using std::cout;
 using std::endl;
+using std::string;
 
 Order::Order(string type) : m_type(type) {}
 
@@ -252,7 +255,8 @@ OrdersList::OrdersList(const OrdersList &other)
 void OrdersList::addOrder(Order *newOrder)
 {
     m_orders.push_back(newOrder);
-    Notify();
+
+    Notify(this);
 }
 
 // move() takes in the current position of an order, from a list of current orders shown to the
@@ -286,7 +290,8 @@ void OrdersList::executeNextOrder()
 {
     m_orders[0]->execute();
     remove(1);
-    Notify();
+
+    Notify(this);
 }
 
 // destructor deletes every Order object and then clears the underlying vector container
@@ -329,4 +334,21 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
             cout << i++ << ". " << *order << endl;
         return output;
     }
+}
+
+
+//stringToLog
+string Order::stringToLog() {
+    
+    string stringLog;
+    cout << stringLog << endl;
+    return stringLog;
+}
+
+//stringToLog
+string OrdersList::stringToLog() {
+    
+    string stringLog = m_orders.back()->m_type + " Order has been added to the Order List.";
+    cout << stringLog << endl;
+    return stringLog;
 }

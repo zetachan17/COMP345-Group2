@@ -36,6 +36,9 @@ public:
     // individual implementation resulting in some game action depending on the specific order
     virtual void execute() = 0;
 
+    //stringToLog
+    string stringToLog();
+
 private:
     string m_type;
 };
@@ -116,7 +119,7 @@ public:
     OrdersList(const OrdersList &other);
 
     // destructor
-    ~OrdersList();
+    virtual ~OrdersList();
     
     // assignment operator
     OrdersList& operator=(const OrdersList& ordersList);
@@ -136,6 +139,9 @@ public:
 
     // executes the next order and then removes it from the list
     void executeNextOrder();
+
+    //stringToLog
+    string stringToLog();
 
 private:
     vector<Order*> m_orders;

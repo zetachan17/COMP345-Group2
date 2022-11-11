@@ -1,12 +1,27 @@
 #pragma once
 #include <list>
+#include <string>
+//#include "Orders/Orders.h"
+using std::string;
 using std::list;
+
+class Order;
+class OrdersList;
+
+class ILoggable {
+
+public:
+	ILoggable();
+	~ILoggable();
+
+	virtual string stringToLog() = 0;
+};
 
 class Observer {
 
 public:
 	~Observer();
-	virtual void Update() = 0;
+	virtual void Update(ILoggable* ilog) = 0;
 
 protected:
 	Observer();
@@ -20,19 +35,28 @@ public:
 
 	virtual void Attach(Observer* o);
 	virtual void Detach(Observer* o);
-	virtual void Notify();
+	virtual void Notify(ILoggable* ilog);
 
 private:
-	list<Observer*>* _observers;
+	list<Observer*>* observers;
 };
 
-class ILoggable {
+class LogObserver : public Observer {
 
 public:
-	virtual void stringToLog() = 0;
-};
+	LogObserver();
+	virtual ~LogObserver();
+	//LogObserver(D* saveCommand);
+	//LogObserver(D* execute);
+	//LogObserver(D* saveEffect);
+	LogObserver(OrdersList* orders);
+	//LogObserver(D* transition);
 
-class LogObserver {
-public:
+	void Update(ILoggable* ilog);
 
+	//D* subjectSC;
+	//D* subjectE;
+	//D* subjectSE;
+	OrdersList* subjectOL;
+	//D* subjectT;
 };
