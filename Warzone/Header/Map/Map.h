@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -36,6 +38,7 @@ public:
 
 	friend class Map;
 	friend class Continent;
+	int numArmies;
 };
 
 class Continent
@@ -83,7 +86,7 @@ public:
 
 	// destructor
 	~Map();
-
+	
 	// assignment operator
 	Map &operator=(const Map &map);
 
@@ -92,7 +95,10 @@ public:
 
 	// REQUIRED - validates the map is a connected graph, continents are connected subgraphs and each territory belongs
 	// to one and only one continent
-	void validate();
+	bool validate();
+
+	// gets all the territories
+	vector<Territory*> getTerritories();
 	
 private:
 	// adds continent to the map
@@ -109,7 +115,7 @@ private:
 
 	// gets the territory maching the passed name
 	Territory* getTerritoryByName(string territoryName);
-
+	
 	// verifies that the map is a connected graph
 	bool isMapConnected();
 
@@ -128,6 +134,7 @@ class MapLoader
 {
 	int ContinentCounter;
 	int TerritoryCounter;
+	Map* map;
 
 public:
 	// constructors
@@ -144,7 +151,9 @@ public:
 	friend ostream& operator<<(ostream &os, const MapLoader &mapLoader);
 
 	// reads a map file
-	void readFile(string fileName);
-	
+	bool readFile(string fileName);
+
+	// getters
+	Map* getMap();
 	friend class Map;
 };

@@ -130,6 +130,8 @@
   <ItemGroup>
     <ClCompile Include="Source\LoggingObserver\LoggingObserver.cpp" />
     <ClCompile Include="Source\LoggingObserver\LoggingObserverDriver.cpp" />
+    <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp" />
+    <ClCompile Include="Source\CommandProcessing\CommandProcessingDriver.cpp" />
     <ClCompile Include="Source\Player\PlayerDriver.cpp" />
     <ClCompile Include="Source\Cards\CardsDriver.cpp" />
     <ClCompile Include="Source\GameEngine\GameEngine.cpp" />
@@ -142,12 +144,14 @@
     <ClCompile Include="Warzone.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\CommandProcessing\CommandProcessing.h" />
+    <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h" />
+    <ClInclude Include="Header\LoggingObserver\LoggingObserver.h" />
+    <ClInclude Include="Header\LoggingObserver\LoggingObserverDriver.h" />
     <ClInclude Include="Header\Cards\CardsDriver.h" />
     <ClInclude Include="Header\GameEngine\GameEngine.h" />
     <ClInclude Include="Header\Cards\Cards.h" />
     <ClInclude Include="Header\GameEngine\GameEngineDriver.h" />
-    <ClInclude Include="Header\LoggingObserver\LoggingObserver.h" />
-    <ClInclude Include="Header\LoggingObserver\LoggingObserverDriver.h" />
     <ClInclude Include="Header\Map\Map.h" />
     <ClInclude Include="Header\Map\MapDriver.h" />
     <ClInclude Include="Header\Orders\OrdersDriver.h" />

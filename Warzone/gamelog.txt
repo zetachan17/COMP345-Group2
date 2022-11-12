@@ -1,7 +1,9 @@
 Output of commands:
-Negotiate Order has been added to the Order List..
-Bomb Order has been added to the Order List..
-Advance Order has been added to the Order List..
-Deploy Order has been added to the Order List..
-Airlift Order has been added to the Order List..
-Blockade Order has been added to the Order List..
+Negotiate Order has been added to the Order List.
+Bomb Order has been added to the Order List.
+Advance Order has been added to the Order List.
+Deploy Order has been added to the Order List.
+Airlift Order has been added to the Order List.
+Blockade Order has been added to the Order List.
+New state is MapLoaded
+New state is MapValidated

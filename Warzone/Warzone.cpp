@@ -7,6 +7,8 @@
 #include "GameEngine/GameEngineDriver.h"    
 
 #include "LoggingObserver/LoggingObserverDriver.h"
+#include "CommandProcessing/CommandProcessingDriver.h"
+#include "GameEngine/GameEngineDriver.h"
 
 int main()
 {
@@ -24,4 +26,8 @@ int main()
     //A2P5
     testLoggingObserver();
 
+    //
+    //testCommandProcessor();
+
+    //testStartupPhase();
 }

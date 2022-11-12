@@ -9,8 +9,15 @@ using std::vector;
 
 Player::Player()
 {
+	this->numArmies = 0;
+}
+
+Player::Player(string playerName)
+{
+	this->playerName = playerName;
 	this->hand = new Hand();
 	this->ordersList= new OrdersList();
+	this->numArmies = 0;
 }
 
 Player::Player(const Player& otherPlayer)
@@ -23,6 +30,9 @@ Player::Player(const Player& otherPlayer)
 	{
 		this->territories.push_back(new Territory(*territory));
 	}
+
+	this->playerName = otherPlayer.playerName;
+	this->numArmies = otherPlayer.numArmies;
 }
 
 Player::~Player() 
@@ -39,7 +49,7 @@ Player &Player::operator=(const Player &otherPlayer)
 	this->hand = otherPlayer.hand;
 	this->ordersList = otherPlayer.ordersList;
 	this->hand = otherPlayer.hand;
-
+	this->playerName = otherPlayer.playerName;
 
 	vector<Territory*> territories;
 	for (Territory* territory : otherPlayer.territories)
@@ -66,6 +76,8 @@ ostream& operator<<(ostream& output, const Player& player)
 	output << "Player orders list:" << endl;
 	output << *player.ordersList << endl;
 
+	output << "Player name: "  + player.playerName << endl;
+	
 	return output;
 }
 
@@ -119,6 +131,38 @@ void Player::issueOrder(string orderName)
 {
 	//to be refactored
 	cout << "Handling order: " << orderName << endl;
+}
+
+string Player::getPlayerName()
+{
+	return playerName;
+}
+
+void Player::addTerritory(Territory* territory)
+{
+	territories.push_back(territory);
+}
+
+vector<Territory*> Player::getTerritories()
+{
+	return territories;
+}
+
+Hand* Player::getHand()
+{
+	return hand;
+}
+
+int Player::getNumArmies()
+{
+	return numArmies;
+}
+
+void Player::addNumArmies(int newArmies)
+{
+	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;
+	numArmies += newArmies;
+	cout << "Now they have " << getNumArmies() << " armies" << endl;
 }
 
 

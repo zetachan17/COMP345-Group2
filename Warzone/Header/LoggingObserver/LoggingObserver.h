@@ -5,8 +5,12 @@
 using std::string;
 using std::list;
 
+class CommandProcessor;
+//class 
+class Command;
 class Order;
 class OrdersList;
+class GameEngine;
 
 class ILoggable {
 
@@ -46,17 +50,17 @@ class LogObserver : public Observer {
 public:
 	LogObserver();
 	virtual ~LogObserver();
-	//LogObserver(D* saveCommand);
-	//LogObserver(D* execute);
-	//LogObserver(D* saveEffect);
+	LogObserver(CommandProcessor* saveCommand);
+	//LogObserver(Order* execute);
+	LogObserver(Command* saveEffect);
 	LogObserver(OrdersList* orders);
-	//LogObserver(D* transition);
+	LogObserver(GameEngine* transition);
 
 	void Update(ILoggable* ilog);
 
-	//D* subjectSC;
+	CommandProcessor* subjectSC;
 	//D* subjectE;
-	//D* subjectSE;
+	Command* subjectSE;
 	OrdersList* subjectOL;
-	//D* subjectT;
+	GameEngine* subjectT;
 };
