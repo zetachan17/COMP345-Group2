@@ -143,7 +143,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
         {
             //P2.3 add players
             //TODO: find a better place to add players
-            Player* newPlayer = new Player("P1");
+            Player* newPlayer = new Player(((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(10));
             activePlayers.push_back(newPlayer);
 
 
@@ -167,7 +167,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
             if ((cmdP->listCommands[cmdP->nbCommands]->commandName).substr(0, 9) == "addplayer")
             {
                 // addPlayer();
-                Player* newPlayer = new Player("P2");
+                Player* newPlayer = new Player(((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(10));
                 activePlayers.push_back(newPlayer);
                 cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
                 cmdP->nbCommands++;
@@ -389,4 +389,31 @@ void GameEngine::drawInitialCards()
         player->getHand()->addToHand(deck->draw());
         player->getHand()->addToHand(deck->draw());
     }
+}
+
+CommandProcessor* GameEngine::initializeCommandProcessor()
+{
+    CommandProcessor* commandProcessor;
+    string userInput;
+    std::regex fileRegex("-file");
+    
+    std::cout << "Please choose if you want the game accept commands form the console (-console) or from a file (-file filename)" << std::endl;
+    std::getline(cin, userInput);
+    
+    if (userInput == "-console")
+    {
+        commandProcessor = new CommandProcessor();
+    }
+    else if (std::regex_search(userInput, fileRegex))
+    {
+        string fileName = userInput.substr(6);
+        std::cout << fileName << std::endl;
+        commandProcessor = new FileCommandProcessorAdapter(fileName);
+    }
+    else
+    {
+        commandProcessor = new CommandProcessor();
+    }
+    
+    return commandProcessor;
 }

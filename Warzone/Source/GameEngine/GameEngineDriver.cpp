@@ -5,13 +5,14 @@
 void testStartupPhase()
 {
     GameEngine* gameEngine = new GameEngine();
-    CommandProcessor* cmdP = new CommandProcessor();
+    CommandProcessor* cmdP = gameEngine->initializeCommandProcessor();
     GameEngine::State currentState = GameEngine::State::Start;
     
     while (currentState != GameEngine::State::End)
     {
         currentState = gameEngine->startupPhase(gameEngine->getState(), cmdP);
     }
-
+    
     delete gameEngine;
+    
 }

@@ -43,6 +43,7 @@ public:
 	CommandProcessor();
 
 	//methods
+	virtual string getFromUser();
 	void getCommand();
 	Command* saveCommand(string cmdName);
 	void saveEffect(Command* cmd, string effectName);
@@ -56,6 +57,7 @@ public:
 
 class FileCommandProcessorAdapter: public CommandProcessor
 {
+public:
 	FileCommandProcessorAdapter(string filename);
 	~FileCommandProcessorAdapter();
 
@@ -64,5 +66,5 @@ class FileCommandProcessorAdapter: public CommandProcessor
 
 protected:
 	ifstream inputstream;
-	string readCommand() override;
+	string getFromUser() override;
 };

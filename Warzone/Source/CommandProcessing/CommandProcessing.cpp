@@ -23,6 +23,16 @@ CommandProcessor::CommandProcessor()
 	nbCommands = 0;
 }
 
+string CommandProcessor::getFromUser()
+{
+	string userInput;
+	std::cout << "Please enter the command you would like to send next, in lowercase: ";
+	std::getline(std::cin, userInput);
+	std::cout << endl;
+
+	return userInput;
+}
+
 string CommandProcessor::readCommand()
 {
 	std::string userInput;
@@ -32,10 +42,7 @@ string CommandProcessor::readCommand()
 
 	while (condition == 0)
 	{
-		std::cout << "Please enter the command you would like to send next, in lowercase: ";
-		std::getline(std::cin, userInput);
-		std::cout << endl;
-
+		userInput = getFromUser();
 
 		if (userInput.substr(0, 7) == "loadmap")
 		{
@@ -88,13 +95,8 @@ string CommandProcessor::readCommand()
 			std::cout << "That was not a valid input, please try again" << endl;
 			condition = 1;
 		}
-
-
-
 	}
 	return userInput;
-
-
 }
 
 void CommandProcessor::getCommand()
@@ -177,23 +179,6 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filename) : Comm
 	inputstream.open("CommandFile/" + filename);
 }
 
-string FileCommandProcessorAdapter::readCommand()
-{
-	if (inputstream.eof())
-	{
-		
-	}
-
-	string command;
-	getline(inputstream, command);
-	if (command == "")
-	{
-		
-	}
-
-	return command;
-}
-
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 {
 	inputstream.close();
@@ -203,6 +188,25 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
 {
 	return *this;
+}
+
+string FileCommandProcessorAdapter::getFromUser()
+{
+	if (inputstream.eof())
+	{
+		std::cout << "End of the command file, now quit the game!" << std::endl;
+		return "quit";
+	}
+
+	string command;
+	getline(inputstream, command);
+	if (command == "")
+	{
+		std::cout << "End of the command file, now quit the game!" << std::endl;
+		return "quit";
+	}
+
+	return command;
 }
 
 std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& adapter)

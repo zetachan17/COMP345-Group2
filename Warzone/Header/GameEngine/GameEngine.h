@@ -1,8 +1,5 @@
 #pragma once
 #include <iostream>
-
-#include <iostream>
-
 #include "Map/Map.h"
 #include "Player/Player.h"
 
@@ -43,6 +40,7 @@ public:
     State getState();
     std::string stateToString(State state);
 
+    CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
 
 private:
