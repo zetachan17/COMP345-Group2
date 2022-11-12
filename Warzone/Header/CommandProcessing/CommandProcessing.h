@@ -54,6 +54,17 @@ public:
 
 };
 
+class FileLineReader {
+private:
+	string line;
+public:
+	//Default Constructor
+	FileLineReader();
+
+	//method
+	string readLineFromFile();
+};
+
 class FileCommandProcessorAdapter: public CommandProcessor
 {
 	FileCommandProcessorAdapter(string filename);
@@ -67,10 +78,9 @@ protected:
 	string readCommand() override;
 
 private:
-	//FileLineReader fileLineReader;
+	FileLineReader fileLineReader;
 
-public:
-	//void FileLineReaderToCommandProcessorAdapter(FileLineReader* fileLineReader);
+
 };
 
 

@@ -72,7 +72,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
             {
                 if (mLoader->readFile(((cmdP->listCommands[cmdP->nbCommands])->commandName).substr(8)))
                 {
-                    std::cout << "Making sure that this is gone intpo" << endl;
+                    std::cout << "Making sure that this is gone into" << endl;
                     //loadMap();
                     this->state = GameEngine::State::MapLoaded;
                     cmdP->saveEffect(cmdP->listCommands[cmdP->nbCommands], stateToString(this->state));//Saving the effect inside the Command object as a string

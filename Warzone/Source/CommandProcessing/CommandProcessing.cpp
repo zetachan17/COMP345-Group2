@@ -176,6 +176,17 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 	}
 }
 
+FileLineReader::FileLineReader() 
+{
+
+}
+
+string FileLineReader::readLineFromFile()
+{
+
+}
+
+
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filename) : CommandProcessor()
 {
 	inputstream.open("CommandFile/" + filename);
