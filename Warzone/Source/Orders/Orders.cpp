@@ -6,10 +6,9 @@
 using std::cout;
 using std::endl;
 
-Order::Order() : m_player(NULL), m_type("BLANK ORDER"), m_description(""), m_effect("") {}
+Order::Order() : m_player(NULL), m_description(""), m_effect("") {}
 
-Order::Order(string type, Player *player) : m_player(player), m_type(type), m_description(""),
-                                            m_effect("") {}
+Order::Order(Player *player) : m_player(player), m_description(""), m_effect("") {}
 
 // to remove once all suborders are implemented
 Order::Order(const string &type) : m_player(NULL), m_description(type), m_effect("") {}
@@ -17,7 +16,6 @@ Order::Order(const string &type) : m_player(NULL), m_description(type), m_effect
 Order::Order(const Order &other)
 {
     m_player = other.m_player;
-    m_type = other.m_type;
     m_description = other.m_description;
     m_effect = other.m_effect;
 }
@@ -25,7 +23,6 @@ Order::Order(const Order &other)
 Order &Order::operator=(const Order &rightSide)
 {
     m_player = rightSide.m_player;
-    m_type = rightSide.m_type;
     m_description = rightSide.m_description;
     m_effect = rightSide.m_effect;
     return *this;
@@ -51,17 +48,19 @@ string Order::player() const
 
 string Order::type() const
 {
-    return m_type;
+    return m_description.substr(0, m_description.find(" "));
 }
 
 Player *Order::m_neutralPlayer = NULL;
+int Order::m_attackCount = 0;
+vector<pair<Player *, Player *>> Order::m_ceaseFire;
 
 Player *Order::neutralPlayer()
 {
     return m_neutralPlayer;
 }
 
-Deploy::Deploy(Player *player, int armyUnits, Territory *target) : Order("Deploy", player),
+Deploy::Deploy(Player *player, int armyUnits, Territory *target) : Order(player),
                                                                    m_units(armyUnits),
                                                                    m_territory(target)
 {
@@ -76,7 +75,7 @@ Order *Deploy::clone() const
 
 // validate() not fully implemented yet for part 1, simply returns true (valid) for now to
 // demonstrate it can be accessed to check validity.
-bool Deploy::validate() const
+bool Deploy::validate()
 {
     if (m_territory->getOwner() == m_player)
         return true;
@@ -94,14 +93,14 @@ void Deploy::execute()
         m_territory->setArmyUnits(m_territory->getArmyUnits() + m_units);
         m_player->addReinforcements(-m_units);
 
-        m_effect = "Player " + m_player->getPlayerName() + " deployed " + std::to_string(m_units) +
-                   " units to " + m_territory->getTerritoryName() + ".";
+        m_effect = "Player " + player() + " deployed " + std::to_string(m_units) + " units to " +
+                   m_territory->getTerritoryName() + ".";
 
         cout << m_effect << endl;
     }
     else
     {
-        m_effect = "Player " + m_player->getPlayerName() + " deploy order invalid, no effect. " +
+        m_effect = "Player " + player() + " deploy order invalid, no effect. " +
                    m_territory->getTerritoryName() + " is not a valid target territory.";
 
         cout << m_effect << endl;
@@ -119,7 +118,7 @@ Order *Advance::clone() const
 
 // validate() not fully implemented yet for part 1, simply returns true (valid) for now to
 // demonstrate it can be accessed to check validity.
-bool Advance::validate() const
+bool Advance::validate()
 {
     if (true)
     {
@@ -142,15 +141,20 @@ void Advance::execute()
     {
         cout << *this << " order executed.\n";
     }
+
+    if (--m_attackCount == 0)
+        m_ceaseFire.clear();
 }
 
 Advance::~Advance() {}
 
 Bomb::Bomb() : Order() {}
 
-Bomb::Bomb(Player *player, Territory *target) : Order("Bomb", player), m_territory(target)
+Bomb::Bomb(Player *player, Territory *target) : Order(player), m_territory(target),
+                                                m_negotiate(false)
 {
     m_description = "Bomb " + target->getTerritoryName();
+    ++m_attackCount;
 }
 
 Order *Bomb::clone() const
@@ -160,13 +164,24 @@ Order *Bomb::clone() const
 
 // validate() not fully implemented yet for part 1, simply returns true (valid) for now to
 // demonstrate it can be accessed to check validity.
-bool Bomb::validate() const
+bool Bomb::validate()
 {
+    // check for active negotiations between the two players involved
+    for (auto pair : m_ceaseFire)
+    {
+        const Player *targetPlayer = m_territory->getOwner();
+        if (pair.first == m_player && pair.second == targetPlayer)
+            return !(flipNegotiate());
+        if (pair.first == targetPlayer && pair.second == m_player)
+            return !(flipNegotiate());
+    }
+
+    // check if target territory is adjacent to one of the current player's territories
     vector<Territory *> toAttack = m_player->toAttack();
 
     bool adjacent = std::find(toAttack.begin(), toAttack.end(), m_territory) != toAttack.end();
 
-    if (!(m_territory->getOwner() == m_player) && adjacent)
+    if ((m_territory->getOwner() != m_player) && adjacent)
         return true;
 
     return false;
@@ -179,34 +194,48 @@ void Bomb::execute()
 {
     if (validate())
     {
-        int units = m_territory->getArmyUnits();
-        m_territory->setArmyUnits(units / 2);
+        int initialUnits = m_territory->getArmyUnits();
+        m_territory->setArmyUnits(initialUnits / 2);
 
         string territory = m_territory->getTerritoryName();
-        int remainingUnits = m_territory->getArmyUnits();
-        int lostUnits = units - remainingUnits;
+        int survivingUnits = m_territory->getArmyUnits();
+        string lostUnits = std::to_string(initialUnits - survivingUnits);
 
-        m_effect = "Player " + m_player->getPlayerName() + " bombed " + territory + ". " +
-                   std::to_string(lostUnits) + " units killed. " + territory + " now has " +
-                   std::to_string(remainingUnits) + " units.";
+        m_effect = "Player " + player() + " bombed " + territory + ". " + lostUnits +
+                   " units killed. " + territory + " now has " + std::to_string(survivingUnits) +
+                   " units.";
 
         cout << m_effect << endl;
     }
     else
     {
-        m_effect = "Player " + m_player->getPlayerName() + " bomb order invalid, no effect. " +
-                   m_territory->getTerritoryName() + " is not a valid target territory.";
+        m_effect = "Player " + player() + " bomb order invalid, no effect. ";
+
+        if (m_negotiate)
+            m_effect += "Negotiations are in effect between " + player() + " and " +
+                        m_territory->getOwner()->getPlayerName() + ".";
+        else
+            m_effect += m_territory->getTerritoryName() + " is not a valid target territory.";
 
         cout << m_effect << endl;
     }
+
+    if (--m_attackCount == 0)
+        m_ceaseFire.clear();
 }
 
-Bomb::~Bomb() {}
+bool Bomb::flipNegotiate()
+{
+    return (m_negotiate = !m_negotiate);
+}
+
+Bomb::~Bomb()
+{
+}
 
 Blockade::Blockade() : Order() {}
 
-Blockade::Blockade(Player *player, Territory *target) : Order("Blockade", player),
-                                                        m_territory(target)
+Blockade::Blockade(Player *player, Territory *target) : Order(player), m_territory(target)
 {
     m_description = "Blockade " + target->getTerritoryName();
 }
@@ -218,7 +247,7 @@ Order *Blockade::clone() const
 
 // validate() not fully implemented yet for part 1, simply returns true (valid) for now to
 // demonstrate it can be accessed to check validity.
-bool Blockade::validate() const
+bool Blockade::validate()
 {
     if (m_territory->getOwner() == m_player)
         return true;
@@ -247,17 +276,15 @@ void Blockade::execute()
         string territory = m_territory->getTerritoryName();
         string units = std::to_string(m_territory->getArmyUnits());
 
-        m_effect = "Player " + m_player->getPlayerName() + " blockaded " + territory + ". " +
-                   neutralCreated + territory + " now has " + units +
-                   " units and belongs to the Neutral player.";
+        m_effect = "Player " + player() + " blockaded " + territory + ". " + neutralCreated +
+                   territory + " now has " + units + " units and belongs to the Neutral player.";
 
         cout << m_effect << endl;
     }
     else
     {
-        m_effect = "Player " + m_player->getPlayerName() +
-                   " blockade order invalid, no effect. " + m_territory->getTerritoryName() +
-                   " is not a valid target territory.";
+        m_effect = "Player " + player() + " blockade order invalid, no effect. " +
+                   m_territory->getTerritoryName() + " is not a valid target territory.";
 
         cout << m_effect << endl;
     }
@@ -274,7 +301,7 @@ Order *Airlift::clone() const
 
 // validate() not fully implemented yet for part 1, simply returns true (valid) for now to
 // demonstrate it can be accessed to check validity.
-bool Airlift::validate() const
+bool Airlift::validate()
 {
     if (true)
     {
@@ -303,6 +330,11 @@ Airlift::~Airlift() {}
 
 Negotiate::Negotiate() : Order("Negotiate") {}
 
+Negotiate::Negotiate(Player *player, Player *target) : Order(player), m_target(target)
+{
+    m_description = "Negotiate with " + target->getPlayerName();
+}
+
 Order *Negotiate::clone() const
 {
     return (new Negotiate(*this));
@@ -310,18 +342,12 @@ Order *Negotiate::clone() const
 
 // validate() not fully implemented yet for part 1, simply returns true (valid) for now to
 // demonstrate it can be accessed to check validity.
-bool Negotiate::validate() const
+bool Negotiate::validate()
 {
-    if (true)
-    {
-        cout << *this << " order validated.\n";
+    if (m_target != m_player)
         return true;
-    }
-    else if (false)
-    {
-        cout << *this << " order not valid.\n";
-        return false;
-    }
+
+    return false;
 }
 
 // execute() not fully implemented yet for part 1, for now it simply calls validate()
@@ -331,7 +357,20 @@ void Negotiate::execute()
 {
     if (validate())
     {
-        cout << *this << " order executed.\n";
+        m_ceaseFire.emplace_back(m_player, m_target);
+
+        m_effect = "Player " + player() + " entered negotiations with " +
+                   m_target->getPlayerName() +
+                   ". Attacks between them are invalid for the remainder of the turn.";
+
+        cout << m_effect << endl;
+    }
+    else
+    {
+        m_effect = "Player " + player() + " negotiate order invalid, no effect. " +
+                   "A player cannot negotiate with themselves.";
+
+        cout << m_effect << endl;
     }
 }
 
@@ -387,6 +426,11 @@ Order *OrdersList::nextOrder()
     }
 
     return temp;
+}
+
+const vector<Order *> *OrdersList::orders() const
+{
+    return &m_orders;
 }
 
 OrdersList::~OrdersList()

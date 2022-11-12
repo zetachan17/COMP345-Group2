@@ -6,7 +6,9 @@ class Player;
 #include <vector>
 #include <string>
 #include <iostream>
+#include <utility>
 using std::ostream;
+using std::pair;
 using std::string;
 using std::vector;
 
@@ -16,7 +18,7 @@ class Order
 public:
     // constructors
     Order();
-    Order(string type, Player *player);
+    Order(Player *player);
     Order(const string &type); // to delete when all subclasses are implemented
     Order(const Order &other);
 
@@ -33,7 +35,7 @@ public:
     friend ostream &operator<<(ostream &output, const Order &order);
 
     // REQUIRED - verifies if order is valid; subclasses override this for their own verification
-    virtual bool validate() const = 0;
+    virtual bool validate() = 0;
 
     // REQUIRED - executes order; checks validity first, each subclass overrides this for their own
     // implementation resulting in some game action depending on the specific order
@@ -49,9 +51,10 @@ public:
 
 protected:
     Player *m_player;
-    string m_type;
     string m_effect;
     string m_description;
+    static int m_attackCount;
+    static vector<pair<Player *, Player *>> m_ceaseFire;
     static Player *m_neutralPlayer;
 };
 
@@ -62,7 +65,7 @@ public:
     Deploy(Player *player, int armyUnits, Territory *target);
 
     Order *clone() const override;
-    bool validate() const override;
+    bool validate() override;
     void execute() override;
     ~Deploy();
 
@@ -77,7 +80,7 @@ class Advance : public Order
 public:
     Advance();
     Order *clone() const override;
-    bool validate() const override;
+    bool validate() override;
     void execute() override;
     ~Advance();
 };
@@ -89,13 +92,16 @@ public:
     Bomb();
     Bomb(Player *player, Territory *target);
 
-    Order *clone() const override;
-    bool validate() const override;
-    void execute() override;
     ~Bomb();
+
+    Order *clone() const override;
+    bool validate() override;
+    void execute() override;
+    bool flipNegotiate();
 
 private:
     Territory *m_territory;
+    bool m_negotiate;
 };
 
 /// Order subclass representing a Blockade order
@@ -106,7 +112,7 @@ public:
     Blockade(Player *player, Territory *target);
 
     Order *clone() const override;
-    bool validate() const override;
+    bool validate() override;
     void execute() override;
     ~Blockade();
 
@@ -120,7 +126,7 @@ class Airlift : public Order
 public:
     Airlift();
     Order *clone() const override;
-    bool validate() const override;
+    bool validate() override;
     void execute() override;
     ~Airlift();
 };
@@ -130,10 +136,15 @@ class Negotiate : public Order
 {
 public:
     Negotiate();
+    Negotiate(Player *player, Player *target);
+
     Order *clone() const override;
-    bool validate() const override;
+    bool validate() override;
     void execute() override;
     ~Negotiate();
+
+private:
+    Player *m_target;
 };
 
 /// OrdersList manages a list of Order objects representing the sequential orders issued by a
@@ -166,6 +177,8 @@ public:
 
     // returns the next order and removes it from the list
     Order *nextOrder();
+
+    const vector<Order *> *orders() const;
 
 private:
     vector<Order *> m_orders;
