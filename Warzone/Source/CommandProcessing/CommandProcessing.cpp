@@ -25,6 +25,7 @@ CommandProcessor::CommandProcessor()
 
 string CommandProcessor::readCommand()
 {
+
 	std::string userInput;
 	std::string delimiter = " ";
 	std::string secondInput;
@@ -38,6 +39,7 @@ string CommandProcessor::readCommand()
 
 
 		if (userInput.substr(0, 7) == "loadmap")
+
 		{
 			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "loadmap" and the file name
 				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
@@ -97,15 +99,17 @@ string CommandProcessor::readCommand()
 
 }
 
-void CommandProcessor::getCommand()
+void CommandProcessor::getCommand(CommandProcessor* commandProcessor)
 {
-	std::string cmdName = readCommand();
-	saveCommand(cmdName);
+
+	std::string commandName;
+	commandName = commandProcessor->readCommand();
+	saveCommand(commandName);
 }
 
-Command* CommandProcessor::saveCommand(string cmdName) //remember to track where the command object goes
+Command* CommandProcessor::saveCommand(string commandName) //remember to track where the command object goes
 {
-	Command* cmd = new Command(cmdName);
+	Command* cmd = new Command(commandName);
 	listCommands.push_back(cmd);
 	std::cout << "The command's name is : " << cmd->commandName << std::endl;
 	return cmd;

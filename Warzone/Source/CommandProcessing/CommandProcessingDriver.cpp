@@ -4,5 +4,5 @@
 void testCommandProcessor()
 {
 	CommandProcessor *comP = new CommandProcessor;
-	comP->getCommand();
+	comP->getCommand(comP);
 }

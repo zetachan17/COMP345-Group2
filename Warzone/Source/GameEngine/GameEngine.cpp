@@ -62,7 +62,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
     {
     case GameEngine::State::Start:
         std::cout << "Welcome to Warzone!" << std::endl;
-        cmdP->getCommand(); //Getting the command from the user
+        cmdP->getCommand(cmdP); //Getting the command from the user
         bool cmdValidateValue;
         cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this); //validating the command
         std::cout << cmdValidateValue;
@@ -100,7 +100,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
 
         std::cout << this->stateToString(getState());
 
-        cmdP->getCommand();
+        cmdP->getCommand(cmdP);
         std::cout << this->stateToString(this->getState());
         cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this); //validating the command
         std::cout << cmdValidateValue;
@@ -137,7 +137,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
         
     case GameEngine::State::MapValidated:
         
-        cmdP->getCommand();
+        cmdP->getCommand(cmdP);
         cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this);
         if (cmdValidateValue)
         {
@@ -160,7 +160,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
             break;
         }
     case GameEngine::State::PlayersAdded:
-        cmdP->getCommand();
+        cmdP->getCommand(cmdP);
         cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this);
         if (cmdValidateValue)
         {   
@@ -262,7 +262,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* cmdP)
         }
     case GameEngine::State::Win:
         
-        cmdP->getCommand();
+        cmdP->getCommand(cmdP);
         cmdValidateValue = cmdP->validate(cmdP->listCommands[cmdP->nbCommands], this);
         if (cmdValidateValue)
         {

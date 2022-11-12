@@ -43,7 +43,7 @@ public:
 	CommandProcessor();
 
 	//methods
-	void getCommand();
+	void getCommand(CommandProcessor* commandProcessor);
 	Command* saveCommand(string cmdName);
 	void saveEffect(Command* cmd, string effectName);
 	bool validate(Command* cmd, GameEngine* gameEngine);
@@ -65,4 +65,12 @@ class FileCommandProcessorAdapter: public CommandProcessor
 protected:
 	ifstream inputstream;
 	string readCommand() override;
+
+private:
+	//FileLineReader fileLineReader;
+
+public:
+	//void FileLineReaderToCommandProcessorAdapter(FileLineReader* fileLineReader);
 };
+
+
