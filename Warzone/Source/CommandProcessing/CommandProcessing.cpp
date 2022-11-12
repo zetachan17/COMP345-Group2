@@ -18,12 +18,81 @@ Command::Command(string cmdName)
 	commandName = cmdName;
 }
 
+Command::Command(const Command& command)
+{
+	this->commandName = command.commandName;
+	this->commandEffect = command.commandEffect;
+}
+
+Command::~Command()
+{
+	std::cout << "Command object destroyed!";
+}
+
+
+Command& Command::operator=(const Command& command)
+{
+	this->commandName = command.commandName;
+	this->commandEffect = command.commandEffect;
+	return *this;
+}
+
+ostream& operator<<(std::ostream& output, const Command& adapter)
+{
+	output << "The name of this command is: " << adapter.commandName << " and the name of the effect it stores is: " << adapter.commandEffect << endl;
+	return output;
+}
+
 CommandProcessor::CommandProcessor()
 {
 	nbCommands = 0;
 }
 
+CommandProcessor::CommandProcessor(const CommandProcessor& commandProcessor)
+{
+	nbCommands = commandProcessor.nbCommands;
+	for (Command* command : commandProcessor.listCommands)
+	{
+		listCommands.push_back(command);
+	}
+}
 
+CommandProcessor& CommandProcessor::operator=(const CommandProcessor& commandProcessor)
+{
+	this->nbCommands = commandProcessor.nbCommands;
+	for (Command* command : commandProcessor.listCommands)
+	{
+		listCommands.push_back(command);
+	}
+	return *this;
+}
+
+CommandProcessor::~CommandProcessor() 
+{
+	for (Command* y : this->listCommands)
+	{
+		delete y;
+		y = NULL;
+	}
+	
+
+}
+
+ostream& operator<<(std::ostream& output, const CommandProcessor& adapter)
+{
+	output << "CommandProcessor has " << adapter.nbCommands << "number of Commands" << endl;
+	output << "And the Commands contained in this CommandProcessor are: " << endl;
+	for (Command* y : adapter.listCommands)
+	{
+		output << *y;
+	}
+	return output;
+}
+
+void Command::saveEffect(Command* cmd, string effectName)
+{
+	cmd->commandEffect = effectName;
+}
 string CommandProcessor::readCommand()
 {
 
@@ -111,10 +180,7 @@ Command* CommandProcessor::saveCommand(string commandName) //remember to track w
 
 }
 
-void CommandProcessor::saveEffect(Command* cmd, std::string effectName)
-{
-	cmd->commandEffect = effectName;
-}
+
 
 bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 {
@@ -176,6 +242,32 @@ FileLineReader::FileLineReader()
 
 }
 
+FileLineReader::FileLineReader(const FileLineReader& filelinereader)
+{
+	
+	this->filename = filelinereader.filename;
+
+}
+
+FileLineReader& FileLineReader::operator=(const FileLineReader& filelinereader)
+{
+	this->filename = filelinereader.filename;
+	return *this;
+}
+
+ostream& operator<<(std::ostream& output, const FileLineReader& filelinereader)
+{
+	output << "The name of this filelinereader is: " << filelinereader.filename;
+	return output;
+}
+
+FileLineReader::~FileLineReader()
+{
+	std::cout << "FileLineReader object destroyed!";
+}
+
+
+
 string FileLineReader::readLineFromFile()
 {
 	
@@ -207,7 +299,20 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(FileLineReader* fileLin
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 {
 	this->fileLineReader->inputstream.close();
+	delete fileLineReader;
+	for (Command* y : this->listCommands)
+	{
+		delete y;
+	}
+	
 	std::cout << "Close file command processor adapter" << std::endl;
+}
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter& fileCommandProcessorAdapter)
+{
+	this->fileLineReader = fileCommandProcessorAdapter.fileLineReader;
+	this->fileLineReader->filename = fileCommandProcessorAdapter.fileLineReader->filename;
+	this->fileLineReader->inputstream.open("CommandFile/" + fileCommandProcessorAdapter.fileLineReader->filename);
 }
 
 FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
