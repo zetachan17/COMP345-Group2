@@ -23,6 +23,7 @@ CommandProcessor::CommandProcessor()
 	nbCommands = 0;
 }
 
+
 string CommandProcessor::readCommand()
 {
 
@@ -36,7 +37,6 @@ string CommandProcessor::readCommand()
 		std::cout << "Please enter the command you would like to send next, in lowercase: ";
 		std::getline(std::cin, userInput);
 		std::cout << endl;
-
 
 		if (userInput.substr(0, 7) == "loadmap")
 
@@ -90,13 +90,8 @@ string CommandProcessor::readCommand()
 			std::cout << "That was not a valid input, please try again" << endl;
 			condition = 1;
 		}
-
-
-
 	}
 	return userInput;
-
-
 }
 
 void CommandProcessor::getCommand(CommandProcessor* commandProcessor)
@@ -183,41 +178,106 @@ FileLineReader::FileLineReader()
 
 string FileLineReader::readLineFromFile()
 {
-
-}
-
-
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filename) : CommandProcessor()
-{
-	inputstream.open("CommandFile/" + filename);
-}
-
-string FileCommandProcessorAdapter::readCommand()
-{
+	
 	if (inputstream.eof())
 	{
-		
+		std::cout << "End of the command file, now quit the game!" << std::endl;
+		return "quit";
 	}
 
 	string command;
 	getline(inputstream, command);
 	if (command == "")
 	{
-		
+		std::cout << "End of the command file, now quit the game!" << std::endl;
+		return "quit";
 	}
 
 	return command;
 }
 
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(FileLineReader* fileLineReader, string filename) : CommandProcessor()
+{
+	this->fileLineReader = fileLineReader;
+	this->fileLineReader->filename = filename;
+	this->fileLineReader->inputstream.open("CommandFile/" + filename);
+}
+
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 {
-	inputstream.close();
+	this->fileLineReader->inputstream.close();
 	std::cout << "Close file command processor adapter" << std::endl;
 }
 
 FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
 {
 	return *this;
+}
+
+string FileCommandProcessorAdapter::readCommand() 
+{
+	string userInput = fileLineReader->readLineFromFile();
+	std::string delimiter = " ";
+	std::string secondInput;
+	int condition = 0;
+	while (condition == 0)
+	{
+
+		if (userInput.substr(0, 7) == "loadmap")
+
+		{
+			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "loadmap" and the file name
+				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
+
+			}
+			else {
+				std::cout << "We will load the map" << endl;
+				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); //We store the name of the map file in secondInput
+				std::cout << "the name of the file is: " << secondInput << endl;
+				condition = 1;
+			}
+		}
+		else if (userInput.substr(0, 9) == "addplayer")
+		{
+			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "addplayer" and the player name
+				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
+
+			}
+			else {
+				std::cout << "We will add the Player : ";
+				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); //We store the name of the player in secondInput
+				std::cout << secondInput << endl;
+				condition = 1;
+			}
+		}
+		else if (userInput == "gamestart")
+		{
+			std::cout << "We will begin the game" << endl;
+			condition = 1;
+		}
+		else if (userInput == "validatemap")
+		{
+			std::cout << "We will validate the map" << endl;
+			condition = 1;
+		}
+		else if (userInput == "replay")
+		{
+			std::cout << "We will begin a new game" << endl;
+			condition = 1;
+		}
+		else if (userInput == "quit")
+		{
+			std::cout << "We will end the game" << endl;
+			condition = 1;
+		}
+		else
+		{
+			std::cout << "That was not a valid input, please try again" << endl;
+			condition = 1;
+		}
+	}
+	return userInput;
 }
 
 std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& adapter)

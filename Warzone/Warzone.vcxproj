@@ -158,6 +158,9 @@
   <ItemGroup>
     <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="CommandFile\cmd1.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

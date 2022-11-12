@@ -1,0 +1,6 @@
+loadmap 002_I72_X-29.map
+validatemap
+addplayer P1
+addplayer P2
+gamestart
+quit

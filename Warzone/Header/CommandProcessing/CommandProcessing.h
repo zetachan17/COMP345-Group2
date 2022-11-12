@@ -57,28 +57,34 @@ public:
 class FileLineReader {
 private:
 	string line;
+	ifstream inputstream;
+	string filename;
 public:
 	//Default Constructor
 	FileLineReader();
 
 	//method
 	string readLineFromFile();
+
+	//friend
+	friend class FileCommandProcessorAdapter;
 };
 
 class FileCommandProcessorAdapter: public CommandProcessor
 {
-	FileCommandProcessorAdapter(string filename);
+public:
+	FileCommandProcessorAdapter(FileLineReader* fileLineReader, string filename);
 	~FileCommandProcessorAdapter();
 
 	FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& adapter);
 	friend std::ostream& operator<<(std::ostream& output, const FileCommandProcessorAdapter& adapter);
 
 protected:
-	ifstream inputstream;
-	string readCommand() override;
+	
+	 string readCommand() override;
 
 private:
-	FileLineReader fileLineReader;
+	FileLineReader* fileLineReader;
 
 
 };
