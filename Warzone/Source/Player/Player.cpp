@@ -1,5 +1,7 @@
 #include "Player/Player.h"
 #include "Cards/Cards.h"
+#include "Map/Map.h"
+#include "Orders/Orders.h"
 
 #include <vector>
 #include <iostream>
@@ -7,101 +9,132 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-Player::Player()
+Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList),
+									 reinforcementPool(0) {}
+
+void Player::addTerritory(Territory *territory)
 {
-	this->numArmies = 0;
+	territories.push_back(territory);
+	territory->setOwner(this);
 }
 
-Player::Player(string playerName)
+void Player::removeTerritory(Territory *territory)
 {
-	this->playerName = playerName;
-	this->hand = new Hand();
-	this->ordersList= new OrdersList();
-	this->numArmies = 0;
-}
-
-Player::Player(const Player& otherPlayer)
-{
-	this->hand = new Hand(*otherPlayer.hand);
-
-	this->ordersList = new OrdersList(*otherPlayer.ordersList);
-
-	for (Territory* territory : otherPlayer.territories)
+	vector<Territory *>::iterator i = find(territories.begin(), territories.end(), territory);
+	if (i != territories.end())
 	{
-		this->territories.push_back(new Territory(*territory));
+		territories.erase(i);
+		territory->setOwner(nullptr);
 	}
-
-	this->playerName = otherPlayer.playerName;
-	this->numArmies = otherPlayer.numArmies;
 }
 
-Player::~Player() 
+void Player::issueOrder(Order *order)
+{
+	ordersList->addOrder(order);
+}
+
+Order *Player::nextOrder()
+{
+	return ordersList->nextOrder();
+}
+
+void Player::addReinforcements(int units)
+{
+	cout << "Player " << getPlayerName() << " received " << units << " armies." << endl;
+	reinforcementPool += units;
+	cout << "Now they have " << getReinforcementPool() << " armies" << endl;
+}
+
+int Player::getReinforcementPool() const
+{
+	return reinforcementPool;
+}
+
+const string &Player::getPlayerName() const
+{
+	return playerName;
+}
+
+Player::Player() : playerName(""), hand(new Hand), ordersList(new OrdersList),
+				   reinforcementPool(0) {}
+
+Player::Player(const Player &otherPlayer)
+{
+	playerName = otherPlayer.playerName;
+	reinforcementPool = otherPlayer.reinforcementPool;
+	hand = new Hand(*otherPlayer.hand);
+	ordersList = new OrdersList(*otherPlayer.ordersList);
+
+	for (Territory *territory : otherPlayer.territories)
+	{
+		territories.push_back(new Territory(*territory));
+		territories.back()->setOwner(this);
+	}
+}
+
+Player::~Player()
 {
 	territories.clear();
-	hand->~Hand();
-	ordersList->~OrdersList();
 	delete hand;
 	delete ordersList;
 }
 
 Player &Player::operator=(const Player &otherPlayer)
 {
-	this->hand = otherPlayer.hand;
-	this->ordersList = otherPlayer.ordersList;
-	this->hand = otherPlayer.hand;
-	this->playerName = otherPlayer.playerName;
+	playerName = otherPlayer.playerName;
+	hand = otherPlayer.hand;
+	ordersList = otherPlayer.ordersList;
+	reinforcementPool = otherPlayer.reinforcementPool;
 
-	vector<Territory*> territories;
-	for (Territory* territory : otherPlayer.territories)
+	for (Territory *territory : otherPlayer.territories)
 	{
 		territories.push_back(new Territory(*territory));
+		territories.back()->setOwner(this);
 	}
-	this->territories = territories;
 
 	return *this;
 }
 
-ostream& operator<<(ostream& output, const Player& player)
+ostream &operator<<(ostream &output, const Player &player)
 {
-	output << "Player owned territories:" << endl;
-	for (Territory* territory : player.territories)
-	{
-		output << "\t" << territory << endl;
-	}
+	output << "Player: " << player.playerName << endl
+		   << "\nOwned territories: " << endl;
+	for (Territory *territory : player.territories)
+		output << "    " << territory->getTerritoryName() << endl;
 
-	output << "Player cards in hand3:" << endl;
-	output << *player.hand << endl;
-	
+	output << "\nCards in hand:" << endl
+		   << *player.hand << endl;
 
-	output << "Player orders list:" << endl;
-	output << *player.ordersList << endl;
+	output << "Orders list:" << endl
+		   << *player.ordersList << endl;
 
-	output << "Player name: "  + player.playerName << endl;
-	
 	return output;
 }
 
-vector<Territory*> Player::toDefend()
+vector<Territory *> Player::toDefend()
 {
 	return territories;
 }
 
-vector<Territory*> Player::toAttack()
+vector<Territory *> Player::toAttack()
 {
-	vector<Territory*> allAdjacentTerritories;
+	vector<Territory *> allAdjacentTerritories;
 
-	for (Territory* territory : territories)
+	for (Territory *territory : territories)
 	{
-		vector<Territory*> currentAdjacentTerritories = territory->getAdjacentTerritories();
-		allAdjacentTerritories.insert(allAdjacentTerritories.end(), currentAdjacentTerritories.begin(), currentAdjacentTerritories.end());
+		vector<Territory *> currentAdjacentTerritories = territory->getAdjacentTerritories();
+		allAdjacentTerritories.insert(allAdjacentTerritories.end(),
+									  currentAdjacentTerritories.begin(),
+									  currentAdjacentTerritories.end());
 	}
 
 	// remove duplicates
-	for (int i = 0; i < allAdjacentTerritories.size();)
+	for (int i = 0; i < allAdjacentTerritories.size(); i++)
 	{
-		for (int j = i+1; j < allAdjacentTerritories.size(); j++)
+		for (int j = i + 1; j < allAdjacentTerritories.size();)
 		{
-			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			if (allAdjacentTerritories[i]->getTerritoryName() ==
+				allAdjacentTerritories[j]->getTerritoryName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
@@ -115,7 +148,8 @@ vector<Territory*> Player::toAttack()
 	{
 		for (int j = 0; j < allAdjacentTerritories.size();)
 		{
-			if (territories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			if (territories[i]->getTerritoryName() ==
+				allAdjacentTerritories[j]->getTerritoryName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
@@ -123,48 +157,10 @@ vector<Territory*> Player::toAttack()
 			j++;
 		}
 	}
-
 	return allAdjacentTerritories;
 }
 
-void Player::issueOrder(string orderName)
-{
-	//to be refactored
-	cout << "Handling order: " << orderName << endl;
-}
-
-string Player::getPlayerName()
-{
-	return playerName;
-}
-
-void Player::addTerritory(Territory* territory)
-{
-	territories.push_back(territory);
-}
-
-vector<Territory*> Player::getTerritories()
-{
-	return territories;
-}
-
-Hand* Player::getHand()
+Hand *Player::getHand()
 {
 	return hand;
 }
-
-int Player::getNumArmies()
-{
-	return numArmies;
-}
-
-void Player::addNumArmies(int newArmies)
-{
-	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;
-	numArmies += newArmies;
-	cout << "Now they have " << getNumArmies() << " armies" << endl;
-}
-
-
-
-

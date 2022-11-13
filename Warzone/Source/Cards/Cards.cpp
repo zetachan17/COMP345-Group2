@@ -40,7 +40,6 @@ Card::Card(const Card &card)
 
 Card::~Card()
 {
-
 }
 
 Card &Card::operator=(const Card &card)
@@ -49,37 +48,38 @@ Card &Card::operator=(const Card &card)
 	return *this;
 }
 
-ostream& operator<<(ostream& output, const Card& card)
+ostream &operator<<(ostream &output, const Card &card)
 {
 	output << "Card: " << cardTypes[card.type] << endl;
 	return output;
 }
 
-void Card::play(Card* card, OrdersList* orders)
+void Card::play(Card *card, OrdersList *orders)
 {
 	cout << "Played card is " << cardTypes[card->type] << endl;
-	Order* newOrder = createOrder(card);
+	Order *newOrder = createOrder(card);
 
 	orders->addOrder(newOrder);
 }
 
-Order* Card::createOrder(Card* card)
+Order *Card::createOrder(Card *card)
 {
 	cout << "Creating order for card " << cardTypes[card->type] << endl;
-	switch (card->type) {
-		case 0:
-			return new Bomb();
-		case 1:
-			//TODO: Reinforcement when it's implemented
-			return new Bomb();
-		case 2:
-			return new Blockade();
-		case 3:
-			return new Airlift();
-		case 4:
-			return new Negotiate();
-		default:
-			return new Bomb(); //TODO: fix default order?
+	switch (card->type)
+	{
+	case 0:
+		return new Bomb();
+	case 1:
+		// TODO: Reinforcement when it's implemented
+		return new Bomb();
+	case 2:
+		return new Blockade();
+	case 3:
+		return new Airlift();
+	case 4:
+		return new Negotiate();
+	default:
+		return new Bomb(); // TODO: fix default order?
 	}
 }
 
@@ -94,7 +94,7 @@ Deck::Deck(const Deck &deck)
 
 Deck::~Deck()
 {
-	for (auto& card : cardsInDeck)
+	for (auto &card : cardsInDeck)
 		delete card;
 	cardsInDeck.clear();
 }
@@ -106,7 +106,7 @@ Deck &Deck::operator=(const Deck &deck)
 	return *this;
 }
 
-ostream& operator<<(ostream& output, const Deck& deck)
+ostream &operator<<(ostream &output, const Deck &deck)
 {
 	if (deck.cardsInDeck.empty())
 	{
@@ -116,7 +116,7 @@ ostream& operator<<(ostream& output, const Deck& deck)
 	else
 	{
 		int i = 1;
-		for (auto& card : deck.cardsInDeck)
+		for (auto &card : deck.cardsInDeck)
 			cout << i++ << ". " << *card << endl;
 		return output;
 	}
@@ -125,15 +125,14 @@ ostream& operator<<(ostream& output, const Deck& deck)
 }
 
 // REQUIRED
-Card* Deck::draw()
+Card *Deck::draw()
 {
 	// shuffle deck before drawing
 	std::random_device rd;
 	std::mt19937 g(rd());
 	shuffle(cardsInDeck.begin(), cardsInDeck.end(), g);
 
-
-	Card* tempDrawCard = cardsInDeck[0];
+	Card *tempDrawCard = cardsInDeck[0];
 	cardsInDeck.erase(cardsInDeck.begin());
 
 	cout << "Drawn card is " << cardTypes[tempDrawCard->type] << endl;
@@ -146,7 +145,7 @@ void Deck::createDeck()
 	// to determine the type of the card and add it to the deck
 	for (int i = 0; i < totalCardsInDeck; i++)
 	{
-		Card* newCard = new Card(i%5);
+		Card *newCard = new Card(i % 5);
 		cardsInDeck.push_back(newCard);
 	}
 }
@@ -160,9 +159,9 @@ Hand::Hand()
 {
 }
 
-Hand::Hand(const Hand& hand)
+Hand::Hand(const Hand &hand)
 {
-	this->cardsInHand = *new vector<Card*>(hand.cardsInHand);
+	this->cardsInHand = *new vector<Card *>(hand.cardsInHand);
 }
 
 Hand::~Hand()
@@ -175,7 +174,7 @@ Hand &Hand::operator=(const Hand &hand)
 	return *this;
 }
 
-ostream& operator<<(ostream& output, const Hand& hand)
+ostream &operator<<(ostream &output, const Hand &hand)
 {
 	if (hand.cardsInHand.empty())
 	{
@@ -185,7 +184,7 @@ ostream& operator<<(ostream& output, const Hand& hand)
 	else
 	{
 		int i = 1;
-		for (auto& card : hand.cardsInHand)
+		for (auto &card : hand.cardsInHand)
 			cout << i++ << ". " << *card << endl;
 		return output;
 	}
@@ -193,9 +192,9 @@ ostream& operator<<(ostream& output, const Hand& hand)
 	return output;
 }
 
-Card* Hand::playCard(Deck* deck)
+Card *Hand::playCard(Deck *deck)
 {
-	Card* tempPlayCard = cardsInHand[0];
+	Card *tempPlayCard = cardsInHand[0];
 	cardsInHand.erase(cardsInHand.begin());
 
 	deck->addToDeck(tempPlayCard);
@@ -209,7 +208,7 @@ void Hand::addToHand(Card *card)
 	cout << "Card " << cardTypes[card->type] << " has been added to the hand." << endl;
 }
 
-vector<Card*> Hand::getCards()
+vector<Card *> Hand::getCards()
 {
 	return cardsInHand;
 }
