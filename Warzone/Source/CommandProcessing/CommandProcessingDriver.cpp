@@ -25,6 +25,7 @@ void testCommandProcessor()
             commandProcessor = nullptr;
             delete gameEngine;
             gameEngine = nullptr;
+            break;
         }
     }
 }

@@ -21,6 +21,7 @@ void testStartupPhase()
         {
             delete commandProcessor;
             delete gameEngine;
+            break;
         }
     }
 }
