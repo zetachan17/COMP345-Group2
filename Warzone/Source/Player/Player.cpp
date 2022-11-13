@@ -9,7 +9,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList) {}
+Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
 
 void Player::addTerritory(Territory *territory)
 {
