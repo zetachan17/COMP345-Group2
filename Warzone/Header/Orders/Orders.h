@@ -300,7 +300,8 @@ public:
     void remove(int position);
 
     // returns the next order and removes it from the list
-    Order *nextOrder();
+    // if deployOnly is true, returns the next order if it is Deploy or returns nullptr
+    Order *nextOrder(bool deployOnly = false);
 
 private:
     vector<Order *> m_orders;

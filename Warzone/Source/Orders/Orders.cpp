@@ -669,12 +669,19 @@ void OrdersList::remove(int p)
     }
 }
 
-Order *OrdersList::nextOrder()
+Order *OrdersList::nextOrder(bool deployOnly = false)
 {
-    Order *temp = nullptr;
+    Order* temp = nullptr;
     if (!(m_orders.empty()))
     {
         temp = m_orders.front();
+
+        // only want deploy orders but the next order is not deploy
+        if (deployOnly && dynamic_cast<const Deploy*> (temp) == nullptr)
+        {
+            return nullptr;
+        }
+        
         m_orders.erase(m_orders.begin());
         return temp;
     }
