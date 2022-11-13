@@ -18,6 +18,7 @@ void testCommandProcessor()
         {
             currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
         }
+        
         if (commandProcessor != nullptr)
         {
             delete commandProcessor;

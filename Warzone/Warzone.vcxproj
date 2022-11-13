@@ -130,7 +130,6 @@
   <ItemGroup>
     <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp" />
     <ClCompile Include="Source\CommandProcessing\CommandProcessingDriver.cpp" />
-    <ClCompile Include="Source\Player\PlayerDriver.cpp" />
     <ClCompile Include="Source\Cards\CardsDriver.cpp" />
     <ClCompile Include="Source\GameEngine\GameEngine.cpp" />
     <ClCompile Include="Source\Cards\Cards.cpp" />
