@@ -8,6 +8,8 @@ using std::string;
 using std::vector;
 
 class Territory;
+class Continent;
+class Map;
 class Hand;
 class Order;
 class OrdersList;

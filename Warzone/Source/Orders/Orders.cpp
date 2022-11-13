@@ -669,7 +669,7 @@ void OrdersList::remove(int p)
     }
 }
 
-Order *OrdersList::nextOrder(bool deployOnly = false)
+Order *OrdersList::nextOrder(bool deployOnly)
 {
     Order* temp = nullptr;
     if (!(m_orders.empty()))
