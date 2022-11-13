@@ -1,16 +1,16 @@
 #pragma once
 
+#include <vector>
+#include <string>
+#include <iostream>
+using std::ostream;	
+using std::string;
+using std::vector;
+
 class Territory;
 class Hand;
 class Order;
 class OrdersList;
-
-#include <vector>
-#include <string>
-#include <iostream>
-using std::ostream;
-using std::string;
-using std::vector;
 
 class Player
 {
@@ -40,25 +40,26 @@ public:
 	// the card is then removed from the player's cards
 	void issueOrder(Order *order);
 
+	// returns pointer to player's next order
 	Order *nextOrder();
 
+	// adds a territory to the player and updates the territory's ownership
 	void addTerritory(Territory *territory);
 
+	// removes a territory from the player and sets a territory's owner to null
 	void removeTerritory(Territory *territory);
 
+	// adds army units to a player's reinforcement pool
 	void addReinforcements(int units);
 
+	// returns number of army units in the reinforcement pool
 	int getReinforcementPool() const;
 
+	// returns string of player's name
 	const string &getPlayerName() const;
 
+	// returns pointer to player's hand of cards
 	Hand *getHand();
-
-	// used by Runze, eventually merge with addReinforcements() ?
-	void addNumArmies(int newArmies);
-
-	// used by Runze, eventually merge with getReinforcements() ?
-	int getNumArmies();
 
 private:
 	vector<Territory *> territories;
@@ -67,7 +68,4 @@ private:
 	string name;
 	string playerName;
 	int reinforcementPool;
-
-	// used by Runze, eventually use only reinforcementPool?
-	int numArmies;
 };

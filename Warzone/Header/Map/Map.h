@@ -1,13 +1,13 @@
 #pragma once
 
-class Player;
-
 #include <vector>
 #include <string>
 #include <iostream>
 using std::ostream;
 using std::string;
 using std::vector;
+
+class Player;
 
 class Territory
 {
@@ -39,14 +39,19 @@ public:
 	// getters
 	string getTerritoryName();
 
+	// returns vector list of adjacent territories
 	vector<Territory *> getAdjacentTerritories();
 
+	// sets number of army units in the territory
 	void setArmyUnits(int armyUnits);
 
+	// returns number of units in the territory
 	int getArmyUnits() const;
 
+	// sets who controls this territory
 	void setOwner(Player *player);
 
+	// returns pointer to player who controls this territory
 	Player *getOwner() const;
 
 	friend class Map;

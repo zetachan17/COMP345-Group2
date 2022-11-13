@@ -39,7 +39,9 @@ Order *Player::nextOrder()
 
 void Player::addReinforcements(int units)
 {
+	cout << "Player " << getPlayerName() << " received " << units << " armies." << endl;
 	reinforcementPool += units;
+	cout << "Now they have " << getReinforcementPool() << " armies" << endl;
 }
 
 int Player::getReinforcementPool() const
@@ -52,9 +54,6 @@ const string &Player::getPlayerName() const
 	return playerName;
 }
 
-//
-// original definitions from assignment 1
-//
 Player::Player() : playerName(""), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
 
 Player::Player(const Player &otherPlayer)
@@ -158,18 +157,4 @@ vector<Territory *> Player::toAttack()
 Hand *Player::getHand()
 {
 	return hand;
-}
-
-// used by Runze, eventually merge with addReinforcements()
-void Player::addNumArmies(int newArmies)
-{
-	cout << "Player " << getPlayerName() << " received " << newArmies << " armies." << endl;
-	numArmies += newArmies;
-	cout << "Now they have " << getNumArmies() << " armies" << endl;
-}
-
-// used by Runze, eventually merge with getReinforcements() ?
-int Player::getNumArmies()
-{
-	return numArmies;
 }

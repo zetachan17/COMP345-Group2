@@ -298,7 +298,7 @@ void GameEngine::giveInitialArmies()
 {
     for (Player *player : activePlayers)
     {
-        player->addNumArmies(50);
+        player->addReinforcements(50);
     }
 }
 

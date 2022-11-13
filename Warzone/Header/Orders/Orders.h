@@ -1,8 +1,5 @@
 #pragma once
 
-class Territory;
-class Player;
-
 #include <vector>
 #include <string>
 #include <iostream>
@@ -11,6 +8,9 @@ using std::ostream;
 using std::pair;
 using std::string;
 using std::vector;
+
+class Territory;
+class Player;
 
 /// Base Order class representing an order issued by the player to then be executed
 class Order
@@ -21,14 +21,14 @@ public:
     Order(Player *player);
     Order(const Order &other);
 
-    // clone() creates new order object identical to this order, returns a pointer to the new order
+    // creates new order object identical to this order, returns a pointer to the new order
     virtual Order *clone() const = 0;
 
     // destructor
     virtual ~Order();
 
     // assignment operator
-    Order &operator=(const Order &rightSide);
+    Order &operator=(const Order &right);
 
     // stream output operator
     friend ostream &operator<<(ostream &output, const Order &order);
@@ -40,65 +40,108 @@ public:
     // implementation resulting in some game action depending on the specific order
     virtual void execute() = 0;
 
+    // returns string representation of type of order (Deploy, Advance, Bomb, ...)
     string type() const;
 
+    // returns string of name of player who issued the order
     string player() const;
 
+    // returns string of effect of executing order
     string effect() const;
 
-    void turnEnd();
-
+    // returns vector list of players who can draw a card at the end of the current turn
     static vector<Player *> *getsCard();
 
+    // returns vector list of pair of players in negotiations (i.e. cannot attack each other)
     static vector<pair<Player *, Player *>> *negotiations();
 
+    // returns neutral player
     static Player *neutralPlayer();
 
+    // decrements the order counter for the round by one
     static void decrementOrderCount();
 
 protected:
     Player *m_player;
     string m_effect;
     string m_description;
-
+    bool m_executed;
     static int m_orderCount;
     static vector<Player *> m_getsCard;
     static vector<pair<Player *, Player *>> m_ceaseFire;
     static Player *m_neutralPlayer;
+
+    // clears negotiations and draws cards for players who conquered at least one territory
+    void turnEnd();
 };
 
-/// Order subclass representing a Deploy order
+/// Tells a certain number of army units taken from the reinforcement pool of the player issuing
+/// this order to deploy to one of this player's territories.
 class Deploy : public Order
 {
 public:
+    // constructors
     Deploy();
     Deploy(Player *player, int armyUnits, Territory *target);
+    Deploy(const Deploy &other);
 
-    Order *clone() const override;
-    bool validate() override;
-    void execute() override;
+    // destructor
     ~Deploy();
+
+    // assignment operator
+    Deploy &operator=(const Deploy &right);
+
+    // creates new order object identical to this order, returns a pointer to the new order
+    Order *clone() const override;
+
+    // if target territory does not belong to the player that issued the order or if the units
+    // deployed exceed units remaining in the player's reinforcement pool, the order is invalid
+    bool validate() override;
+
+    // validates and executes order and records the resulting effect
+    void execute() override;
 
 private:
     int m_units;
     Territory *m_target;
 };
 
-/// Order subclass representing an Advance order
+/// Tells a certain number of army units to move from a source territory to a target adjacent
+/// territory. If the target territory belongs to an enemy player, an attack is triggered.
 class Advance : public Order
 {
 public:
+    // constructors
     Advance();
     Advance(Player *player, int units, Territory *source, Territory *target);
+    Advance(const Advance &other);
 
-    Order *clone() const override;
-    bool validate() override;
-    void execute() override;
+    // destructor
     ~Advance();
 
+    // assignment operator
+    Advance &operator=(const Advance &right);
+
+    // creates new order object identical to this order, returns a pointer to the new order
+    Order *clone() const override;
+
+    // If the source territory does not belong to the player issuing the order or if the target
+    // territory is not adjacent to the source territory, the order is invalid.
+    bool validate() override;
+
+    // validates and executes order and records the resulting effect
+    void execute() override;
+
 private:
+    // returns number of enemy units killed by a given number of opposing units
     int killCount(int units, int probability) const;
+
+    // transfers territory from defending player to attacking player and updates army units
+    // after the attack
     void conquer();
+
+    // simulates battle bettween the active player's attacking units and the target territory's
+    // defending units, recording the outcome
     void battle();
 
     Territory *m_source;
@@ -107,17 +150,31 @@ private:
     int m_units;
 };
 
-/// Order subclass representing a Bomb order
+/// Removes half of the army units from an target enemy territory
 class Bomb : public Order
 {
 public:
+    // constructors
     Bomb();
     Bomb(Player *player, Territory *target);
+    Bomb(const Bomb &other);
 
+    // destructor
     ~Bomb();
 
+    Territory *target() { return m_target; };
+    void setTarget(Territory *target) { m_target = target; }
+    // assignment operator
+    Bomb &operator=(const Bomb &right);
+
+    // creates new order object identical to this order, returns a pointer to the new order
     Order *clone() const override;
+
+    // If the target belongs to the player that issued the order or is not adjacent to any
+    // territories owned by the player issuing the order, the order is invalid.
     bool validate() override;
+
+    // validates and executes order and records the resulting effect
     void execute() override;
 
 private:
@@ -125,33 +182,61 @@ private:
     bool m_negotiate;
 };
 
-/// Order subclass representing a Blockade order
+/// Doubles the number of army units on the target territory and transfers its ownership from the
+/// player issuing the order to the Neutral player.
 class Blockade : public Order
 {
 public:
+    // constructors
     Blockade();
     Blockade(Player *player, Territory *target);
+    Blockade(const Blockade &other);
 
-    Order *clone() const override;
-    bool validate() override;
-    void execute() override;
+    // destructor
     ~Blockade();
+
+    // assignment operator
+    Blockade &operator=(const Blockade &right);
+
+    // creates new order object identical to this order, returns a pointer to the new order
+    Order *clone() const override;
+
+    // If the target territory does not belong to the player issuing the order, the order is
+    // declared invalid.
+    bool validate() override;
+
+    // validates and executes order and records the resulting effect
+    void execute() override;
 
 private:
     Territory *m_target;
 };
 
-/// Order subclass representing an Airlift order
+/// Tells a certain number of army units taken from a source territory to be moved to a target
+/// territory, the source and the target territory being owned by the player issuing the order.
 class Airlift : public Order
 {
 public:
+    // constructors
     Airlift();
     Airlift(Player *player, int units, Territory *source, Territory *target);
+    Airlift(const Airlift &other);
 
-    Order *clone() const override;
-    bool validate() override;
-    void execute() override;
+    // destructor
     ~Airlift();
+
+    // assignment operator
+    Airlift &operator=(const Airlift &right);
+
+    // creates new order object identical to this order, returns a pointer to the new order
+    Order *clone() const override;
+
+    // If the source or target territory does not belong to the player that issued the order, the
+    // order is declared invalid.
+    bool validate() override;
+
+    // validates and executes order and records the resulting effect
+    void execute() override;
 
 private:
     Territory *m_source;
@@ -159,17 +244,30 @@ private:
     int m_units;
 };
 
-/// Order subclass representing a Negotiate order
+/// Results in an enemy player and the player issuing the order to not be able to successfully
+/// attack each others’ territories for the remainder of the turn.
 class Negotiate : public Order
 {
 public:
+    // constructors
     Negotiate();
     Negotiate(Player *player, Player *target);
+    Negotiate(const Negotiate &other);
 
-    Order *clone() const override;
-    bool validate() override;
-    void execute() override;
+    // destructor
     ~Negotiate();
+
+    // assignment operator
+    Negotiate &operator=(const Negotiate &right);
+
+    // creates new order object identical to this order, returns a pointer to the new order
+    Order *clone() const override;
+
+    // If the target is the player issuing the order, then the order is declared invalid.
+    bool validate() override;
+
+    // validates and executes order and records the resulting effect
+    void execute() override;
 
 private:
     Player *m_target;
@@ -205,8 +303,6 @@ public:
 
     // returns the next order and removes it from the list
     Order *nextOrder();
-
-    const vector<Order *> *orders() const;
 
 private:
     vector<Order *> m_orders;

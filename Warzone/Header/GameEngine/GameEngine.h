@@ -36,7 +36,7 @@ public:
 
     void addPlayer(std::string name);
 
-    // returns a card from the game deck
+    // returns pointer to game deck
     static Deck *getDeck();
 
     // Start the game
