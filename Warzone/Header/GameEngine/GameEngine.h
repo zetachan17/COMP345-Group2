@@ -1,9 +1,12 @@
 #pragma once
-#include <iostream>
 
 #include <iostream>
 #include <string>
 using std::string;
+#include "Map/Map.h"
+#include "Player/Player.h"
+
+class CommandProcessor;
 
 #include "Map/Map.h"
 #include "Player/Player.h"
@@ -40,15 +43,14 @@ public:
     void addPlayer(std::string name);
     
     //Start the game
-    State startupPhase(State state, CommandProcessor* cmdP);
+    State startupPhase(State state, CommandProcessor*commandProcessor);
 
     //methods
     State getState();
     std::string stateToString(State state);
 
+    CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
-
-    string stringToLog();
 
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER

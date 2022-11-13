@@ -9,6 +9,7 @@
 #include "LoggingObserver/LoggingObserverDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
 #include "GameEngine/GameEngineDriver.h"
+#include "CommandProcessing/CommandProcessingDriver.h"
 
 int main()
 {

@@ -89,10 +89,10 @@ bool MapLoader::readFile(string fileName)
 
                 if (continentsData[i].compare("|") == 0)
                 {
-                    //std::cout << "\n";
+                    
                     i++;
                 }
-                // cout << *contObj;
+                
                 mapObj->addContinent(contObj);
 
                 ContinentCounter++;
@@ -121,7 +121,7 @@ bool MapLoader::readFile(string fileName)
                 }
                 if (territoriesData[i].compare("|") == 0)
                 {
-                    //std::cout << "\n";
+                   
                     i++;
                 }
                 mapObj->addTerritory(TerrObj);
@@ -134,11 +134,11 @@ bool MapLoader::readFile(string fileName)
             { // Here we will create the array of ajdacent territories
                 Territory *terr = (mapObj->getTerritoryByName(territoriesData[i]));
 
-                // cout << "For territ: " << territoriesData[i]<<"\n";
+               
                 i = i + 4;
                 while (territoriesData[i].compare("|") != 0)
                 {
-                    // cout << *(mapObj->getTerrObjByName(territoriesData[i]));
+                    
                     terr->addAdjacentTerritory(mapObj->getTerritoryByName(territoriesData[i]));
                     i++;
                 }
@@ -178,22 +178,6 @@ bool MapLoader::readFile(string fileName)
             
             mapFile.close();
             
-            //TODO: FIND A PLACE TO DELETE THESE FUCKING POINTERS
-            // for (Territory *terr : territories)
-            // { // Memory deallocation to avoid leaks
-            //     delete terr;
-            //     terr = NULL;
-            // }
-            //
-            // for (Continent *cont : continents)
-            // {
-            //     delete cont;
-            //     cont = NULL;
-            // }
-            //
-            // delete mapObj;
-            //
-            // mapObj = NULL; // Handling the pointers to avoid dangling pointers
         }
 
         return true;
@@ -314,14 +298,7 @@ Continent &Continent::operator=(const Continent & continent)
     {
         this->territories.push_back(new Territory(*territory));
     }
-    
-    // for (Territory *terri : continent.arrOfTerrInContinent)
-    // {
-    //     Territory *newTerritory = new Territory(terri->territoryID, terri->TerritoryName, terri->territoryID);
-    //     arrOfTerrInContinent.push_back(newTerritory);
-    //     terri = new Territory(terri->territoryID, terri->TerritoryName, terri->ContinentId);
-    // }
-    
+   
     return *this;
 }
 
@@ -351,20 +328,7 @@ Map::Map(const Map &otherMap)
     numberOfTerritories = otherMap.numberOfTerritories;
     continents = otherMap.continents; // These are shallow copies, gotta iterate through the array of pointers to make deep copies
     territories = otherMap.territories;
-    
-    // for (int i = 0; i < otherMap.ContinentPointerArray.size(); ++i)
-    // {
-    //     Continent *newContinent;
-    //     newContinent = otherMap.ContinentPointerArray[i];
-    //     ContinentPointerArray.push_back(newContinent);
-    // }
-    //
-    // for (int i = 0; i < otherMap.TerritoryPointerArray.size(); ++i)
-    // {
-    //     Territory *newTerritory;
-    //     newTerritory = otherMap.TerritoryPointerArray[i];
-    //     TerritoryPointerArray.push_back(newTerritory);
-    // }
+   
 }
 
 Map::~Map()
@@ -389,17 +353,6 @@ Map &Map::operator=(const Map & otherMap)
     continents = otherMap.continents;
     territories = otherMap.territories;
     
-    // for (int i = 0; i < otherMap.ContinentPointerArray.size(); ++i)
-    // {
-    //     Continent *newContinent = new Continent(*otherMap.ContinentPointerArray[i]);
-    //     ContinentPointerArray.push_back(newContinent);
-    // }
-    //
-    // for (int i = 0; i < otherMap.TerritoryPointerArray.size(); ++i)
-    // {
-    //     Territory *newTerritory = new Territory(*otherMap.TerritoryPointerArray[i]);
-    //     TerritoryPointerArray.push_back(newTerritory);
-    // }
 
     return *this;
 }

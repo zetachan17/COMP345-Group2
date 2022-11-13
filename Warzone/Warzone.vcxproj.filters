@@ -53,6 +53,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\LoggingObserver\LoggingObserverDriver.cpp">
+    <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\CommandProcessing\CommandProcessingDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,5 +99,16 @@
     <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header\CommandProcessing\CommandProcessing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CommandFile\cmd2.txt" />
+    <Text Include="CommandFile\InvalidFile.txt" />
+    <Text Include="CommandFile\cmd3.txt" />
   </ItemGroup>
 </Project>

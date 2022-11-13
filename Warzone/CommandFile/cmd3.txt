@@ -1,0 +1,8 @@
+loadmap Mongol Empire 1294.map
+loadmap Pangaea.map
+validatemap
+fshajk
+addplayer Nada
+sdagj
+addplayer Tom
+gamestart
