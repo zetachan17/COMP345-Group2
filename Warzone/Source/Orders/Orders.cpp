@@ -11,7 +11,7 @@ using std::cout;
 using std::endl;
 using std::to_string;
 
-Order::Order() : m_player(NULL), m_description(""), m_effect("Not executed"), m_executed(false) {}
+Order::Order() : m_player(nullptr), m_description(""), m_effect("Not executed"), m_executed(false) {}
 
 Order::Order(Player *player) : m_player(player), m_description(""), m_effect("Not executed"),
                                m_executed(false) {}
@@ -86,7 +86,7 @@ void Order::decrementOrderCount()
     --m_orderCount;
 }
 
-Player *Order::m_neutralPlayer = NULL;
+Player *Order::m_neutralPlayer = nullptr;
 int Order::m_orderCount = 0;
 vector<pair<Player *, Player *>> Order::m_ceaseFire;
 vector<Player *> Order::m_getsCard;
@@ -282,13 +282,8 @@ void Advance::battle()
     int attackKills = killCount(attackingUnits, 60);
     int defenceKills = killCount(defenceUnits, 70);
 
-    if (defenceKills > attackingUnits)
-    {
-        defenceKills = attackingUnits;
-        attackingUnits = 0;
-    }
-    else
-        attackingUnits -= defenceKills;
+    defenceKills = min(defenceKills, attackingUnits);
+    attackingUnits -= defenceKills;
 
     if ((attackingUnits > 0) && (attackKills >= defenceUnits))
     {
@@ -404,8 +399,9 @@ void Bomb::execute()
         int survivingUnits = m_target->getArmyUnits();
         string lostUnits = to_string(initialUnits - survivingUnits);
 
-        m_effect = "Effect: " + player() + " bombed " + territory + ". " + lostUnits + " units killed. " +
-                   territory + " now has " + to_string(survivingUnits) + " units.";
+        m_effect = "Effect: " + player() + " bombed " + territory + ". " + lostUnits +
+                   " units killed. " + territory + " now has " + to_string(survivingUnits) +
+                   " units.";
         cout << m_effect << endl;
     }
     else
@@ -472,7 +468,7 @@ void Blockade::execute()
         m_player->removeTerritory(m_target);
 
         string neutralCreated = "";
-        if (m_neutralPlayer == NULL)
+        if (m_neutralPlayer == nullptr)
         {
             m_neutralPlayer = new Player("Neutral Player");
             neutralCreated = "Neutral Player created.\n\t";
@@ -682,7 +678,7 @@ void OrdersList::remove(int p)
 
 Order *OrdersList::nextOrder()
 {
-    Order *temp = NULL;
+    Order *temp = nullptr;
     if (!(m_orders.empty()))
     {
         temp = m_orders.front();
