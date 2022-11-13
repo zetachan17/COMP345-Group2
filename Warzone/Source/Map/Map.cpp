@@ -5,6 +5,7 @@
 #include <regex>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
 using std::cout;
 using std::endl;
 using std::regex;
@@ -274,7 +275,7 @@ ostream &operator<<(ostream &os, const Territory &territory)
 
 void Territory::setArmyUnits(int units)
 {
-    armyUnits = max(units, 0);
+    armyUnits = std::max(units, 0);
 }
 
 int Territory::getArmyUnits() const

@@ -146,7 +146,6 @@ private:
 
     Territory *m_source;
     Territory *m_target;
-    bool m_negotiate;
     int m_units;
 };
 
@@ -179,7 +178,6 @@ public:
 
 private:
     Territory *m_target;
-    bool m_negotiate;
 };
 
 /// Doubles the number of army units on the target territory and transfers its ownership from the

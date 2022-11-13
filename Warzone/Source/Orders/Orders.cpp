@@ -11,7 +11,8 @@ using std::cout;
 using std::endl;
 using std::to_string;
 
-Order::Order() : m_player(nullptr), m_description(""), m_effect("Not executed"), m_executed(false) {}
+Order::Order() : m_player(nullptr), m_description(""), m_effect("Not executed"),
+                 m_executed(false) {}
 
 Order::Order(Player *player) : m_player(player), m_description(""), m_effect("Not executed"),
                                m_executed(false) {}
@@ -237,7 +238,7 @@ bool Advance::validate()
             m_effect = "Negotiations are in effect between " + player() + " and " +
                        m_target->getOwner()->getPlayerName() + ".";
             cout << "~INVALID ORDER~\n";
-            return !(m_negotiate = true);
+            return false;
         }
     }
     cout << "~order validated~\n";
@@ -282,7 +283,7 @@ void Advance::battle()
     int attackKills = killCount(attackingUnits, 60);
     int defenceKills = killCount(defenceUnits, 70);
 
-    defenceKills = min(defenceKills, attackingUnits);
+    defenceKills = std::min(defenceKills, attackingUnits);
     attackingUnits -= defenceKills;
 
     if ((attackingUnits > 0) && (attackKills >= defenceUnits))
@@ -338,20 +339,17 @@ Advance::~Advance() {}
 
 Bomb::Bomb() : Order() {}
 
-Bomb::Bomb(Player *player, Territory *target) : Order(player), m_target(target),
-                                                m_negotiate(false)
+Bomb::Bomb(Player *player, Territory *target) : Order(player), m_target(target)
 {
     m_description = "Bomb " + target->getTerritoryName();
     ++m_orderCount;
 }
 
-Bomb::Bomb(const Bomb &other) : Order(other), m_negotiate(other.m_negotiate),
-                                m_target(other.m_target) {}
+Bomb::Bomb(const Bomb &other) : Order(other), m_target(other.m_target) {}
 
 Bomb &Bomb::operator=(const Bomb &right)
 {
     Order::operator=(right);
-    m_negotiate = right.m_negotiate;
     m_target = right.m_target;
 
     return *this;
@@ -365,9 +363,11 @@ Order *Bomb::clone() const
 bool Bomb::validate()
 {
     // check if target territory is adjacent to one of the current player's territories
-    vector<Territory *> toAttack = m_player->toAttack();
-    if (std::find(toAttack.begin(), toAttack.end(), m_target) == toAttack.end())
+    vector<Territory *> adjacent = m_player->toAttack();
+    if (std::find(adjacent.begin(), adjacent.end(), m_target) == adjacent.end())
     {
+        m_effect = m_target->getTerritoryName() + " is not adjacent to any of " + player() +
+                   "'s territories.";
         cout << "~INVALID ORDER~\n";
         return false;
     }
@@ -379,8 +379,10 @@ bool Bomb::validate()
         if ((pair.first == m_player && pair.second == targetPlayer) ||
             (pair.first == targetPlayer && pair.second == m_player))
         {
+            m_effect = "Negotiations are in effect between " + player() + " and " +
+                       m_target->getOwner()->getPlayerName() + ".";
             cout << "~INVALID ORDER~\n";
-            return !(m_negotiate = true);
+            return false;
         }
     }
 
@@ -405,17 +407,7 @@ void Bomb::execute()
         cout << m_effect << endl;
     }
     else
-    {
-        m_effect = "Effect: No effect. ";
-
-        if (m_negotiate)
-            m_effect += "Negotiations are in effect between " + player() + " and " +
-                        m_target->getOwner()->getPlayerName() + ".";
-        else
-            m_effect += m_target->getTerritoryName() + " is not adjacent to any of " + player() +
-                        "'s territories.";
-        cout << m_effect << endl;
-    }
+        cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
     decrementOrderCount();
@@ -478,8 +470,8 @@ void Blockade::execute()
         string territory = m_target->getTerritoryName();
         string units = to_string(m_target->getArmyUnits());
 
-        m_effect = "Effect: " + player() + " blockaded " + territory + ". " + neutralCreated + territory +
-                   " now has " + units + " units and belongs to the Neutral Player.";
+        m_effect = "Effect: " + player() + " blockaded " + territory + ". " + neutralCreated +
+                   territory + " now has " + units + " units and belongs to the Neutral Player.";
         cout << m_effect << endl;
     }
     else
@@ -618,7 +610,8 @@ void Negotiate::execute()
     {
         m_ceaseFire.emplace_back(m_player, m_target);
 
-        m_effect = "Effect: " + player() + " entered negotiations with " + m_target->getPlayerName() +
+        m_effect = "Effect: " + player() + " entered negotiations with " +
+                   m_target->getPlayerName() +
                    ". Attacks between them are invalid for the rest of the turn.";
         cout << m_effect << endl;
     }

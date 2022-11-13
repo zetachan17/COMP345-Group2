@@ -55,7 +55,8 @@ const string &Player::getPlayerName() const
 	return playerName;
 }
 
-Player::Player() : playerName(""), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
+Player::Player() : playerName(""), hand(new Hand), ordersList(new OrdersList),
+				   reinforcementPool(0) {}
 
 Player::Player(const Player &otherPlayer)
 {
@@ -122,32 +123,23 @@ vector<Territory *> Player::toAttack()
 	for (Territory *territory : territories)
 	{
 		vector<Territory *> currentAdjacentTerritories = territory->getAdjacentTerritories();
-		allAdjacentTerritories.insert(allAdjacentTerritories.end(), currentAdjacentTerritories.begin(), currentAdjacentTerritories.end());
+		allAdjacentTerritories.insert(allAdjacentTerritories.end(),
+									  currentAdjacentTerritories.begin(),
+									  currentAdjacentTerritories.end());
 	}
 
 	// remove duplicates
-        for (int i = 0; i < allAdjacentTerritories.size(); i++)
+	for (int i = 0; i < allAdjacentTerritories.size(); i++)
 	{
-
 		for (int j = i + 1; j < allAdjacentTerritories.size();)
 		{
-			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			if (allAdjacentTerritories[i]->getTerritoryName() ==
+				allAdjacentTerritories[j]->getTerritoryName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
 			}
 			j++;
-		}
-	}
-	{
-
-		for (int j = i + 1; j < allAdjacentTerritories.size(); j++)
-		{
-			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
-			{
-				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
-				continue;
-			}
 		}
 	}
 
@@ -156,7 +148,8 @@ vector<Territory *> Player::toAttack()
 	{
 		for (int j = 0; j < allAdjacentTerritories.size();)
 		{
-			if (territories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			if (territories[i]->getTerritoryName() ==
+				allAdjacentTerritories[j]->getTerritoryName())
 			{
 				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
 				continue;
