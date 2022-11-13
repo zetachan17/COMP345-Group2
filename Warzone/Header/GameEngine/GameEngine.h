@@ -58,7 +58,7 @@ private:
     //Part 2.4.c) give 50 initial army units to the players
     void giveInitialArmies();
 
-    // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck��s draw() method
+    // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck's draw() method
     void drawInitialCards();
 };
 

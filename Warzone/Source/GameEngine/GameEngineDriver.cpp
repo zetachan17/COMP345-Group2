@@ -6,10 +6,10 @@
 
 void testStartupPhase()
 {
-    CommandProcessor* commandProcessor = NULL;
+    CommandProcessor* commandProcessor = nullptr;
     GameEngine::State currentState = GameEngine::State::End;
    
-    while (commandProcessor == NULL|| currentState == GameEngine::State::End) {
+    while (commandProcessor == nullptr|| currentState == GameEngine::State::End) {
         GameEngine* gameEngine = new GameEngine();
         currentState = GameEngine::State::Start;
         CommandProcessor* commandProcessor = gameEngine->initializeCommandProcessor();
@@ -17,14 +17,11 @@ void testStartupPhase()
         {
             currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
         }
-        if (commandProcessor != NULL) 
+        if (commandProcessor != nullptr) 
         {
             delete commandProcessor;
             delete gameEngine;
         }
-       
     }
-    
-   
 }
 
