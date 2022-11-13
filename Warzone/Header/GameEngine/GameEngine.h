@@ -51,9 +51,8 @@ public:
     CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
 
-
     // contains logic for the game loop after initial setup
-    void mainGameLoop();
+    void mainGameLoop(MapLoader *mLoader);
 private:
     // ENUM, DOES NOT NEED TO BE A POINTER
     State state;
@@ -73,7 +72,7 @@ private:
     void drawInitialCards();
 
     //Part 3.1
-    void reinforcementPhase();
+    void reinforcementPhase(MapLoader *mLoader);
 
     //Part 3.2
     void issueOrdersPhase();

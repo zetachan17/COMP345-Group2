@@ -210,7 +210,7 @@ MapLoader::MapLoader(const MapLoader &mapLoader)
     TerritoryCounter = 0;
 }
 
-Map *MapLoader::getMap()
+Map *MapLoader::getMap() const
 {
     return map;
 }

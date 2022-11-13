@@ -84,7 +84,7 @@ public:
 	void resetIsFinishedIssuingOrders();
 
 	// calculates the reinforcements for a player based on owned territories and continents
-	int calculateReinforcements(Map& map);
+	int calculateReinforcements(Map* const map);
 private:
 	vector<Territory *> territories;
 	Hand *hand;
@@ -98,6 +98,6 @@ private:
 	void playCard();
 
 	// helper method for calculating reinforcements
-	int calculateContinentBonuses(Map &map);
+	int calculateContinentBonuses(Map* const map);
 	bool ownsContinent(Continent* continent);
 };

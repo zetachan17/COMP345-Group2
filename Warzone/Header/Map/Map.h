@@ -177,6 +177,6 @@ public:
 	bool readFile(string fileName);
 
 	// getters
-	Map *getMap();
+	Map *getMap() const;
 	friend class Map;
 };

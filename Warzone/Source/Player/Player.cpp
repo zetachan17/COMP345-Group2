@@ -287,7 +287,7 @@ void Player::resetIsFinishedIssuingOrders()
 	this->finishedIssuingOrders = false;
 }
 
-int Player::calculateReinforcements(Map &map)
+int Player::calculateReinforcements(Map* const map)
 {
 	int numberOfTerritories = this->getTerritories().size();
 
@@ -298,10 +298,10 @@ int Player::calculateReinforcements(Map &map)
 	this->addReinforcements(territoryReinforcements + continentBonusReinforcements);
 }
 
-int Player::calculateContinentBonuses(Map &map)
+int Player::calculateContinentBonuses(Map* const map)
 {
 	int totalBonus = 0;
-	for (Continent* continent : map.getContinents())
+	for (Continent* continent : map->getContinents())
 	{
 		if (this->ownsContinent(continent))
 		{
