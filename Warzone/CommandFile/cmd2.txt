@@ -1,4 +1,7 @@
 loadmap Pangaea.map
+loadmap Mongol Empire 1294.map
+loadmap Eurasia - WWI 1914.map
+loadmap 002_I72_X-29.map
 fsksahkj
 validatemap
 addplayer P1

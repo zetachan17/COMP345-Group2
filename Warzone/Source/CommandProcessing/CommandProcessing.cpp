@@ -305,14 +305,14 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 		delete y;
 	}
 	
-	std::cout << "Close file command processor adapter" << std::endl;
+	std::cout << "FileCommandProcessorAdapter object destroyed!" << std::endl;
 }
 
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter& fileCommandProcessorAdapter)
 {
 	this->fileLineReader = fileCommandProcessorAdapter.fileLineReader;
 	this->fileLineReader->filename = fileCommandProcessorAdapter.fileLineReader->filename;
-	this->fileLineReader->inputstream.open("CommandFile/" + fileCommandProcessorAdapter.fileLineReader->filename);
+	this->fileLineReader->inputstream.open("CommandFile/" +(fileCommandProcessorAdapter.fileLineReader->filename).substr(0));
 }
 
 FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
@@ -322,13 +322,15 @@ FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCo
 
 string FileCommandProcessorAdapter::readCommand() 
 {
+
+	if((this->fileLineReader->inputstream).is_open())
+	{
 	string userInput = fileLineReader->readLineFromFile();
 	std::string delimiter = " ";
 	std::string secondInput;
 	int condition = 0;
 	while (condition == 0)
 	{
-
 		if (userInput.substr(0, 7) == "loadmap")
 
 		{
@@ -383,6 +385,10 @@ string FileCommandProcessorAdapter::readCommand()
 		}
 	}
 	return userInput;
+	}
+	else {
+		return "NULL";
+	}
 }
 
 std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& adapter)

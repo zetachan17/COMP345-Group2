@@ -164,6 +164,7 @@
   <ItemGroup>
     <Text Include="CommandFile\cmd2.txt" />
     <Text Include="CommandFile\InvalidFile.txt" />
+    <Text Include="CommandFile\cmd3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

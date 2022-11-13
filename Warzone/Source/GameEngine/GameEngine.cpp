@@ -51,10 +51,10 @@ void GameEngine::addPlayer(string name)
     activePlayers.push_back(p);
 }
 
-//TODO: THIS IS SO UGLY, NEEDS TO BE FIXED
+
 MapLoader* mLoader = new MapLoader;
 
-GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*commandProcessor)
+GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* commandProcessor)
 {
     std::string userInput;
 
@@ -62,10 +62,17 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*command
     {
     case GameEngine::State::Start:
         std::cout << "Welcome to Warzone!" << std::endl;
-       commandProcessor->getCommand(commandProcessor); //Getting the command from the user
+        
+        commandProcessor->getCommand(commandProcessor); //Getting the command from the user
+        if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName) == "NULL")
+        {
+            std::cout << "The file you requested to open could not be opened. You will be redirected to choosing to use the command line or a prepared file";
+            (commandProcessor->nbCommands)++;
+            commandProcessor = NULL;
+            return GameEngine::State::End;
+        }
         bool commandValidateValue;
         commandValidateValue = commandProcessor->validate(commandProcessor->listCommands[commandProcessor->nbCommands], this); //validating the command
-        std::cout << commandValidateValue;
         if (commandValidateValue)
         {
             if (((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(0, 7) == "loadmap") //Just making sure that this is indeed the loadmap command
@@ -75,8 +82,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*command
                    
                     this->state = GameEngine::State::MapLoaded;
                     (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], stateToString(this->state));//Saving the effect inside the Command object as a string
-                    std::cout << "The effect of this command is: "<<commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect<<endl;
+                    std::cout << "\n\nThe effect of this command is: "<<commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect<<endl;
                    commandProcessor->nbCommands++;//Keeping track of the number of Commands
+                   break;
                     
                 }
                 else
@@ -97,14 +105,10 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*command
         
     case GameEngine::State::MapLoaded:
 
-        std::cout << this->stateToString(getState());
-
        commandProcessor->getCommand(commandProcessor);
-        std::cout << this->stateToString(this->getState());
-        commandValidateValue =commandProcessor->validate(commandProcessor->listCommands[commandProcessor->nbCommands], this); //validating the command
-        std::cout << commandValidateValue;
-        //commandProcessor->nbCommands++;//Keeping track of the number of Commands
-        if (commandValidateValue)
+        bool commandValidateValue2;
+        commandValidateValue2 = commandProcessor->validate(commandProcessor->listCommands[commandProcessor->nbCommands], this); //validating the command
+        if (commandValidateValue2)
         {
             if ((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName == "validatemap")
             {
@@ -118,12 +122,20 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*command
             }
             else//In this case the command entered must have been "loadmap <filename>
             {
-                //loadMap();
-                this->state = GameEngine::State::MapLoaded;
-               (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], stateToString(this->state));//Saving the effect inside the Command object as a string
-               std::cout << "The effect of this command is: " <<commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
-               commandProcessor->nbCommands++;//Keeping track of the number of Commands
-                break;
+                
+                if (mLoader->readFile(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(8)))
+                {
+
+                    this->state = GameEngine::State::MapLoaded;
+                    (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], stateToString(this->state));//Saving the effect inside the Command object as a string
+                    std::cout << "\n\nThe effect of this command is: " << commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
+                    commandProcessor->nbCommands++;//Keeping track of the number of Commands
+                    break;
+                }
+                else
+                {
+                    break;
+                }
             }
             
         }
@@ -138,7 +150,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*command
     case GameEngine::State::MapValidated:
         
        commandProcessor->getCommand(commandProcessor);
-        commandValidateValue =commandProcessor->validate(commandProcessor->listCommands[commandProcessor->nbCommands], this);
+        commandValidateValue = commandProcessor->validate(commandProcessor->listCommands[commandProcessor->nbCommands], this);
         if (commandValidateValue)
         {
             //P2.3 add players
@@ -293,8 +305,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor*command
             break;
         }
     case GameEngine::State::End:
-        delete commandProcessor;
-       commandProcessor = NULL;
+        
         break;
     }
     return state;
@@ -406,20 +417,25 @@ CommandProcessor* GameEngine::initializeCommandProcessor()
     std::getline(cin, userInput);
     
     if (userInput == "-console")
-    {
+    {   
         commandProcessor = new CommandProcessor();
+        
     }
     else if (std::regex_search(userInput, fileRegex))
     {
         string fileName = userInput.substr(6);
-        std::cout << fileName << std::endl;
+        std::cout << "The file name is:"<<fileName << std::endl;
         FileLineReader* fileLineReader = new FileLineReader();
         commandProcessor = new FileCommandProcessorAdapter(fileLineReader,fileName);
+        
     }
     else
     {
-        commandProcessor = new CommandProcessor();
+        commandProcessor = NULL;
+        this->state = GameEngine::State::End;
+        std::cout << "Invalid input. Please enter -console or -file \"filename\" exclusively" << endl;
     }
     
     return commandProcessor;
+    
 }
