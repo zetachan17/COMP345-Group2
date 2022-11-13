@@ -231,7 +231,7 @@ Territory::Territory(int TerrID, string TerrName, int ContID)
     territoryName = TerrName;
     continentId = ContID;
     armyUnits = 0;
-    owner = NULL;
+    owner = nullptr;
 }
 /* Important note: For the copy constructors and the overloaded assignment operators, we make it possible to have deep copies, but so far for assignment 1, we have never needed to actually use them!
 This implies that even though the new keyword is written, the code is never executed so the allocation on the heap is never made. For that reason, there is no need to delete these objects and handle the pointer values (make them NULL)*/
@@ -274,10 +274,7 @@ ostream &operator<<(ostream &os, const Territory &territory)
 
 void Territory::setArmyUnits(int units)
 {
-    if (units < 0)
-        armyUnits = 0;
-    else
-        armyUnits = units;
+    armyUnits = max(units, 0);
 }
 
 int Territory::getArmyUnits() const
