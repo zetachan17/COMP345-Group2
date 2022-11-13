@@ -83,6 +83,10 @@ public:
 	// adds a territory to the list of territory in this continent
 	void addTerritoryToContinent(Territory *territory);
 
+	//getters
+	int getBonus();
+	vector<Territory*> getTerritories();
+
 	friend class Map;
 	friend class Territory;
 };
@@ -116,6 +120,9 @@ public:
 	// gets all the territories
 	vector<Territory *> getTerritories();
 
+	// gets all the continents
+	vector<Continent *> getContinents();
+	
 private:
 	// adds continent to the map
 	void addContinent(Continent *continent);
