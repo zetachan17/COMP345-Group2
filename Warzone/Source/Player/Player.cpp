@@ -170,13 +170,13 @@ void Player::issueOrder()
 	}
 	else
 	{
-		int randomChoice = rand() % (15);
+		int randomChoice = rand() % (100);
 
-		if (randomChoice <= 5)
+		if (randomChoice <= 50)
 		{
 			this->issueAdvanceOrder();
 		}
-		else if (randomChoice <= 10)
+		else if (randomChoice <= 75)
 		{
 			this->playCard();
 		}
@@ -198,9 +198,8 @@ void Player::issueDeployOrder()
 		int minimumArmies = 3;
 		armiesToDeploy = rand() % (maximumArmies - minimumArmies + 1) + minimumArmies;
 	}
-	vector<Territory*> territoriesToDefend = toDefend();
 
-	Territory* randomTerritoryToDefend = territoriesToDefend[rand() % (territoriesToDefend.size() - 1)];
+	Territory* randomTerritoryToDefend = toDefend()[rand() % (toDefend().size())];
 
 	//TODO: when order constructors are merged
 	ordersList->addOrder(new Deploy(this, armiesToDeploy, randomTerritoryToDefend));
@@ -210,38 +209,65 @@ void Player::issueAdvanceOrder()
 {
 	
 	//get random territory from toAttack and toDefend
+	Territory* sourceTerritory = toDefend()[rand() % (toDefend().size())];
+	Territory* targetTerritory; 
+	
+	// find a territory adjacent to the source that's
+	for(Territory* territoryAdjacentToSource : sourceTerritory->getAdjacentTerritories())
+	{
+		if (find(toAttack().begin(), toAttack().end(), territoryAdjacentToSource) == toAttack().end())
+        {
+            continue;
+        }
+		targetTerritory = territoryAdjacentToSource;
+		break;
+	}
+
+	//get random target territory from toAttack
+	Territory* targetTerritory = toAttack()[rand() % (toAttack().size())];
 	Territory* sourceTerritory;
-	Territory* targetTerritory;
+	
+	// find a territory adjacent to the target that's in toDefend
+	for(Territory* territoryAdjacentToTarget : targetTerritory->getAdjacentTerritories())
+	{
+		if (find(toDefend().begin(), toDefend().end(), territoryAdjacentToTarget) == toDefend().end())
+        {
+            continue;
+        }
+		sourceTerritory = territoryAdjacentToTarget;
+		break;
+	}
+	
 
 	//determine how many armies
-	int armiesToAdvance;
+	int units = sourceTerritory->getNumberOfArmies() / 2;
 
 	//TODO: when order constructors are merged
-	ordersList->addOrder(new Advance(this, armiesToAdvance, sourceTerritory, targetTerritory));
+	ordersList->addOrder(new Advance(this, units, sourceTerritory, targetTerritory));
 }
 
 void Player::issueAirliftOrder()
 {
 	//get random territory from toAttack and toDefend
-	Territory* sourceTerritory;
-	Territory* targetTerritory;
+	Territory* sourceTerritory = toDefend()[rand() % (toDefend().size())];
+	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
 
 	//determine how many armies
-	int armiesToAirlift;
+	int units = sourceTerritory->getNumberOfArmies() / 2;
 
 	//TODO: when order constructors are merged
-	ordersList->addOrder(new Airlift(this, armiesToAirlift, sourceTerritory, targetTerritory));
+	ordersList->addOrder(new Airlift(this, units, sourceTerritory, targetTerritory));
 }
 
 void Player::issueBombOrder()
 {
-	Territory* targetTerritory;
+	Territory* targetTerritory = toAttack()[rand() % (toAttack().size())];
 	ordersList->addOrder(new Bomb(this, targetTerritory));
 }
 
 void Player::issueBlockadeOrder()
 {
-	Territory* targetTerritory;
+	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
 	ordersList->addOrder(new Blockade(this, targetTerritory));
 }
 
@@ -253,7 +279,7 @@ void Player::issueNegotiateOrder()
 
 void Player::playCard()
 {
-	Card* randomCard = this->hand->getCards()[rand() % (this->hand->getCards().size() - 1)];
+	Card* randomCard = this->hand->getCards()[rand() % (this->hand->getCards().size())];
 	randomCard->play(this);
 }
 
