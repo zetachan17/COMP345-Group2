@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-using std::ostream;	
+using std::ostream;
 using std::string;
 using std::vector;
 
@@ -65,7 +65,6 @@ private:
 	vector<Territory *> territories;
 	Hand *hand;
 	OrdersList *ordersList;
-	string name;
 	string playerName;
 	int reinforcementPool;
 };
