@@ -40,6 +40,11 @@ ostream &operator<<(ostream &output, const Card &card)
 	return output;
 }
 
+string Card::cardType() const
+{
+	return type;
+}
+
 
 AirliftCard::AirliftCard() : Card("Airlift") {}
 

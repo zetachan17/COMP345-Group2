@@ -31,7 +31,7 @@ public:
 	virtual void play(Player *player) = 0;
 
 	// returns the name of the card type
-	string cardType();
+	string cardType() const;
 
 protected:
 	string type;
