@@ -274,7 +274,10 @@ ostream &operator<<(ostream &os, const Territory &territory)
 
 void Territory::setArmyUnits(int units)
 {
-    armyUnits = units;
+    if (units < 0)
+        armyUnits = 0;
+    else
+        armyUnits = units;
 }
 
 int Territory::getArmyUnits() const
@@ -287,7 +290,7 @@ void Territory::setOwner(Player *player)
     owner = player;
 }
 
-const Player *Territory::getOwner() const
+Player *Territory::getOwner() const
 {
     return owner;
 }

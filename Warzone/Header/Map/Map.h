@@ -38,7 +38,7 @@ public:
 
 	// getters
 	string getTerritoryName();
-	
+
 	vector<Territory *> getAdjacentTerritories();
 
 	void setArmyUnits(int armyUnits);
@@ -47,7 +47,7 @@ public:
 
 	void setOwner(Player *player);
 
-	const Player *getOwner() const;
+	Player *getOwner() const;
 
 	friend class Map;
 	friend class Continent;

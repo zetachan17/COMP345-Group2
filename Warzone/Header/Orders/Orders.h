@@ -19,7 +19,6 @@ public:
     // constructors
     Order();
     Order(Player *player);
-    Order(const string &type); // to delete when all subclasses are implemented
     Order(const Order &other);
 
     // clone() creates new order object identical to this order, returns a pointer to the new order
@@ -47,13 +46,23 @@ public:
 
     string effect() const;
 
+    void turnEnd();
+
+    static vector<Player *> *getsCard();
+
+    static vector<pair<Player *, Player *>> *negotiations();
+
     static Player *neutralPlayer();
+
+    static void decrementOrderCount();
 
 protected:
     Player *m_player;
     string m_effect;
     string m_description;
-    static int m_attackCount;
+
+    static int m_orderCount;
+    static vector<Player *> m_getsCard;
     static vector<pair<Player *, Player *>> m_ceaseFire;
     static Player *m_neutralPlayer;
 };
@@ -62,6 +71,7 @@ protected:
 class Deploy : public Order
 {
 public:
+    Deploy();
     Deploy(Player *player, int armyUnits, Territory *target);
 
     Order *clone() const override;
@@ -71,7 +81,7 @@ public:
 
 private:
     int m_units;
-    Territory *m_territory;
+    Territory *m_target;
 };
 
 /// Order subclass representing an Advance order
@@ -79,10 +89,22 @@ class Advance : public Order
 {
 public:
     Advance();
+    Advance(Player *player, int units, Territory *source, Territory *target);
+
     Order *clone() const override;
     bool validate() override;
     void execute() override;
     ~Advance();
+
+private:
+    int killCount(int units, int probability) const;
+    void conquer();
+    void battle();
+
+    Territory *m_source;
+    Territory *m_target;
+    bool m_negotiate;
+    int m_units;
 };
 
 /// Order subclass representing a Bomb order
@@ -97,10 +119,9 @@ public:
     Order *clone() const override;
     bool validate() override;
     void execute() override;
-    bool flipNegotiate();
 
 private:
-    Territory *m_territory;
+    Territory *m_target;
     bool m_negotiate;
 };
 
@@ -117,7 +138,7 @@ public:
     ~Blockade();
 
 private:
-    Territory *m_territory;
+    Territory *m_target;
 };
 
 /// Order subclass representing an Airlift order
@@ -125,10 +146,17 @@ class Airlift : public Order
 {
 public:
     Airlift();
+    Airlift(Player *player, int units, Territory *source, Territory *target);
+
     Order *clone() const override;
     bool validate() override;
     void execute() override;
     ~Airlift();
+
+private:
+    Territory *m_source;
+    Territory *m_target;
+    int m_units;
 };
 
 /// Order subclass representing a Negotiate order
