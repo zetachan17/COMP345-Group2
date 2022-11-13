@@ -125,7 +125,19 @@ vector<Territory *> Player::toAttack()
 	}
 
 	// remove duplicates
-	for (int i = 0; i < allAdjacentTerritories.size(); i++)
+        for (int i = 0; i < allAdjacentTerritories.size(); i++)
+	{
+
+		for (int j = i + 1; j < allAdjacentTerritories.size();)
+		{
+			if (allAdjacentTerritories[i]->getTerritoryName() == allAdjacentTerritories[j]->getTerritoryName())
+			{
+				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
+				continue;
+			}
+			j++;
+		}
+	}
 	{
 
 		for (int j = i + 1; j < allAdjacentTerritories.size(); j++)
