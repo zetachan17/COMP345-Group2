@@ -52,6 +52,9 @@ public:
     CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
 
+    //stringToLog
+    string stringToLog();
+
 private:
     //ENUM, DOES NOT NEED TO BE A POINTER
     State state;

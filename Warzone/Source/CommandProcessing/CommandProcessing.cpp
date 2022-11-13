@@ -92,6 +92,7 @@ ostream& operator<<(std::ostream& output, const CommandProcessor& adapter)
 void Command::saveEffect(Command* cmd, string effectName)
 {
 	cmd->commandEffect = effectName;
+	Notify(this);
 }
 string CommandProcessor::readCommand()
 {
@@ -176,6 +177,9 @@ Command* CommandProcessor::saveCommand(string commandName) //remember to track w
 	Command* cmd = new Command(commandName);
 	listCommands.push_back(cmd);
 	std::cout << "The command's name is : " << cmd->commandName << std::endl;
+	
+	Notify(this);
+	
 	return cmd;
 
 }

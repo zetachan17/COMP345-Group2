@@ -42,7 +42,7 @@ void Subject::Detach(Observer* o) {
 }
 
 void Subject::Notify(ILoggable* ilog) {
-	//std::cout << "subject notify" << std::endl;
+	std::cout << "Notify(Subject) has been called." << std::endl;
 	list<Observer*>::iterator i = observers->begin();
 	for (; i != observers->end(); ++i) {
 		//std::cout << "in for" << std::endl;
