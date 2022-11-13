@@ -443,3 +443,129 @@ Deck *GameEngine::getDeck()
 
 // static variable definition
 Deck *GameEngine::deck;
+
+void GameEngine::mainGameLoop()
+{
+    reinforcementPhase();
+    issueOrdersPhase();
+    executeOrdersPhase();
+}
+
+void GameEngine::reinforcementPhase()
+{
+    for (Player* player : activePlayers) {
+        int reinforcements = player->calculateReinforcements(mLoader->getMap());
+
+        player->addReinforcements(reinforcements);
+    }
+}
+
+void GameEngine::issueOrdersPhase()
+{
+    int totalPlayersFinishedIssuingOrders = 0;
+    bool issueOrdersPhaseComplete = false;
+
+    while (!issueOrdersPhaseComplete)
+    {
+        for (Player* player : activePlayers) {
+            // only process the player if they're still issuing orders
+            if (!player->isFinishedIssuingOrders())
+            {
+                player->issueOrder();
+
+                // check if the player is now finished
+                if (player->isFinishedIssuingOrders())
+                {
+                    totalPlayersFinishedIssuingOrders++;
+                    if (totalPlayersFinishedIssuingOrders == activePlayers.size())
+                    {
+                        issueOrdersPhaseComplete = true;
+                    }
+                }
+            }
+        }
+    }
+
+    for (Player* player : activePlayers) {
+        player->resetIsFinishedIssuingOrders();
+    }
+}
+
+void GameEngine::executeOrdersPhase()
+{
+    // all the deploy orders must be executed before other orders
+    executeDeployOrders();
+    executeRemainingOrders();
+}
+
+void GameEngine::executeDeployOrders() {
+    int totalPlayersFinishedExecutingDeployOrders = 0;
+    vector<bool> playersFinishedExecutingDeployOrders(activePlayers.size(), false);
+    bool executingDeployOrdersComplete = false;
+
+    // start the round robin
+    while (!executingDeployOrdersComplete)
+    {
+        for (int i = 0; i < activePlayers.size(); i++) {
+
+            // only process the player if they still have deploy orders to execute
+            if (!playersFinishedExecutingDeployOrders[i])
+            {
+                // get the next deploy for this player
+                Order* nextDeploy = activePlayers[i]->nextOrder(true);
+
+                // if the order is null, the player has no more deploy orders
+                if (nextDeploy == nullptr)
+                {
+                    playersFinishedExecutingDeployOrders[i] = true;
+                    totalPlayersFinishedExecutingDeployOrders++;
+                    if (totalPlayersFinishedExecutingDeployOrders == activePlayers.size())
+                    {
+                        executingDeployOrdersComplete = true;
+                    }
+                }
+                else
+                {
+                    nextDeploy->execute();
+                    delete nextDeploy;
+                }
+            }
+        }
+    }
+}
+
+void GameEngine::executeRemainingOrders() {
+    int totalPlayersFinishedExecutingOrders = 0;
+    vector<bool> playersFinishedExecutingOrders(activePlayers.size(), false);
+    bool executingOrdersComplete = false;
+
+    // start the round robin
+    while (!executingOrdersComplete)
+    {
+        for (int i = 0; i < activePlayers.size(); i++) {
+
+            // only process the player if they still have orders to execute
+            if (!playersFinishedExecutingOrders[i])
+            {
+                // get the next order for this player
+                Order* nextOrder= activePlayers[i]->nextOrder();
+
+                // if the order is null, the player has no more orders
+                if (nextOrder == nullptr)
+                {
+                    playersFinishedExecutingOrders[i] = true;
+                    totalPlayersFinishedExecutingOrders++;
+                    if (totalPlayersFinishedExecutingOrders == activePlayers.size())
+                    {
+                        executingOrdersComplete = true;
+                    }
+                }
+                else
+                {
+                    nextOrder->execute();
+                    delete nextOrder;
+                }
+            }
+        }
+    }
+}

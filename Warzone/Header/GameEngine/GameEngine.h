@@ -52,6 +52,8 @@ public:
     friend class GameProcessor;
 
 
+    // contains logic for the game loop after initial setup
+    void mainGameLoop();
 private:
     // ENUM, DOES NOT NEED TO BE A POINTER
     State state;
@@ -69,4 +71,19 @@ private:
 
     // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck's draw() method
     void drawInitialCards();
+
+    //Part 3.1
+    void reinforcementPhase();
+
+    //Part 3.2
+    void issueOrdersPhase();
+
+    //Part 3.3
+    void executeOrdersPhase();
+
+    //Part 3.3.a
+    void executeDeployOrders();
+
+    //Part 3.3.b
+    void executeRemainingOrders();
 };
