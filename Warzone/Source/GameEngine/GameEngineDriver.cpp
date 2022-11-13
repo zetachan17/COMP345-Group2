@@ -12,7 +12,7 @@ void testStartupPhase()
     while (commandProcessor == nullptr|| currentState == GameEngine::State::End) {
         GameEngine* gameEngine = new GameEngine();
         currentState = GameEngine::State::Start;
-        CommandProcessor* commandProcessor = gameEngine->initializeCommandProcessor();
+        commandProcessor = gameEngine->initializeCommandProcessor();
         while (currentState != GameEngine::State::End)
         {
             currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);

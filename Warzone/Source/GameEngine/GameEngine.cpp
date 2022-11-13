@@ -280,6 +280,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
                 this->state = GameEngine::State::Start;    
                (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
                commandProcessor->nbCommands++;
+                delete mLoader->getMap();
+                delete mLoader;
+                mLoader = nullptr;
                 break;
             }
             else //In this case the command must have been "quit"
@@ -287,6 +290,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
                 this->state = GameEngine::State::End;
                (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
                commandProcessor->nbCommands++;
+                delete mLoader->getMap();
+                delete mLoader;
+                mLoader = nullptr;
                 break;
             }
         }
