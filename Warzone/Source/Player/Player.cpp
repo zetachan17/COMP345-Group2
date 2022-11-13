@@ -9,7 +9,8 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList), reinforcementPool(0) {}
+Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList),
+									 reinforcementPool(0) {}
 
 void Player::addTerritory(Territory *territory)
 {
@@ -23,7 +24,7 @@ void Player::removeTerritory(Territory *territory)
 	if (i != territories.end())
 	{
 		territories.erase(i);
-		territory->setOwner(NULL);
+		territory->setOwner(nullptr);
 	}
 }
 
