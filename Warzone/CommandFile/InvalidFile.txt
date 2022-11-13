@@ -1,0 +1,8 @@
+fsafsa
+fsksahkj
+validatemap
+addplayer P1
+fdsafsa
+addplayer P2
+gamestart
+quit

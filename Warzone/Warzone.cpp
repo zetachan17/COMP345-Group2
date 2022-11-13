@@ -5,11 +5,12 @@
 #include "Orders/OrdersDriver.h"
 #include "Cards/CardsDriver.h"
 #include "GameEngine/GameEngineDriver.h"
+#include "CommandProcessing/CommandProcessingDriver.h"
 
 int main()
 {
     //P1
-    //testLoadMaps();
+    testCommandProcessor();
     //P2
     //testPlayers();
     //P3
@@ -17,6 +18,5 @@ int main()
     //P4
     //testCards();
     //P5
-    testStartupPhase();
-
+   //testStartupPhase();
 }

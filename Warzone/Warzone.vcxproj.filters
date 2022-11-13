@@ -93,4 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="CommandFile\cmd2.txt" />
+    <Text Include="CommandFile\InvalidFile.txt" />
+    <Text Include="CommandFile\cmd3.txt" />
+  </ItemGroup>
 </Project>
