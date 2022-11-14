@@ -10,6 +10,7 @@
 #include "CommandProcessing/CommandProcessingDriver.h"
 #include "GameEngine/GameEngineDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
+#include <iostream>
 
 int main()
 {
