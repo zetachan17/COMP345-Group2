@@ -38,6 +38,8 @@ public:
 
     void addPlayer(std::string name);
 
+    static std::vector<Player*> getPlayers();
+
     // returns pointer to game deck
     static Deck *getDeck();
     
@@ -57,7 +59,7 @@ private:
     // ENUM, DOES NOT NEED TO BE A POINTER
     State state;
     static Deck *deck;
-    std::vector<Player *> activePlayers;
+    static std::vector<Player *> activePlayers;
 
     // Part 2.4.a) fairly distribute all the territories to the players
     void distributeTerritories(MapLoader *mLoader);

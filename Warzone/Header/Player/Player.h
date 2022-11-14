@@ -86,13 +86,13 @@ public:
 	// calculates the reinforcements for a player based on owned territories and continents
 	int calculateReinforcements(Map* const map);
 private:
-	vector<Territory *> territories;
+	string playerName;
 	Hand *hand;
 	OrdersList *ordersList;
-	string playerName;
 	int reinforcementPool;
 	bool finishedIssuingOrders;
 	int armiesDeployedThisTurn;
+	vector<Territory*> territories;
 	
 	// plays a random card from the players hand
 	void playCard();
