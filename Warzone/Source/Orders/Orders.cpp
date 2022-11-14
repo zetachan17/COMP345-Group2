@@ -68,7 +68,8 @@ string Order::player() const
 
 string Order::type() const
 {
-    return m_description.substr(0, m_description.find(" "));
+    return m_description;
+    // return m_description.substr(0, m_description.find(" "));
 }
 
 vector<Player *> *Order::getsCard()
