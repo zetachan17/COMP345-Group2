@@ -394,19 +394,18 @@ std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& ada
 	return output;
 }
 
-
+//CommandProcessor's stringToLog() method
 string CommandProcessor::stringToLog() {
 
-	string stringLog = listCommands.back()->commandName + " has been saved used saveCommand().";
+	string stringLog = listCommands.back()->commandName + " has been saved using saveCommand().";
 	cout << stringLog << endl;
-	cout << "CP log" << endl;
 	return stringLog;
 }
 
+//Command's stringToLog() method
 string Command::stringToLog() {
 
-	string stringLog = " saveEffect().";
+	string stringLog = "saveEffect() method saved the transition to the " + commandEffect + " state inside the commandEffect attribute.";
 	cout << stringLog << endl;
-	cout << "C log" << endl;
 	return stringLog;
 }

@@ -6,9 +6,6 @@
 #include <string>
 using std::string;
 
-//class Order;
-//class OrdersList;
-
 //ILoggable
 ILoggable::ILoggable() {
 }
@@ -45,7 +42,6 @@ void Subject::Notify(ILoggable* ilog) {
 	std::cout << "Notify(Subject) has been called." << std::endl;
 	list<Observer*>::iterator i = observers->begin();
 	for (; i != observers->end(); ++i) {
-		//std::cout << "in for" << std::endl;
 		(*i)->Update(ilog);
 	}
 }
@@ -64,11 +60,11 @@ LogObserver::LogObserver(CommandProcessor* saveCommand) {
 	subjectSC->Attach(this);
 }
 
-//LogObserver::LogObserver(Order* execute) {
-//
-//	subjectE = execute;
-//	subjectE->Attach(this);
-//}
+LogObserver::LogObserver(Order* execute) {
+
+	subjectE = execute;
+	subjectE->Attach(this);
+}
 
 LogObserver::LogObserver(Command* saveEffect) {
 
@@ -80,7 +76,6 @@ LogObserver::LogObserver(OrdersList* orders) {
 
 	subjectOL = orders;
 	subjectOL->Attach(this);
-	std::cout << "123" << std::endl;
 }
 
 LogObserver::LogObserver(GameEngine* transition) {
@@ -91,7 +86,6 @@ LogObserver::LogObserver(GameEngine* transition) {
 
 void LogObserver::Update(ILoggable* ilog) {
 
-	//std::cout << "logobserver update" << std::endl;
 	string output = ilog->stringToLog();
 	std::ofstream gameLog;
 	gameLog.open("gamelog.txt", std::ios_base::app);

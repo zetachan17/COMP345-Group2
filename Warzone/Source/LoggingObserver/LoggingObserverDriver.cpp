@@ -22,17 +22,43 @@ void testLoggingObserver() {
 
     cout << "\nCommandProcessor::saveCommand() being added to log file:" << endl;
 
-    CommandProcessor* saveCommand = new CommandProcessor;
-    LogObserver* view1 = new LogObserver(saveCommand);
-    saveCommand->getCommand(saveCommand);
+    CommandProcessor* commandProcessor = nullptr;
+    GameEngine::State currentState = GameEngine::State::End;
+    LogObserver* view1 = new LogObserver(commandProcessor);
 
-    cout << "Show that CommandProcessor is a subclass of Subject and ILoggable:" << endl;
-    if (dynamic_cast<Subject*>(saveCommand) != nullptr && dynamic_cast<ILoggable*>(saveCommand) != nullptr) {
-        cout << "CommandProcessor is a subclass of Subejct and ILoggable." << endl;
+    while (commandProcessor == nullptr || currentState == GameEngine::State::End) {
+        GameEngine* gameEngine = new GameEngine();
+        currentState = GameEngine::State::Start;
+        commandProcessor = gameEngine->initializeCommandProcessor();
+        
+        // if(commandProcessor != NULL){
+        while (currentState != GameEngine::State::End)
+        {
+            currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
+        }
+        
+        if (commandProcessor != nullptr)
+        {
+            delete commandProcessor;
+            commandProcessor = nullptr;
+            delete gameEngine;
+            gameEngine = nullptr;
+            delete view1;
+            break;
+        }
     }
 
-    delete saveCommand;
-    delete view1;
+    // CommandProcessor* saveCommand = new CommandProcessor;
+    // LogObserver* view1 = new LogObserver(saveCommand);
+    // saveCommand->getCommand(saveCommand);
+
+    // cout << "Show that CommandProcessor is a subclass of Subject and ILoggable:" << endl;
+    // if (dynamic_cast<Subject*>(saveCommand) != nullptr && dynamic_cast<ILoggable*>(saveCommand) != nullptr) {
+    //     cout << "CommandProcessor is a subclass of Subejct and ILoggable." << endl;
+    // }
+
+    // delete saveCommand;
+    // delete view1;
 
     cout << "\nOrder::execute() being added to log file:" << endl;
 
@@ -52,7 +78,9 @@ void testLoggingObserver() {
     Command* saveEffectTest = new Command();
     Command* cmd = new Command();
     LogObserver* view3 = new LogObserver(saveEffectTest);
-    cmd->saveEffect(saveEffectTest, "");
+    cmd->saveEffect(saveEffectTest, "Start");
+    cmd->saveEffect(saveEffectTest, "MapLoaded");
+    cmd->saveEffect(saveEffectTest, "MapValidated");
 
     cout << "Show that Command is a subclass of Subject and ILoggable:" << endl;
     if (dynamic_cast<Subject*>(saveEffectTest) != nullptr && dynamic_cast<ILoggable*>(saveEffectTest) != nullptr) {
@@ -65,25 +93,25 @@ void testLoggingObserver() {
 
     cout << "\nOrderList::addOrder() being added to log file:" << endl;
 
-    //OrdersList* orders = new OrdersList();
-    //LogObserver* view4 = new LogObserver(orders);
-    //cout << "*Created order list*\n";
+    OrdersList* orders = new OrdersList();
+    LogObserver* view4 = new LogObserver(orders);
+    cout << "*Created order list*\n";
 
-    ////adding orders to the list
-    //orders->addOrder(new Negotiate());
-    //orders->addOrder(new Bomb());
-    //orders->addOrder(new Advance());
-    //orders->addOrder(new Deploy());
-    //orders->addOrder(new Airlift());
-    //orders->addOrder(new Blockade());
+    //adding orders to the list
+    orders->addOrder(new Negotiate());
+    orders->addOrder(new Bomb());
+    orders->addOrder(new Advance());
+    orders->addOrder(new Deploy());
+    orders->addOrder(new Airlift());
+    orders->addOrder(new Blockade());
 
-    //cout << "Show that OrderList is a subclass of Subject and ILoggable:" << endl;
-    //if (dynamic_cast<Subject*>(orders) != nullptr && dynamic_cast<ILoggable*>(orders) != nullptr) {
-    //    cout << "OrderList is a subclass of Subejct and ILoggable." << endl;
-    //}
+    cout << "Show that OrderList is a subclass of Subject and ILoggable:" << endl;
+    if (dynamic_cast<Subject*>(orders) != nullptr && dynamic_cast<ILoggable*>(orders) != nullptr) {
+       cout << "OrderList is a subclass of Subejct and ILoggable." << endl;
+    }
 
-    //delete orders;
-    //delete view4;
+    delete orders;
+    delete view4;
 
     cout << "\nGameEngine::transition() being added to log file:" << endl;
 
