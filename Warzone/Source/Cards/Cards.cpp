@@ -1,6 +1,5 @@
 #include "Cards/Cards.h"
 #include "Orders/Orders.h"
-#include "Player/Player.h"
 
 #include <iostream>
 #include <vector>
@@ -15,13 +14,28 @@ using std::vector;
 int cardsPerType = 3;
 int totalCardsInDeck = cardsPerType * 5;
 
-Card::Card() : type("") {}
+// array to convert number of card to its respective type
+string cardTypes[5]{
+	// 0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
+	"Bomb",			 // 0
+	"Reinforcement", // 1
+	"Blockade",		 // 2
+	"Airlift",		 // 3
+	"Diplomacy"		 // 4
+};
 
-Card::Card(string type) : type(type) {}
+Card::Card()
+{
+}
+
+Card::Card(const int type)
+{
+	this->type = type;
+}
 
 Card::Card(const Card &card)
 {
-	type = card.type;
+	this->type = card.type;
 }
 
 Card::~Card()
@@ -36,64 +50,37 @@ Card &Card::operator=(const Card &card)
 
 ostream &operator<<(ostream &output, const Card &card)
 {
-	output << "Card: " << card.type << endl;
+	output << "Card: " << cardTypes[card.type] << endl;
 	return output;
 }
 
-string Card::cardType() const
+void Card::play(Card *card, OrdersList *orders)
 {
-	return type;
+	cout << "Played card is " << cardTypes[card->type] << endl;
+	Order *newOrder = createOrder(card);
+
+	orders->addOrder(newOrder);
 }
 
-
-AirliftCard::AirliftCard() : Card("Airlift") {}
-
-AirliftCard::~AirliftCard() {}
-
-void AirliftCard::play(Player* player)
+Order *Card::createOrder(Card *card)
 {
-	cout << "Playing a Airlift card" << endl;
-	player->issueAirliftOrder();
-}
-
-BlockadeCard::BlockadeCard() : Card("Blockade") {}
-
-BlockadeCard::~BlockadeCard() {}
-
-void BlockadeCard::play(Player* player)
-{
-	cout << "Playing a Blockade card" << endl;
-	player->issueBlockadeOrder();
-}
-
-BombCard::BombCard() : Card("Bomb") {}
-
-BombCard::~BombCard() {}
-
-void BombCard::play(Player* player)
-{
-	cout << "Playing a Bomb card" << endl;
-	player->issueBombOrder();
-}
-
-DiplomacyCard::DiplomacyCard() : Card("Diplomacy") {}
-
-DiplomacyCard::~DiplomacyCard() {}
-
-void DiplomacyCard::play(Player* player)
-{
-	cout << "Playing a Diplomacy card" << endl;
-	player->issueNegotiateOrder();
-}
-
-ReinforcementCard::ReinforcementCard() : Card("Reinforcement") {}
-
-ReinforcementCard::~ReinforcementCard() {}
-
-void ReinforcementCard::play(Player* player)
-{
-	cout << "Playing a Reinforcement card" << endl;
-	player->addReinforcements(5);
+	cout << "Creating order for card " << cardTypes[card->type] << endl;
+	switch (card->type)
+	{
+	case 0:
+		return new Bomb();
+	case 1:
+		// TODO: Reinforcement when it's implemented
+		return new Bomb();
+	case 2:
+		return new Blockade();
+	case 3:
+		return new Airlift();
+	case 4:
+		return new Negotiate();
+	default:
+		return new Bomb(); // TODO: fix default order?
+	}
 }
 
 Deck::Deck()
@@ -148,7 +135,7 @@ Card *Deck::draw()
 	Card *tempDrawCard = cardsInDeck[0];
 	cardsInDeck.erase(cardsInDeck.begin());
 
-	cout << "Drawn card is " << tempDrawCard->cardType() << endl;
+	cout << "Drawn card is " << cardTypes[tempDrawCard->type] << endl;
 
 	return tempDrawCard;
 }
@@ -158,27 +145,7 @@ void Deck::createDeck()
 	// to determine the type of the card and add it to the deck
 	for (int i = 0; i < totalCardsInDeck; i++)
 	{
-		Card* newCard;
-		switch (i % 5)
-		{
-			case 0:
-				newCard = new AirliftCard();
-				break;
-			case 1:
-				newCard = new BlockadeCard();
-				break;
-			case 2:
-				newCard = new BombCard();
-				break;
-			case 3:
-				newCard = new DiplomacyCard();
-				break;
-			case 4:
-				newCard = new ReinforcementCard();
-				break;
-
-		}
-
+		Card *newCard = new Card(i % 5);
 		cardsInDeck.push_back(newCard);
 	}
 }
@@ -225,22 +192,20 @@ ostream &operator<<(ostream &output, const Hand &hand)
 	return output;
 }
 
-void Hand::playCard(Player *player, Deck *deck)
+Card *Hand::playCard(Deck *deck)
 {
-	int randomIndex = rand() % (getCards().size());
-	Card* randomCard = getCards()[randomIndex];
-	
-	cardsInHand.erase(cardsInHand.begin() + randomIndex);
+	Card *tempPlayCard = cardsInHand[0];
+	cardsInHand.erase(cardsInHand.begin());
 
-	deck->addToDeck(randomCard);
+	deck->addToDeck(tempPlayCard);
 
-	randomCard->play(player);
+	return tempPlayCard;
 }
 
 void Hand::addToHand(Card *card)
 {
 	cardsInHand.push_back(card);
-	cout << "Card " << card->cardType() << " has been added to the hand." << endl;
+	cout << "Card " << cardTypes[card->type] << " has been added to the hand." << endl;
 }
 
 vector<Card *> Hand::getCards()

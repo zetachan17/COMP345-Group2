@@ -45,7 +45,7 @@ std::istream &operator>>(std::istream &in, GameEngine &g)
 
 void GameEngine::addPlayer(string name)
 {
-    Player *p = new Player(name);
+    Player *p = new Player();
     // p->name = name;
     activePlayers.push_back(p);
 }
@@ -185,9 +185,8 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
                 distributeTerritories(mLoader);
                 giveInitialArmies();
                 randomizePlayerOrder();
-                drawInitialCards();
+                //drawInitialCards();
                 this->state = GameEngine::State::AssignReinforcement;
-                //this->state = GameEngine::State::Win;
                (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
                std::cout << "The effect of this command is: " <<commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
                commandProcessor->nbCommands++;
@@ -208,30 +207,66 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
         }
         
     case GameEngine::State::AssignReinforcement:
-        cout << "----------------------------------------------------------\n"
-            << "----------------------------------------------------------\n"
-            << "\t** Assign Reinforcements Phase **\n\n";
-        reinforcementPhase(mLoader);
+        std::cout << "Please enter \"issueorder\" to order issue" << std::endl;
+        std::cin >> userInput;
 
-        this->state = GameEngine::State::IssueOrders;
-        break;
+        if (userInput == "issueorder")
+        {
+            // issueOrder();
+            std::cout << "Reinforcements assigned!" << std::endl;
+            this->state = GameEngine::State::IssueOrders;
+            break;
+        }
+        else
+        {
+            std::cout << "Invalid input, please try again!" << std::endl;
+            break;
+        }
     case GameEngine::State::IssueOrders:
-        cout << "----------------------------------------------------------\n"
-            << "----------------------------------------------------------\n"
-            << "\t** Issue Orders Phase **\n\n";
-        issueOrdersPhase();
-        this->state = GameEngine::State::ExecuteOrders;
-        break;
-        
+        std::cout << "Enter \"issueorder\" to issues more orders or \"endissueorders\" to execute orders" << std::endl;
+        std::cin >> userInput;
+
+        if (userInput == "issueorder")
+        {
+            // issueOrder();
+            break;
+        }
+        else if (userInput == "endissueorders")
+        {
+            //executeOrder();
+            this->state = GameEngine::State::ExecuteOrders;
+        }
+        else
+        {
+            std::cout << "Invalid input, please try again!" << std::endl;
+            break;
+        }
     case GameEngine::State::ExecuteOrders:
-        cout << "----------------------------------------------------------\n"
-            << "----------------------------------------------------------\n"
-            << "\t** Execute Orders Phase **\n\n";
-        executeOrdersPhase();
-        this->state = GameEngine::State::AssignReinforcement;
-        checkForVictory(mLoader);
-        checkForDefeats();
-        break;
+        std::cout << "Enter \"execorder\" to execute more orders or \"endexecorders\" to end execute orders" << std::endl;
+        std::cin >> userInput;
+
+        if (userInput == "execorder")
+        {
+            // executeOrder();
+            break;
+        }
+        else if (userInput == "endexecorders")
+        {
+            this->state = GameEngine::State::AssignReinforcement;
+            break;
+        }
+        // temporary testing win condition
+        // if (/*some win condition*/)
+        else if (userInput == "win")
+        {
+            this->state = GameEngine::State::Win;
+            break;
+        }
+        else
+        {
+            std::cout << "Invalid input, please try again!" << std::endl;
+            break;
+        }
     case GameEngine::State::Win:
         
        commandProcessor->getCommand(commandProcessor);
@@ -408,12 +443,7 @@ Deck *GameEngine::getDeck()
     return deck;
 }
 
-vector<Player*> GameEngine::getPlayers()
-{
-    return activePlayers;
-}
-
-// static variable definitions
+// static variable definition
 Deck *GameEngine::deck;
 
 //GameEngine's stringToLog() method
@@ -422,210 +452,4 @@ string GameEngine::stringToLog() {
     string stringLog = "New state is " + stateToString(getState()); + " using transition().";
     cout << stringLog << endl;
     return stringLog;
-vector<Player*> GameEngine::activePlayers;
-
-void GameEngine::mainGameLoop(MapLoader *mLoader)
-{
-    reinforcementPhase(mLoader);
-    issueOrdersPhase();
-    executeOrdersPhase();
-}
-
-void GameEngine::reinforcementPhase(MapLoader *mLoader)
-{
-    for (Player* player : activePlayers) {
-        int reinforcements = player->calculateReinforcements(mLoader->getMap());
-
-        player->addReinforcements(reinforcements);
-    }
-}
-
-void GameEngine::issueOrdersPhase()
-{
-    int totalPlayersFinishedIssuingOrders = 0;
-    bool issueOrdersPhaseComplete = false;
-    std::cout << "Starting the order issuing round robin" << endl;
-    while (!issueOrdersPhaseComplete)
-    {
-        std::cout << "Next order issuing round" << endl;
-        for (Player* player : activePlayers) {
-            //std::cout << "Player: " << player->getPlayerName() << " is up" << endl;
-            //std::cout << "Player: " << player->getPlayerName() << " : " << player->isFinishedIssuingOrders() << endl;
-
-            // only process the player if they're still issuing orders
-            if (!player->isFinishedIssuingOrders())
-            {
-                cout << "----------------------------------------------------------\n" << endl;
-                std::cout << "Player: " << player->getPlayerName() << " is issuing their next order" << endl;
-
-                player->issueOrder();
-
-                // check if the player is now finished
-                if (player->isFinishedIssuingOrders())
-                {
-                    std::cout << "Player: " << player->getPlayerName() << " is finished issuing orders" << endl;
-
-                    totalPlayersFinishedIssuingOrders++;
-                    if (totalPlayersFinishedIssuingOrders == activePlayers.size())
-                    {
-                        std::cout << "All players are finished issuing orders" << endl;
-
-                        issueOrdersPhaseComplete = true;
-                    }
-                }
-            }
-        }
-    }
-
-    for (Player* player : activePlayers) {
-        player->resetIsFinishedIssuingOrders();
-        //std::cout << "Player: " << player->getPlayerName() << " : " << player->isFinishedIssuingOrders() << endl;
-    }
-}
-
-void GameEngine::executeOrdersPhase()
-{
-    // all the deploy orders must be executed before other orders
-    executeDeployOrders();
-    executeRemainingOrders();
-}
-
-void GameEngine::executeDeployOrders() {
-    int totalPlayersFinishedExecutingDeployOrders = 0;
-    vector<bool> playersFinishedExecutingDeployOrders(activePlayers.size(), false);
-    bool executingDeployOrdersComplete = false;
-
-    // start the round robin
-    std::cout << "Starting the deploy order executing round robin" << endl;
-
-    while (!executingDeployOrdersComplete)
-    {
-        std::cout << "Next deploy order executing round" << endl;
-
-        for (int i = 0; i < activePlayers.size(); i++) {
-
-            // only process the player if they still have deploy orders to execute
-            if (!playersFinishedExecutingDeployOrders[i])
-            {
-                cout << "----------------------------------------------------------\n" << endl;
-                std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is executing their next deploy order" << endl;
-
-                // get the next deploy for this player
-                Order* nextDeploy = activePlayers[i]->nextOrder(true);
-
-                // if the order is null, the player has no more deploy orders
-                if (nextDeploy == nullptr)
-                {
-                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is finished executing deploy orders" << endl;
-
-                    playersFinishedExecutingDeployOrders[i] = true;
-                    totalPlayersFinishedExecutingDeployOrders++;
-                    if (totalPlayersFinishedExecutingDeployOrders == activePlayers.size())
-                    {
-                        std::cout << "All players are finished executing deploy orders" << endl;
-
-                        executingDeployOrdersComplete = true;
-                    }
-                }
-                else
-                {
-                    nextDeploy->execute();
-                    delete nextDeploy;
-                }
-            }
-        }
-    }
-}
-
-void GameEngine::executeRemainingOrders() {
-    int totalPlayersFinishedExecutingOrders = 0;
-    vector<bool> playersFinishedExecutingOrders(activePlayers.size(), false);
-    bool executingOrdersComplete = false;
-
-    std::cout << "Starting the order executing round robin" << endl;
-    while (!executingOrdersComplete)
-    {
-        std::cout << "Next order executing round" << endl;
-
-        for (int i = 0; i < activePlayers.size(); i++) {
-
-            // only process the player if they still have orders to execute
-            if (!playersFinishedExecutingOrders[i])
-            {
-                cout << "----------------------------------------------------------\n" << endl;
-                std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is executing their next order" << endl;
-
-                // get the next order for this player
-                Order* nextOrder= activePlayers[i]->nextOrder();
-
-                // if the order is null, the player has no more orders
-                if (nextOrder == nullptr)
-                {
-                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is finished executing orders" << endl;
-
-                    playersFinishedExecutingOrders[i] = true;
-                    totalPlayersFinishedExecutingOrders++;
-                    if (totalPlayersFinishedExecutingOrders == activePlayers.size())
-                    {
-                        std::cout << "All players are finished executing orders" << endl;
-
-                        executingOrdersComplete = true;
-                    }
-                }
-                else
-                {
-                    nextOrder->execute();
-                    delete nextOrder;
-                }
-            }
-        }
-    }
-}
-
-void GameEngine::checkForDefeats()
-{
-    std::cout << "Checking for loss condition" << endl;
-
-    bool defeat = false;
-    for (int i = 0; i < activePlayers.size();)
-    {
-        if (activePlayers[i]->getTerritories().size() == 0)
-        {
-            std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has lost." << endl;
-            activePlayers.erase(activePlayers.begin() + i);
-            defeat = true;
-            continue;
-        }
-        i++;
-    }
-
-    if (activePlayers.size() == 1)
-    {
-        std::cout << "Player: " << activePlayers[0]->getPlayerName() << " has won!" << endl;
-        this->state = GameEngine::State::Win;
-    } else if (!defeat)
-    {
-        std::cout << "No player has been defeated this turn." << endl;
-    }
-}
-
-void GameEngine::checkForVictory(MapLoader* mLoader)
-{
-    std::cout << "Checking for victory condition" << endl;
-
-    bool victory = false;
-    for (int i = 0; i < activePlayers.size(); i++)
-    {
-        if (activePlayers[i]->getTerritories().size() == mLoader->getMap()->getTerritories().size())
-        {
-            std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has won!" << endl;
-            victory = true;
-            this->state = GameEngine::State::Win;
-        }
-    }
-
-    if (!victory)
-    {
-        std::cout << "No victories detected this turn." << endl;
-    }
 }

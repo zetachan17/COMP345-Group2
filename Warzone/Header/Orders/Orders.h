@@ -142,7 +142,7 @@ private:
 
     // transfers territory from defending player to attacking player and updates army units
     // after the attack
-    void conquer(int attackUnits);
+    void conquer();
 
     // simulates battle bettween the active player's attacking units and the target territory's
     // defending units, recording the outcome
@@ -304,8 +304,7 @@ public:
     void remove(int position);
 
     // returns the next order and removes it from the list
-    // if deployOnly is true, returns the next order if it is Deploy or returns nullptr
-    Order *nextOrder(bool deployOnly = false);
+    Order *nextOrder();
 
     //stringToLog
     string stringToLog();

@@ -2,6 +2,7 @@
 #include "Player/Player.h"
 #include "Orders/Orders.h"
 #include "GameEngine/GameEngine.h"
+class Territory;
 
 #include <iostream>
 #include <iomanip>
@@ -10,10 +11,10 @@ using std::endl;
 
 void testOrderExecution()
 {
-     cout << "-----------------------------------------------------------\n"
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << "\t** PART 4: ORDER EXECUTION IMPLEMENTATION **\n\n";
 
-     // setup game engine (just to test access to the deck), territories, and players to test
      GameEngine *game = new GameEngine();
 
      Territory *territories[7] = {new Territory(0, "Villeray", 4), new Territory(1, "Little Italy", 4),
@@ -38,17 +39,16 @@ void testOrderExecution()
      territories[2]->addAdjacentTerritory(territories[4]);
      territories[4]->addAdjacentTerritory(territories[2]);
 
-     cout << "-----------------------------------------------------------\n"
+     cout << "----------------------------------------------------------\n"
           << "*CREATED TEST TERRITORIES*\n\n";
      for (Territory *territory : territories)
           cout << *territory;
-     cout << "-----------------------------------------------------------\n";
+     cout << "----------------------------------------------------------\n";
 
      Player *tina = new Player("Tina");
      Player *eugene = new Player("Eugene");
      Player *louise = new Player("Louise");
 
-     // assign territories for testing
      tina->addTerritory(territories[4]);
      tina->addTerritory(territories[5]);
      tina->addTerritory(territories[6]);
@@ -63,10 +63,10 @@ void testOrderExecution()
 
      // issue test deploy orders
      tina->issueOrder(new Deploy(tina, 10, territories[4]));
-     louise->issueOrder(new Deploy(louise, 11, territories[3]));
+     louise->issueOrder(new Deploy(louise, 15, territories[3]));
      eugene->issueOrder(new Deploy(eugene, 10, territories[0]));
      tina->issueOrder(new Deploy(tina, 30, territories[5]));
-     louise->issueOrder(new Deploy(louise, 9, territories[1]));
+     louise->issueOrder(new Deploy(louise, 20, territories[1]));
      eugene->issueOrder(new Deploy(eugene, 40, territories[3]));
      tina->issueOrder(new Deploy(tina, 20, territories[6]));
      louise->issueOrder(new Deploy(louise, 30, territories[2]));
@@ -85,8 +85,8 @@ void testOrderExecution()
      louise->issueOrder(new Airlift(louise, 5, territories[3], territories[5]));
 
      // issue test bomb orders
-     eugene->issueOrder(new Bomb(eugene, territories[1]));
-     tina->issueOrder(new Bomb(tina, territories[2]));
+     eugene->issueOrder(new Bomb(eugene, territories[2]));
+     tina->issueOrder(new Bomb(tina, territories[1]));
 
      // issue test blockade orders
      louise->issueOrder(new Blockade(louise, territories[3]));
@@ -104,18 +104,18 @@ void testOrderExecution()
           << "*ISSUED ORDERS TO TEST*\n\n"
           << *tina
           << "Player's reinforcement pool : " << tina->getReinforcementPool() << endl
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *eugene
           << "Player's reinforcement pool : " << eugene->getReinforcementPool() << endl
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *louise
           << "Player's reinforcement pool : " << louise->getReinforcementPool() << endl
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
 
      // test execution of deploy orders
      Order *next = tina->nextOrder();
      cout << "\n\t\t**EXECUTE DEPLOY ORDERS**\n\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      cout << tina->getPlayerName() << "'s next order: " << *next << endl;
      next->execute();
      cout << endl;
@@ -140,23 +140,24 @@ void testOrderExecution()
      cout << louise->getPlayerName() << "'s next order: " << *(next = louise->nextOrder()) << endl;
      next->execute();
      cout << endl;
-     cout << "-----------------------------------------------------------\n"
-          << "   *REINFORCEMENT POOLS & TERRITORY UNITS AFTER DEPLOYS*\n"
-          << "\t" << tina->getPlayerName()
-          << "'s reinforcement pool   : " << tina->getReinforcementPool() << endl
-          << "\t" << eugene->getPlayerName()
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "*PLAYERS' REINFORCEMENT POOL & TERRITORY UNITS AFTER DEPLOYS*\n"
+          << tina->getPlayerName()
+          << "'s reinforcement pool : " << tina->getReinforcementPool() << endl
+          << eugene->getPlayerName()
           << "'s reinforcement pool : " << eugene->getReinforcementPool() << endl
-          << "\t" << louise->getPlayerName()
+          << louise->getPlayerName()
           << "'s reinforcement pool : " << louise->getReinforcementPool() << endl;
      for (Territory *territory : territories)
           cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n"
-          << "-----------------------------------------------------------\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // test execution of advance orders
      cout << "\n\t\t**EXECUTE ADVANCE ORDERS**\n\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      cout << eugene->getPlayerName() << "'s next order: " << *(next = eugene->nextOrder()) << endl;
      next->execute();
      cout << endl;
@@ -174,29 +175,29 @@ void testOrderExecution()
      cout << endl;
      cout << louise->getPlayerName() << "'s next order: " << *(next = louise->nextOrder()) << endl;
      next->execute();
-     cout << endl
-          << "-----------------------------------------------------------\n"
-          << "\t *TERRITORY UNITS AFTER ADVANCE ORDERS*\n";
+     cout << endl;
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "*TERRITORY UNITS AFTER ADVANCE ORDERS*\n";
      for (Territory *territory : territories)
-          cout << "\t\t" << std::left << std::setw(12) << territory->getTerritoryName()
+          cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n"
+     cout << "----------------------------------------------------------\n"
           << *tina
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *eugene
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *louise
-          << "-----------------------------------------------------------\n"
-          << "-----------------------------------------------------------\n"
-          << "\t *TERRITORY UNITS BEFORE AIRLIFT ORDERS*\n";
+          << "----------------------------------------------------------\n";
      for (Territory *territory : territories)
-          cout << "\t\t" << std::left << std::setw(12) << territory->getTerritoryName()
+          cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // test airlift orders
      cout << "\n\t\t**EXECUTE AIRLIFT ORDERS**\n\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      cout << eugene->getPlayerName() << "'s next order: " << *(next = eugene->nextOrder()) << endl;
      next->execute();
      cout << endl;
@@ -205,35 +206,37 @@ void testOrderExecution()
      cout << endl;
      cout << louise->getPlayerName() << "'s next order: " << *(next = louise->nextOrder()) << endl;
      next->execute();
-     cout << endl
-          << "-----------------------------------------------------------\n"
-          << "\t  *TERRITORY UNITS AFTER AIRLIFT ORDERS*\n";
+     cout << endl;
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "*TERRITORY UNITS AFTER AIRLIFT ORDERS*\n";
      for (Territory *territory : territories)
-          cout << "\t\t" << std::left << std::setw(12) << territory->getTerritoryName()
+          cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n"
-          << "-----------------------------------------------------------\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // test bomb orders
      cout << "\n\t\t**EXECUTE BOMB ORDERS**\n\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      cout << eugene->getPlayerName() << "'s next order: " << *(next = eugene->nextOrder()) << endl;
      next->execute();
      cout << endl;
      cout << tina->getPlayerName() << "'s next order: " << *(next = tina->nextOrder()) << endl;
      next->execute();
      cout << endl;
-     cout << "-----------------------------------------------------------\n";
-     cout << "\t   *TERRITORY UNITS AFTER BOMB ORDERS*\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "*TERRITORY UNITS AFTER BOMB ORDERS*\n";
      for (Territory *territory : territories)
-          cout << "\t\t" << std::left << std::setw(12) << territory->getTerritoryName()
+          cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n"
-          << "-----------------------------------------------------------\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // test blockade orders
      cout << "\n\t\t**EXECUTE BLOCKADE ORDERS**\n\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      cout << louise->getPlayerName() << "'s next order: " << *(next = louise->nextOrder()) << endl;
      next->execute();
      cout << endl;
@@ -243,25 +246,26 @@ void testOrderExecution()
      cout << tina->getPlayerName() << "'s next order: " << *(next = tina->nextOrder()) << endl;
      next->execute();
      cout << endl;
-     cout << "-----------------------------------------------------------\n";
-     cout << "\t*TERRITORIES & PLAYERS AFTER BLOCKADE ORDERS*\n";
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "*TERRITORY UNITS & PLAYERS AFTER BLOCKADE ORDERS*\n";
      for (Territory *territory : territories)
-          cout << "\t\t" << std::left << std::setw(12) << territory->getTerritoryName()
+          cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n"
+     cout << "----------------------------------------------------------\n"
           << *tina
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *eugene
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *louise
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *Order::neutralPlayer()
-          << "-----------------------------------------------------------\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 
      // test negotiate orders
      cout << "\n\t  **EXECUTE & TEST NEGOTIATE ORDER**\n\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n";
      cout << louise->getPlayerName() << "'s next order: " << *(next = louise->nextOrder()) << endl;
      next->execute();
      cout << endl;
@@ -274,20 +278,21 @@ void testOrderExecution()
      cout << endl;
      cout << louise->getPlayerName() << "'s next order: " << *(next = louise->nextOrder()) << endl;
      next->execute();
-     cout << endl
-          << "-----------------------------------------------------------\n"
-          << "   *TERRITORIES & PLAYERS AFTER ALL ORDER EXECUTIONS*\n";
+     cout << endl;
+     cout << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
+     cout << "*TERRITORY UNITS & PLAYERS AFTER ALL ORDER EXECUTIONS*\n";
      for (Territory *territory : territories)
-          cout << "\t\t" << std::left << std::setw(12) << territory->getTerritoryName()
+          cout << "\t" << std::left << std::setw(12) << territory->getTerritoryName()
                << " : " << territory->getArmyUnits() << " units\n";
-     cout << "-----------------------------------------------------------\n"
+     cout << "----------------------------------------------------------\n"
           << *tina
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *eugene
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *louise
-          << "-----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n"
           << *Order::neutralPlayer()
-          << "-----------------------------------------------------------\n"
-          << "-----------------------------------------------------------\n";
+          << "----------------------------------------------------------\n"
+          << "----------------------------------------------------------\n";
 }

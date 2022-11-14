@@ -210,7 +210,7 @@ MapLoader::MapLoader(const MapLoader &mapLoader)
     TerritoryCounter = 0;
 }
 
-Map *MapLoader::getMap() const
+Map *MapLoader::getMap()
 {
     return map;
 }
@@ -586,22 +586,6 @@ Territory *Map::getTerritoryByName(string name)
 vector<Territory *> Map::getTerritories()
 {
     return territories;
-}
-
-vector<Continent*> Map::getContinents()
-{
-    return continents;
-}
-
-
-vector<Territory*> Continent::getTerritories()
-{
-    return territories;
-}
-
-int Continent::getBonus()
-{
-    return bonus;
 }
 
 ostream &operator<<(ostream &os, const Map &map)

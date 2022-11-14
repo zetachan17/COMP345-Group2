@@ -163,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CommandFile\cmd1.txt" />
-    <Content Include="CommandFile\mgl_test.txt" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CommandFile\cmd2.txt" />
