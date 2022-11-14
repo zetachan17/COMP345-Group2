@@ -228,9 +228,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
             << "----------------------------------------------------------\n"
             << "\t** Execute Orders Phase **\n\n";
         executeOrdersPhase();
-        checkForDefeats();
-        checkForVictory(mLoader);
         this->state = GameEngine::State::AssignReinforcement;
+        checkForVictory(mLoader);
+        checkForDefeats();
         break;
     case GameEngine::State::Win:
         
@@ -591,10 +591,13 @@ void GameEngine::checkForDefeats()
         i++;
     }
 
-    if (!defeat)
+    if (activePlayers.size() == 1)
+    {
+        std::cout << "Player: " << activePlayers[0]->getPlayerName() << " has won!" << endl;
+        this->state = GameEngine::State::Win;
+    } else if (!defeat)
     {
         std::cout << "No player has been defeated this turn." << endl;
-
     }
 }
 
