@@ -153,9 +153,6 @@ void Deck::createDeck()
 	// to determine the type of the card and add it to the deck
 	for (int i = 0; i < totalCardsInDeck; i++)
 	{
-<<<<<<< HEAD
-		Card *newCard = new Card(i % 5);
-=======
 		Card* newCard;
 		switch (i % 5)
 		{
@@ -177,7 +174,6 @@ void Deck::createDeck()
 
 		}
 
->>>>>>> fa02a9a (Refactor cards to have subclasses)
 		cardsInDeck.push_back(newCard);
 	}
 }
@@ -224,14 +220,16 @@ ostream &operator<<(ostream &output, const Hand &hand)
 	return output;
 }
 
-Card *Hand::playCard(Deck *deck)
+void Hand::playCard(Player *player, Deck *deck)
 {
-	Card *tempPlayCard = cardsInHand[0];
-	cardsInHand.erase(cardsInHand.begin());
+	int randomIndex = rand() % (getCards().size());
+	Card* randomCard = getCards()[randomIndex];
+	
+	cardsInHand.erase(cardsInHand.begin() + randomIndex);
 
-	deck->addToDeck(tempPlayCard);
+	deck->addToDeck(randomCard);
 
-	return tempPlayCard;
+	randomCard->play(player);
 }
 
 void Hand::addToHand(Card *card)

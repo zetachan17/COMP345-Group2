@@ -135,7 +135,7 @@ public:
 	void addToHand(Card *card);
 
 	// plays card from hand and adds it back to the deck
-	Card *playCard(Deck *deck);
+	void playCard(Player *player, Deck *deck);
 
 	// getters
 	vector<Card *> getCards();
