@@ -7,22 +7,19 @@ using std::ostream;
 using std::string;
 using std::vector;
 
-class Order;
-class OrdersList;
+class Player;
 
 class Card
 {
 public:
-	// card type: 0=bomb, 1=reinforcement, 2=blockade, 3=airlift,  4=diplomacy
-	int type;
-
+	
 	// constructors
 	Card();
-	Card(const int type);
+	Card(string type);
 	Card(const Card &card);
 
 	// destructor
-	~Card();
+	virtual ~Card();
 
 	// assignment operator
 	Card &operator=(const Card &card);
@@ -30,11 +27,61 @@ public:
 	// output stream operator
 	friend ostream &operator<<(ostream &output, const Card &card);
 
-	// REQUIRED - plays the card, creates the corresponding order and adds it to the orderlist
-	void play(Card *card, OrdersList *orders);
+	// REQUIRED - plays the card, each subclass overrides this to issue the appropriate Order through the Player class
+	virtual void play(Player *player) = 0;
 
-	// creates an order from a card
-	Order *createOrder(Card *card);
+	// returns the name of the card type
+	string cardType() const;
+
+protected:
+	string type;
+};
+
+/// Card subclass representing an Airlift card
+class AirliftCard : public Card
+{
+public:
+	AirliftCard();
+	~AirliftCard();
+	void play(Player* player) override;
+};
+
+/// Card subclass representing a Blockade card
+class BlockadeCard : public Card
+{
+public:
+	BlockadeCard();
+	~BlockadeCard();
+	void play(Player* player) override;
+
+};
+
+/// Card subclass representing a Bomb card
+class BombCard : public Card
+{
+public:
+	BombCard();
+	~BombCard();
+	void play(Player* player) override;
+};
+
+
+/// Card subclass representing a Negotiate card
+class DiplomacyCard : public Card
+{
+public:
+	DiplomacyCard();
+	~DiplomacyCard();
+	void play(Player* player) override;
+};
+
+/// Card subclass representing a Reinforcement card
+class ReinforcementCard: public Card
+{
+public:
+	ReinforcementCard();
+	~ReinforcementCard();
+	void play(Player* player) override;
 };
 
 class Deck
@@ -88,7 +135,7 @@ public:
 	void addToHand(Card *card);
 
 	// plays card from hand and adds it back to the deck
-	Card *playCard(Deck *deck);
+	void playCard(Player *player, Deck *deck);
 
 	// getters
 	vector<Card *> getCards();
