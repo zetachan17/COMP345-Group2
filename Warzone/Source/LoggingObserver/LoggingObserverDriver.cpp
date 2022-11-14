@@ -22,31 +22,31 @@ void testLoggingObserver() {
 
     cout << "\nCommandProcessor::saveCommand() being added to log file:" << endl;
 
-    //CommandProcessor* commandProcessor = nullptr;
-    //GameEngine::State currentState = GameEngine::State::End;
-    //LogObserver* view1 = new LogObserver(commandProcessor);
+    CommandProcessor* commandProcessor = nullptr;
+    GameEngine::State currentState = GameEngine::State::End;
+    LogObserver* view1 = new LogObserver(commandProcessor);
 
-    //while (commandProcessor == nullptr || currentState == GameEngine::State::End) {
-    //    GameEngine* gameEngine = new GameEngine();
-    //    currentState = GameEngine::State::Start;
-    //    commandProcessor = gameEngine->initializeCommandProcessor();
-    //    
-    //    // if(commandProcessor != NULL){
-    //    while (currentState != GameEngine::State::End)
-    //    {
-    //        currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
-    //    }
-    //    
-    //    if (commandProcessor != nullptr)
-    //    {
-    //        delete commandProcessor;
-    //        commandProcessor = nullptr;
-    //        delete gameEngine;
-    //        gameEngine = nullptr;
-    //        delete view1;
-    //        break;
-    //    }
-    //}
+    while (commandProcessor == nullptr || currentState == GameEngine::State::End) {
+        GameEngine* gameEngine = new GameEngine();
+        currentState = GameEngine::State::Start;
+        commandProcessor = gameEngine->initializeCommandProcessor();
+        
+        // if(commandProcessor != NULL){
+        while (currentState != GameEngine::State::End)
+        {
+            currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
+        }
+        
+        if (commandProcessor != nullptr)
+        {
+            delete commandProcessor;
+            commandProcessor = nullptr;
+            delete gameEngine;
+            gameEngine = nullptr;
+            delete view1;
+            break;
+        }
+    }
 
      /*CommandProcessor* saveCommand = new CommandProcessor;
      LogObserver* view1 = new LogObserver(saveCommand);
@@ -155,7 +155,7 @@ void testLoggingObserver() {
 
     cout << "\nCommand::saveEffect() being added to log file:" << endl;
 
-    /*Command* saveEffectTest = new Command();
+    Command* saveEffectTest = new Command();
     Command* cmd = new Command();
     LogObserver* view3 = new LogObserver(cmd);
     cmd->saveEffect(saveEffectTest, "Start");
@@ -169,7 +169,7 @@ void testLoggingObserver() {
 
     delete saveEffectTest;
     delete cmd;
-    delete view3;*/
+    delete view3;
 
     cout << "\nOrderList::addOrder() being added to log file:" << endl;
 
@@ -193,7 +193,7 @@ void testLoggingObserver() {
     delete orders;
     delete view4;
 
-    /*cout << "\nGameEngine::transition() being added to log file:" << endl;
+    cout << "\nGameEngine::transition() being added to log file:" << endl;
 
     CommandProcessor* commandProcessorTransition = NULL;
     GameEngine::State currentStateTransition = GameEngine::State::End;
@@ -221,6 +221,6 @@ void testLoggingObserver() {
     if (dynamic_cast<Subject*>(testGameEngine) != nullptr && dynamic_cast<ILoggable*>(testGameEngine) != nullptr) {
         cout << "gameEngine is a subclass of Subject and ILoggable." << endl;
     }
-    delete testGameEngine;*/
+    delete testGameEngine;
 
 }

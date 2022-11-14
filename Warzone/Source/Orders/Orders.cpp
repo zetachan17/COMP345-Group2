@@ -751,7 +751,7 @@ string Order::stringToLog() {
 
 //stringToLog
 string OrdersList::stringToLog() {
-    cout << m_orders[0]->type() << " AAA" << endl;
+
     string stringLog = m_orders.back()->type() + " Order has been added to the Order List.";
     cout << stringLog << endl;
     return stringLog;

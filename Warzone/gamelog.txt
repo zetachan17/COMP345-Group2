@@ -1,2 +1,1 @@
 Output of commands:
-Order has been executed. Effect: Eugene deployed 40 units to Plateau.
