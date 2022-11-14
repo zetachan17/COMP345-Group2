@@ -52,6 +52,7 @@ AirliftCard::~AirliftCard() {}
 
 void AirliftCard::play(Player* player)
 {
+	cout << "Playing a Airlift card" << endl;
 	player->issueAirliftOrder();
 }
 
@@ -61,6 +62,7 @@ BlockadeCard::~BlockadeCard() {}
 
 void BlockadeCard::play(Player* player)
 {
+	cout << "Playing a Blockade card" << endl;
 	player->issueBlockadeOrder();
 }
 
@@ -70,6 +72,7 @@ BombCard::~BombCard() {}
 
 void BombCard::play(Player* player)
 {
+	cout << "Playing a Bomb card" << endl;
 	player->issueBombOrder();
 }
 
@@ -79,6 +82,7 @@ DiplomacyCard::~DiplomacyCard() {}
 
 void DiplomacyCard::play(Player* player)
 {
+	cout << "Playing a Diplomacy card" << endl;
 	player->issueNegotiateOrder();
 }
 
@@ -88,6 +92,7 @@ ReinforcementCard::~ReinforcementCard() {}
 
 void ReinforcementCard::play(Player* player)
 {
+	cout << "Playing a Reinforcement card" << endl;
 	player->addReinforcements(5);
 }
 

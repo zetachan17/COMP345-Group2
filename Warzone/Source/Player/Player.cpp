@@ -175,8 +175,6 @@ void Player::issueOrder()
 	{
 		
 		int randomChoice = rand() % (100);
-		cout << "random choice: " << randomChoice << endl;
-
 
 		if (randomChoice <= 25)
 		{
@@ -283,7 +281,7 @@ void Player::issueBlockadeOrder()
 	cout << "Issuing a Blockade order." << endl;
 
 	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
-	cout << "Blockading" << targetTerritory->getTerritoryName() << endl;
+	cout << "Blockading " << targetTerritory->getTerritoryName() << endl;
 
 	ordersList->addOrder(new Blockade(this, targetTerritory));
 }
