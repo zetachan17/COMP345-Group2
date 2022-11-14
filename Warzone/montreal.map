@@ -21,5 +21,5 @@ Mount_Royal,700,700,North,Villeray,Little_Italy,Outremont,Downtown,Westmount
 Downtown,700,700,South,Plateau,Mount_Royal,NDG,Verdun
 The_Village,700,700,East,Plateau
 NDG,700,700,West,Downtown,Westmount
-Verdun,700,700,South,Downtown,NDG
-Westmount,700,700,West,Mount_Royal
+Verdun,700,700,South,Downtown
+Westmount,700,700,West,Mount_Royal,NDG
