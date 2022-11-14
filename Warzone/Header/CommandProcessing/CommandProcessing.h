@@ -75,6 +75,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& output, const CommandProcessor& adapter);
 	
 	//friends
+
 	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor*commandProcessor);
 	friend GameEngine::State GameEngine::getState();
 

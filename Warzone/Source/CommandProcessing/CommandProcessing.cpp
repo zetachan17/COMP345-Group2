@@ -69,22 +69,23 @@ CommandProcessor& CommandProcessor::operator=(const CommandProcessor& commandPro
 
 CommandProcessor::~CommandProcessor() 
 {
-	for (Command* y : this->listCommands)
+	if (!this->listCommands.empty())
 	{
-		delete y;
-		y = NULL;
+		for (Command* command : this->listCommands)
+		{
+			delete command;
+			command = nullptr;
+		}
 	}
-	
-
 }
 
 ostream& operator<<(std::ostream& output, const CommandProcessor& adapter)
 {
 	output << "CommandProcessor has " << adapter.nbCommands << "number of Commands" << endl;
 	output << "And the Commands contained in this CommandProcessor are: " << endl;
-	for (Command* y : adapter.listCommands)
+	for (Command* command : adapter.listCommands)
 	{
-		output << *y;
+		output << *command;
 	}
 	return output;
 }
@@ -94,11 +95,12 @@ void Command::saveEffect(Command* cmd, string effectName)
 	cmd->commandEffect = effectName;
 	Notify(this);
 }
+
 string CommandProcessor::readCommand()
 {
 
 	std::string userInput;
-	std::string delimiter = " ";
+	const std::string delimiter = " ";
 	std::string secondInput;
 	int condition = 0;
 
@@ -166,7 +168,6 @@ string CommandProcessor::readCommand()
 
 void CommandProcessor::getCommand(CommandProcessor* commandProcessor)
 {
-
 	std::string commandName;
 	commandName = commandProcessor->readCommand();
 	saveCommand(commandName);
@@ -181,9 +182,7 @@ Command* CommandProcessor::saveCommand(string commandName) //remember to track w
 	Notify(this);
 	
 	return cmd;
-
 }
-
 
 bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 {
@@ -247,9 +246,7 @@ FileLineReader::FileLineReader()
 
 FileLineReader::FileLineReader(const FileLineReader& filelinereader)
 {
-	
 	this->filename = filelinereader.filename;
-
 }
 
 FileLineReader& FileLineReader::operator=(const FileLineReader& filelinereader)
@@ -269,11 +266,8 @@ FileLineReader::~FileLineReader()
 	std::cout << "FileLineReader object destroyed!";
 }
 
-
-
 string FileLineReader::readLineFromFile()
 {
-	
 	if (inputstream.eof())
 	{
 		std::cout << "End of the command file, now quit the game!" << std::endl;
@@ -329,7 +323,7 @@ string FileCommandProcessorAdapter::readCommand()
 	if((this->fileLineReader->inputstream).is_open())
 	{
 	string userInput = fileLineReader->readLineFromFile();
-	std::string delimiter = " ";
+	const std::string delimiter = " ";
 	std::string secondInput;
 	int condition = 0;
 	while (condition == 0)
