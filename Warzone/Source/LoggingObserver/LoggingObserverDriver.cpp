@@ -62,17 +62,6 @@ void testLoggingObserver() {
 
     cout << "\nOrder::execute() being added to log file:" << endl;
 
-    //Order* execute = new Order();
-    //LogObserver* view2 = new LogObserver(next);
-
-    //cout << "Show that Order is a subclass of Subject and ILoggable:" << endl;
-    //if (dynamic_cast<Subject*>(execute) != nullptr && dynamic_cast<ILoggable*>(execute) != nullptr) {
-    //    cout << "Order is a subclass of Subject and ILoggable." << endl;
-    //}
-
-    //delete execute;
-    //delete view2;
-
     // setup game engine (just to test access to the deck)
     GameEngine* game = new GameEngine();
 
@@ -161,7 +150,8 @@ void testLoggingObserver() {
         << "-----------------------------------------------------------\n"
         << "-----------------------------------------------------------\n";
 
-    //delete game;
+    delete game;
+    delete view2;
 
     cout << "\nCommand::saveEffect() being added to log file:" << endl;
 
@@ -183,25 +173,25 @@ void testLoggingObserver() {
 
     cout << "\nOrderList::addOrder() being added to log file:" << endl;
 
-    //OrdersList* orders = new OrdersList();
-    //LogObserver* view4 = new LogObserver(orders);
-    //cout << "*Created order list*\n";
+    OrdersList* orders = new OrdersList();
+    LogObserver* view4 = new LogObserver(orders);
+    cout << "*Created order list*\n";
 
-    ////adding orders to the list
-    //orders->addOrder(new Negotiate());
-    //orders->addOrder(new Bomb());
-    //orders->addOrder(new Advance());
-    //orders->addOrder(new Deploy());
-    //orders->addOrder(new Airlift());
-    //orders->addOrder(new Blockade());
+    //adding orders to the list
+    orders->addOrder(new Negotiate());
+    orders->addOrder(new Bomb());
+    orders->addOrder(new Advance());
+    orders->addOrder(new Deploy());
+    orders->addOrder(new Airlift());
+    orders->addOrder(new Blockade());
 
-    //cout << "Show that OrderList is a subclass of Subject and ILoggable:" << endl;
-    //if (dynamic_cast<Subject*>(orders) != nullptr && dynamic_cast<ILoggable*>(orders) != nullptr) {
-    //   cout << "OrderList is a subclass of Subject and ILoggable." << endl;
-    //}
+    cout << "Show that OrderList is a subclass of Subject and ILoggable:" << endl;
+    if (dynamic_cast<Subject*>(orders) != nullptr && dynamic_cast<ILoggable*>(orders) != nullptr) {
+       cout << "OrderList is a subclass of Subject and ILoggable." << endl;
+    }
 
-    //delete orders;
-    //delete view4;
+    delete orders;
+    delete view4;
 
     /*cout << "\nGameEngine::transition() being added to log file:" << endl;
 
