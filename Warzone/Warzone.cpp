@@ -6,17 +6,19 @@
 #include "Cards/CardsDriver.h"
 #include "GameEngine/GameEngineDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
+#include <iostream>
 
 int main()
 {
+    srand(time(0));
+
     //P1
-    testCommandProcessor();
+    //testCommandProcessor();
     //P2
-    //testPlayers();
+    //testStartupPhase();
     //P3
-    //testOrdersLists();
+    testMainGameLoop();
     //P4
-    //testCards();
+    //testOrderExecution();
     //P5
-   //testStartupPhase();
 }
