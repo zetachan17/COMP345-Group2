@@ -1,6 +1,0 @@
-loadmap montreal.map
-validatemap
-addplayer P1
-addplayer P2
-gamestart
-quit

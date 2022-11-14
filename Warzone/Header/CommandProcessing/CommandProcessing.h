@@ -1,5 +1,6 @@
 #pragma once
 #include "GameEngine/GameEngine.h"
+#include "LoggingObserver/LoggingObserver.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,7 +8,7 @@
 
 using namespace std;
 
-struct Command
+struct Command : public Subject, public ILoggable
 {
 private:
 	string commandName;
@@ -36,11 +37,14 @@ public:
 	//friend class
 	friend class CommandProcessor;
 	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor*commandProcessor);
+
+	//stringToLog
+    string stringToLog();
 };
 
 
 
-class CommandProcessor
+class CommandProcessor : public Subject, public ILoggable
 {
 private:
 	//This is the collection of Command objects
@@ -74,6 +78,9 @@ public:
 
 	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor*commandProcessor);
 	friend GameEngine::State GameEngine::getState();
+
+	//stringToLog
+    string stringToLog();
 };
 
 class FileLineReader {
