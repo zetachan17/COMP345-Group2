@@ -52,6 +52,7 @@ void testMainGameLoop()
         {
             delete commandProcessor;
             delete gameEngine;
+            break;
         }
     }
 }
