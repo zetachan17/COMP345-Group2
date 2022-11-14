@@ -214,6 +214,11 @@ void Player::issueDeployOrder()
 		armiesToDeploy = rand() % (maximumArmies - minimumArmies + 1) + minimumArmies;
 	}
 
+	if (toDefend().size() == 0)
+	{
+		return;
+	}
+
 	Territory* randomTerritoryToDefend = toDefend()[rand() % (toDefend().size())];
 	cout << "Deploying " << armiesToDeploy << " to " << randomTerritoryToDefend->getTerritoryName() << endl;
 
@@ -225,6 +230,11 @@ void Player::issueDeployOrder()
 void Player::issueAdvanceOrder()
 {
 	cout << "Issuing an Advance order." << endl;
+
+	if (toAttack().size() == 0)
+	{
+		return;
+	}
 
 	//get random target territory from toAttack
 	Territory* targetTerritory = toAttack()[rand() % (toAttack().size())];
@@ -243,7 +253,7 @@ void Player::issueAdvanceOrder()
 	}
 	
 	//determine how many armies
-	int units = 12;
+	int units = sourceTerritory->getArmyUnits();
 
 	cout << "Advancing " << units << " to " << targetTerritory->getTerritoryName() << " from " << sourceTerritory->getTerritoryName() << endl;
 
@@ -254,14 +264,19 @@ void Player::issueAirliftOrder()
 {
 	cout << "Issuing an Airlift order." << endl;
 
+
+	if (toDefend().size() == 0)
+	{
+		return;
+	}
 	//get random territory from toAttack and toDefend
 	Territory* sourceTerritory = toDefend()[rand() % (toDefend().size())];
 	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
 
 	//determine how many armies
-	int units = 12;
+	int units = sourceTerritory->getArmyUnits();
 
-	cout << "Airlifting" << units << " from " << sourceTerritory->getTerritoryName() << " to " << targetTerritory->getTerritoryName() << endl;
+	cout << "Airlifting " << units << " from " << sourceTerritory->getTerritoryName() << " to " << targetTerritory->getTerritoryName() << endl;
 
 	ordersList->addOrder(new Airlift(this, units, sourceTerritory, targetTerritory));
 }
@@ -269,6 +284,11 @@ void Player::issueAirliftOrder()
 void Player::issueBombOrder()
 {
 	cout << "Issuing a Bomb order." << endl;
+
+	if (toAttack().size() == 0)
+	{
+		return;
+	}
 
 	Territory* targetTerritory = toAttack()[rand() % (toAttack().size())];
 
@@ -279,6 +299,11 @@ void Player::issueBombOrder()
 void Player::issueBlockadeOrder()
 {
 	cout << "Issuing a Blockade order." << endl;
+
+	if (toDefend().size() == 0)
+	{
+		return;
+	}
 
 	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
 	cout << "Blockading " << targetTerritory->getTerritoryName() << endl;
@@ -301,6 +326,7 @@ void Player::issueNegotiateOrder()
 		}
 	}
 
+	cout << "Negotiating with " << targetPlayer->getPlayerName() << endl;
 
 	ordersList->addOrder(new Negotiate(this, targetPlayer));
 }
