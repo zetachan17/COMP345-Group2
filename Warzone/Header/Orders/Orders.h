@@ -138,7 +138,7 @@ private:
 
     // transfers territory from defending player to attacking player and updates army units
     // after the attack
-    void conquer();
+    void conquer(int attackUnits);
 
     // simulates battle bettween the active player's attacking units and the target territory's
     // defending units, recording the outcome
