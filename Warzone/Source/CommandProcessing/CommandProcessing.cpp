@@ -405,7 +405,7 @@ string CommandProcessor::stringToLog() {
 //Command's stringToLog() method
 string Command::stringToLog() {
 
-	string stringLog = "saveEffect() method saved the transition to the " + commandEffect + " state inside the commandEffect attribute.";
+	string stringLog = "saveEffect() method saved the transition.";
 	cout << stringLog << endl;
 	return stringLog;
 }

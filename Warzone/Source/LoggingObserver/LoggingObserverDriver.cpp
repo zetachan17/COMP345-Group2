@@ -22,115 +22,205 @@ void testLoggingObserver() {
 
     cout << "\nCommandProcessor::saveCommand() being added to log file:" << endl;
 
-    CommandProcessor* commandProcessor = nullptr;
-    GameEngine::State currentState = GameEngine::State::End;
-    LogObserver* view1 = new LogObserver(commandProcessor);
+    //CommandProcessor* commandProcessor = nullptr;
+    //GameEngine::State currentState = GameEngine::State::End;
+    //LogObserver* view1 = new LogObserver(commandProcessor);
 
-    while (commandProcessor == nullptr || currentState == GameEngine::State::End) {
-        GameEngine* gameEngine = new GameEngine();
-        currentState = GameEngine::State::Start;
-        commandProcessor = gameEngine->initializeCommandProcessor();
-        
-        // if(commandProcessor != NULL){
-        while (currentState != GameEngine::State::End)
-        {
-            currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
-        }
-        
-        if (commandProcessor != nullptr)
-        {
-            delete commandProcessor;
-            commandProcessor = nullptr;
-            delete gameEngine;
-            gameEngine = nullptr;
-            delete view1;
-            break;
-        }
-    }
+    //while (commandProcessor == nullptr || currentState == GameEngine::State::End) {
+    //    GameEngine* gameEngine = new GameEngine();
+    //    currentState = GameEngine::State::Start;
+    //    commandProcessor = gameEngine->initializeCommandProcessor();
+    //    
+    //    // if(commandProcessor != NULL){
+    //    while (currentState != GameEngine::State::End)
+    //    {
+    //        currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
+    //    }
+    //    
+    //    if (commandProcessor != nullptr)
+    //    {
+    //        delete commandProcessor;
+    //        commandProcessor = nullptr;
+    //        delete gameEngine;
+    //        gameEngine = nullptr;
+    //        delete view1;
+    //        break;
+    //    }
+    //}
 
-    // CommandProcessor* saveCommand = new CommandProcessor;
-    // LogObserver* view1 = new LogObserver(saveCommand);
-    // saveCommand->getCommand(saveCommand);
+     /*CommandProcessor* saveCommand = new CommandProcessor;
+     LogObserver* view1 = new LogObserver(saveCommand);
+     saveCommand->getCommand(saveCommand);
 
-    // cout << "Show that CommandProcessor is a subclass of Subject and ILoggable:" << endl;
-    // if (dynamic_cast<Subject*>(saveCommand) != nullptr && dynamic_cast<ILoggable*>(saveCommand) != nullptr) {
-    //     cout << "CommandProcessor is a subclass of Subejct and ILoggable." << endl;
-    // }
+     cout << "Show that CommandProcessor is a subclass of Subject and ILoggable:" << endl;
+     if (dynamic_cast<Subject*>(saveCommand) != nullptr && dynamic_cast<ILoggable*>(saveCommand) != nullptr) {
+         cout << "CommandProcessor is a subclass of Subject and ILoggable." << endl;
+     }
 
-    // delete saveCommand;
-    // delete view1;
+     delete saveCommand;
+     delete view1;*/
 
     cout << "\nOrder::execute() being added to log file:" << endl;
 
-    //D* execute = new D();
-    //LogObserver* view2 = new LogObserver(execute);
+    //Order* execute = new Order();
+    //LogObserver* view2 = new LogObserver(next);
 
     //cout << "Show that Order is a subclass of Subject and ILoggable:" << endl;
     //if (dynamic_cast<Subject*>(execute) != nullptr && dynamic_cast<ILoggable*>(execute) != nullptr) {
-    //    cout << "Order is a subclass of Subejct and ILoggable." << endl;
+    //    cout << "Order is a subclass of Subject and ILoggable." << endl;
     //}
 
     //delete execute;
     //delete view2;
 
+    // setup game engine (just to test access to the deck)
+    GameEngine* game = new GameEngine();
+
+    // setup test territories
+    Territory* territories[4] = { new Territory(0, "Plateau", 3),
+                                 new Territory(1, "Mount Royal", 2),
+                                 new Territory(2, "Downtown", 1),
+                                 new Territory(3, "The Village", 1) };
+
+    territories[0]->addAdjacentTerritory(territories[1]);
+    territories[1]->addAdjacentTerritory(territories[0]);
+    territories[0]->addAdjacentTerritory(territories[3]);
+    territories[3]->addAdjacentTerritory(territories[0]);
+    territories[1]->addAdjacentTerritory(territories[2]);
+    territories[2]->addAdjacentTerritory(territories[1]);
+    territories[2]->addAdjacentTerritory(territories[3]);
+    territories[3]->addAdjacentTerritory(territories[2]);
+
+    cout << "-----------------------------------------------------------\n"
+        << "*CREATED TEST TERRITORIES*\n"
+        << "*CREATED 2 TEST PLAYERS*\n"
+        << "*ASSIGNED TERRITORIES*\n"
+        << "*ISSUED ORDERS TO TEST*\n"
+        << "-----------------------------------------------------------\n"
+        << "\n\t\t**PLAYERS & ORDERS LISTS**\n\n"
+        << "-----------------------------------------------------------\n";
+
+    // setup test players
+    Player* tina = new Player("Tina");
+    Player* eugene = new Player("Eugene");
+
+    // assign territories & assign reinfcorcements for testing
+    tina->addTerritory(territories[1]);
+    tina->addTerritory(territories[2]);
+    eugene->addTerritory(territories[3]);
+    eugene->addTerritory(territories[0]);
+    tina->addReinforcements(50);
+    eugene->addReinforcements(50);
+
+    // issue test orders
+    eugene->issueOrder(new Deploy(eugene, 40, territories[0]));
+    tina->issueOrder(new Deploy(tina, 30, territories[2]));
+    eugene->issueOrder(new Deploy(eugene, 20, territories[3]));
+    tina->issueOrder(new Advance(tina, 20, territories[2], territories[3]));
+    eugene->issueOrder(new Advance(eugene, 35, territories[0], territories[1]));
+    tina->issueOrder(new Airlift(tina, 2, territories[1], territories[3]));
+    eugene->issueOrder(new Blockade(eugene, territories[1]));
+    tina->issueOrder(new Negotiate(tina, eugene));
+
+    cout << endl
+        << *tina
+        << "-----------------------------------------------------------\n"
+        << *eugene
+        << "-----------------------------------------------------------\n";
+
+    // test execution of deploy orders
+    Order* next = eugene->nextOrder();
+    LogObserver* view2 = new LogObserver(next);
+
+    cout << "\n\t\t**ORDERS EXECUTION**\n\n"
+        << "-----------------------------------------------------------\n";
+    cout << eugene->getPlayerName() << "'s next order: " << *next << endl;
+    next->execute();
+    cout << endl;
+    cout << tina->getPlayerName() << "'s next order: " << *(next = tina->nextOrder()) << endl;
+    next->execute();
+    cout << endl;
+    cout << eugene->getPlayerName() << "'s next order: " << *(next = eugene->nextOrder()) << endl;
+    next->execute();
+    cout << endl;
+    cout << tina->getPlayerName() << "'s next order: " << *(next = tina->nextOrder()) << endl;
+    next->execute();
+    cout << endl;
+    cout << eugene->getPlayerName() << "'s next order: " << *(next = eugene->nextOrder()) << endl;
+    next->execute();
+    cout << endl;
+    cout << tina->getPlayerName() << "'s next order: " << *(next = tina->nextOrder()) << endl;
+    next->execute();
+    cout << endl;
+    cout << eugene->getPlayerName() << "'s next order: " << *(next = eugene->nextOrder()) << endl;
+    next->execute();
+    cout << endl;
+    cout << tina->getPlayerName() << "'s next order: " << *(next = tina->nextOrder()) << endl;
+    next->execute();
+    cout << endl
+        << "-----------------------------------------------------------\n"
+        << "-----------------------------------------------------------\n";
+
+    //delete game;
+
     cout << "\nCommand::saveEffect() being added to log file:" << endl;
 
-    Command* saveEffectTest = new Command();
+    /*Command* saveEffectTest = new Command();
     Command* cmd = new Command();
-    LogObserver* view3 = new LogObserver(saveEffectTest);
+    LogObserver* view3 = new LogObserver(cmd);
     cmd->saveEffect(saveEffectTest, "Start");
     cmd->saveEffect(saveEffectTest, "MapLoaded");
     cmd->saveEffect(saveEffectTest, "MapValidated");
 
     cout << "Show that Command is a subclass of Subject and ILoggable:" << endl;
     if (dynamic_cast<Subject*>(saveEffectTest) != nullptr && dynamic_cast<ILoggable*>(saveEffectTest) != nullptr) {
-        cout << "Command is a subclass of Subejct and ILoggable." << endl;
+        cout << "Command is a subclass of Subject and ILoggable." << endl;
     }
 
     delete saveEffectTest;
     delete cmd;
-    delete view3;
+    delete view3;*/
 
     cout << "\nOrderList::addOrder() being added to log file:" << endl;
 
-    OrdersList* orders = new OrdersList();
-    LogObserver* view4 = new LogObserver(orders);
-    cout << "*Created order list*\n";
+    //OrdersList* orders = new OrdersList();
+    //LogObserver* view4 = new LogObserver(orders);
+    //cout << "*Created order list*\n";
 
-    //adding orders to the list
-    orders->addOrder(new Negotiate());
-    orders->addOrder(new Bomb());
-    orders->addOrder(new Advance());
-    orders->addOrder(new Deploy());
-    orders->addOrder(new Airlift());
-    orders->addOrder(new Blockade());
+    ////adding orders to the list
+    //orders->addOrder(new Negotiate());
+    //orders->addOrder(new Bomb());
+    //orders->addOrder(new Advance());
+    //orders->addOrder(new Deploy());
+    //orders->addOrder(new Airlift());
+    //orders->addOrder(new Blockade());
 
-    cout << "Show that OrderList is a subclass of Subject and ILoggable:" << endl;
-    if (dynamic_cast<Subject*>(orders) != nullptr && dynamic_cast<ILoggable*>(orders) != nullptr) {
-       cout << "OrderList is a subclass of Subejct and ILoggable." << endl;
-    }
+    //cout << "Show that OrderList is a subclass of Subject and ILoggable:" << endl;
+    //if (dynamic_cast<Subject*>(orders) != nullptr && dynamic_cast<ILoggable*>(orders) != nullptr) {
+    //   cout << "OrderList is a subclass of Subject and ILoggable." << endl;
+    //}
 
-    delete orders;
-    delete view4;
+    //delete orders;
+    //delete view4;
 
-    cout << "\nGameEngine::transition() being added to log file:" << endl;
+    /*cout << "\nGameEngine::transition() being added to log file:" << endl;
 
-    CommandProcessor* commandProcessor = NULL;
-    GameEngine::State currentState = GameEngine::State::End;
+    CommandProcessor* commandProcessorTransition = NULL;
+    GameEngine::State currentStateTransition = GameEngine::State::End;
    
-    while (commandProcessor == NULL|| currentState == GameEngine::State::End) {
-        GameEngine* gameEngine = new GameEngine();
-        LogObserver* view5 = new LogObserver(gameEngine);
-        currentState = GameEngine::State::Start;
-        CommandProcessor* commandProcessor = gameEngine->initializeCommandProcessor();
-        while (currentState != GameEngine::State::End)
+    while (commandProcessorTransition == NULL|| currentStateTransition == GameEngine::State::End) {
+        GameEngine* gameEngineTransition = new GameEngine();
+        LogObserver* view5 = new LogObserver(gameEngineTransition);
+        currentStateTransition = GameEngine::State::Start;
+        CommandProcessor* commandProcessorTransition = gameEngineTransition->initializeCommandProcessor();
+        while (currentStateTransition != GameEngine::State::End)
         {
-            currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);
+            currentStateTransition = gameEngineTransition->startupPhase(gameEngineTransition->getState(), commandProcessorTransition);
         }
-        if (commandProcessor != NULL) 
+        if (commandProcessorTransition != NULL)
         {
-            delete commandProcessor;
-            delete gameEngine;
+            delete commandProcessorTransition;
+            delete gameEngineTransition;
             delete view5;
         }
        
@@ -139,8 +229,8 @@ void testLoggingObserver() {
     cout << "Show that gameEngine is a subclass of Subject and ILoggable:" << endl;
     GameEngine* testGameEngine = new GameEngine();
     if (dynamic_cast<Subject*>(testGameEngine) != nullptr && dynamic_cast<ILoggable*>(testGameEngine) != nullptr) {
-        cout << "gameEngine is a subclass of Subejct and ILoggable." << endl;
+        cout << "gameEngine is a subclass of Subject and ILoggable." << endl;
     }
-    delete testGameEngine;
+    delete testGameEngine;*/
 
 }
