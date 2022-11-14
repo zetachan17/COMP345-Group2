@@ -304,11 +304,6 @@ string Territory::getTerritoryName()
     return territoryName;
 }
 
-int Territory::getNumberOfArmies()
-{
-    return numArmies;
-}
-
 Continent::Continent(int continentId, string continentName, int bonus)
 {
     this->continentId = continentId;
