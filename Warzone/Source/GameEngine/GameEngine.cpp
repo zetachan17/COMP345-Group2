@@ -228,6 +228,8 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
             << "----------------------------------------------------------\n"
             << "\t** Execute Orders Phase **\n\n";
         executeOrdersPhase();
+        checkForDefeats();
+        checkForVictory(mLoader);
         this->state = GameEngine::State::AssignReinforcement;
         break;
     case GameEngine::State::Win:
@@ -569,5 +571,50 @@ void GameEngine::executeRemainingOrders() {
                 }
             }
         }
+    }
+}
+
+void GameEngine::checkForDefeats()
+{
+    std::cout << "Checking for loss condition" << endl;
+
+    bool defeat = false;
+    for (int i = 0; i < activePlayers.size();)
+    {
+        if (activePlayers[i]->getTerritories().size() == 0)
+        {
+            std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has lost." << endl;
+            activePlayers.erase(activePlayers.begin() + i);
+            defeat = true;
+            continue;
+        }
+        i++;
+    }
+
+    if (!defeat)
+    {
+        std::cout << "No player has been defeated this turn." << endl;
+
+    }
+}
+
+void GameEngine::checkForVictory(MapLoader* mLoader)
+{
+    std::cout << "Checking for victory condition" << endl;
+
+    bool victory = false;
+    for (int i = 0; i < activePlayers.size(); i++)
+    {
+        if (activePlayers[i]->getTerritories().size() == mLoader->getMap()->getTerritories().size())
+        {
+            std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has won!" << endl;
+            victory = true;
+            this->state = GameEngine::State::Win;
+        }
+    }
+
+    if (!victory)
+    {
+        std::cout << "No victories detected this turn." << endl;
     }
 }

@@ -168,7 +168,7 @@ void Player::issueOrder()
 {
 	cout << *this << endl;
 
-	if (armiesDeployedThisTurn != reinforcementPool) {
+	if (armiesDeployedThisTurn < reinforcementPool) {
 		this->issueDeployOrder();
 	}
 	else

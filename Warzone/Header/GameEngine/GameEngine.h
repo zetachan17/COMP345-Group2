@@ -87,4 +87,7 @@ private:
 
     //Part 3.3.b
     void executeRemainingOrders();
+
+    void checkForDefeats();
+    void checkForVictory(MapLoader* mLoader);
 };
