@@ -1,1 +1,14 @@
 Output of commands:
+Order has been executed. Effect: Eugene deployed 40 units to Plateau.
+Order has been executed. Effect: Tina deployed 30 units to Downtown.
+None saveEffect() method saved the transition.
+None saveEffect() method saved the transition.
+None saveEffect() method saved the transition.
+Deploy Order has been added to the Order List.
+Deploy Order has been added to the Order List.
+Deploy Order has been added to the Order List.
+Advance Order has been added to the Order List.
+Advance Order has been added to the Order List.
+Airlift Order has been added to the Order List.
+Blockade Order has been added to the Order List.
+Negotiate Order has been added to the Order List.

@@ -22,7 +22,7 @@ public:
 	Command(const Command& command);
 
 	//Destructor
-	~Command();
+	virtual ~Command();
 
 	//Another constructor useful for the saveCommand() method
 	Command(string cmdName);

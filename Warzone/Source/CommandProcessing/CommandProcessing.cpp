@@ -94,6 +94,7 @@ void Command::saveEffect(Command* cmd, string effectName)
 {
 	cmd->commandEffect = effectName;
 	Notify(this);
+	std::cout << "This: " << cmd->commandEffect << std::endl;
 }
 
 string CommandProcessor::readCommand()
@@ -405,7 +406,7 @@ string CommandProcessor::stringToLog() {
 //Command's stringToLog() method
 string Command::stringToLog() {
 
-	string stringLog = "saveEffect() method saved the transition.";
+	string stringLog = commandEffect + " saveEffect() method saved the transition.";
 	cout << stringLog << endl;
 	return stringLog;
 }

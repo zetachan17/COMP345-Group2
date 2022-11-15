@@ -39,7 +39,7 @@ public:
     GameEngine();                              // default constructor
     GameEngine(const GameEngine &game);        // copy constructor
     GameEngine &operator=(const GameEngine &); // assignment operator
-    ~GameEngine();                             // destructor
+    virtual ~GameEngine();                             // destructor
 
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
