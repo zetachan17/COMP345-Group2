@@ -1,9 +1,6 @@
 #pragma once
-
 #include <iostream>
 #include <vector>
-#include <string>
-using std::string;
 
 class MapLoader;
 class Player;
@@ -13,13 +10,7 @@ class Card;
 
 class CommandProcessor;
 
-#include "Map/Map.h"
-#include "Player/Player.h"
-#include "LoggingObserver/LoggingObserver.h"
-
-class CommandProcessor;
-
-class GameEngine : public Subject, public ILoggable
+class GameEngine
 {
 public:
     // all game states
@@ -39,13 +30,15 @@ public:
     GameEngine();                              // default constructor
     GameEngine(const GameEngine &game);        // copy constructor
     GameEngine &operator=(const GameEngine &); // assignment operator
-    virtual ~GameEngine();                             // destructor
+    ~GameEngine();                             // destructor
 
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
     friend std::istream &operator>>(std::istream &in, GameEngine &g);
 
     void addPlayer(std::string name);
+
+    static std::vector<Player*> getPlayers();
 
     // returns pointer to game deck
     static Deck *getDeck();
@@ -60,14 +53,13 @@ public:
     CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
 
-    //stringToLog
-    string stringToLog();
-
+    // contains logic for the game loop after initial setup
+    void mainGameLoop(MapLoader *mLoader);
 private:
     // ENUM, DOES NOT NEED TO BE A POINTER
     State state;
     static Deck *deck;
-    std::vector<Player *> activePlayers;
+    static std::vector<Player *> activePlayers;
 
     // Part 2.4.a) fairly distribute all the territories to the players
     void distributeTerritories(MapLoader *mLoader);
@@ -80,4 +72,22 @@ private:
 
     // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck's draw() method
     void drawInitialCards();
+
+    //Part 3.1
+    void reinforcementPhase(MapLoader *mLoader);
+
+    //Part 3.2
+    void issueOrdersPhase();
+
+    //Part 3.3
+    void executeOrdersPhase();
+
+    //Part 3.3.a
+    void executeDeployOrders();
+
+    //Part 3.3.b
+    void executeRemainingOrders();
+
+    void checkForDefeats();
+    void checkForVictory(MapLoader* mLoader);
 };

@@ -13,7 +13,7 @@ void testCommandProcessor()
         currentState = GameEngine::State::Start;
         commandProcessor = gameEngine->initializeCommandProcessor();
         
-        
+        // if(commandProcessor != NULL){
         while (currentState != GameEngine::State::End)
         {
             currentState = gameEngine->startupPhase(gameEngine->getState(), commandProcessor);

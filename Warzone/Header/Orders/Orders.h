@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <utility>
-#include "LoggingObserver/LoggingObserver.h"
 using std::ostream;
 using std::pair;
 using std::string;
@@ -14,7 +13,7 @@ class Territory;
 class Player;
 
 /// Base Order class representing an order issued by the player to then be executed
-class Order : public Subject, public ILoggable
+class Order
 {
 public:
     // constructors
@@ -61,9 +60,6 @@ public:
 
     // decrements the order counter for the round by one
     static void decrementOrderCount();
-
-    //stringToLog
-    string stringToLog();
 
 protected:
     Player *m_player;
@@ -142,7 +138,7 @@ private:
 
     // transfers territory from defending player to attacking player and updates army units
     // after the attack
-    void conquer();
+    void conquer(int attackUnits);
 
     // simulates battle bettween the active player's attacking units and the target territory's
     // defending units, recording the outcome
@@ -277,7 +273,7 @@ private:
 
 /// OrdersList manages a list of Order objects representing the sequential orders issued by a
 /// player. Orders can be added, moved around, removed, and executed.
-class OrdersList : public Subject, public ILoggable
+class OrdersList
 {
 public:
     // constructors
@@ -285,8 +281,8 @@ public:
     OrdersList(const OrdersList &other);
 
     // destructor
-    virtual ~OrdersList();
-    
+    ~OrdersList();
+
     // assignment operator
     OrdersList &operator=(const OrdersList &ordersList);
 
@@ -304,10 +300,8 @@ public:
     void remove(int position);
 
     // returns the next order and removes it from the list
-    Order *nextOrder();
-
-    //stringToLog
-    string stringToLog();
+    // if deployOnly is true, returns the next order if it is Deploy or returns nullptr
+    Order *nextOrder(bool deployOnly = false);
 
 private:
     vector<Order *> m_orders;

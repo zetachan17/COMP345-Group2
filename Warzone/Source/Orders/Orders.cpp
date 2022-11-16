@@ -5,9 +5,6 @@
 #include "GameEngine/GameEngine.h"
 
 #include <iostream>
-#include <fstream>
-#include <string>
-using std::string;
 #include <algorithm>
 #include <random>
 using std::cout;
@@ -45,19 +42,18 @@ Order::~Order() {}
 
 void Order::turnEnd()
 {
-    cout << "\n\n* End of turn triggered *\n"
-         << "* Negotiations cleared *\n"
-         << "* Players who conquered at least one territory draw a card: *\n\n";
-    m_ceaseFire.clear();
+    cout << "\n\n~~End of turn triggered~~\n"
+         << "~~Active negotiations cleared~~\n"
+         << "~~Players who conquered at least one territory draw a card~~\n\n";
 
     for (Player *player : m_getsCard)
     {
         cout << player->getPlayerName() + " draws a card: ";
-        player->getHand()
-            ->addToHand(GameEngine::getDeck()->draw());
+        player->getHand()->addToHand(GameEngine::getDeck()->draw());
     }
 
     m_getsCard.clear();
+    m_ceaseFire.clear();
 }
 
 string Order::effect() const
@@ -72,7 +68,8 @@ string Order::player() const
 
 string Order::type() const
 {
-    return m_description.substr(0, m_description.find(" "));
+    return m_description;
+    // return m_description.substr(0, m_description.find(" "));
 }
 
 vector<Player *> *Order::getsCard()
@@ -138,7 +135,8 @@ bool Deploy::validate()
     if (m_units > m_player->getReinforcementPool())
     {
         cout << "~INVALID ORDER~\n";
-        m_effect = "Player's reinforcement pool does not have sufficient units.";
+        m_effect = "Insufficient units.\n\t" + player() + "'s reinforcement pool only has " +
+                   to_string(m_player->getReinforcementPool()) + " units.";
         return false;
     }
     cout << "~order validated~\n";
@@ -157,17 +155,12 @@ void Deploy::execute()
         cout << m_effect << endl;
     }
     else
-    {
-        m_effect = "Effect: No effect. " + m_effect;
-        cout << m_effect << endl;
-    }
+        cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
-
-    Notify(this);
 }
 
 Deploy::~Deploy() {}
@@ -259,7 +252,7 @@ void Advance::execute()
             m_source->setArmyUnits(m_source->getArmyUnits() - m_units);
             m_target->setArmyUnits(m_target->getArmyUnits() + m_units);
 
-            m_effect = "Effect: " + player() + " advanced " + to_string(m_units) + " units from " +
+            m_effect = "Effect: " + player() + " advanced " + to_string(m_units) + " army units from " +
                        m_source->getTerritoryName() + " to " + m_target->getTerritoryName() + ".";
         }
         else
@@ -274,47 +267,52 @@ void Advance::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
-
-    Notify(this);
 }
 
 void Advance::battle()
 {
     int defenceUnits = m_target->getArmyUnits();
-    int attackingUnits = m_units;
+    int attackUnits = m_units;
     string defencePlayer = m_target->getOwner()->getPlayerName();
 
-    m_effect = "Effect: " + player() + " advanced " + to_string(attackingUnits) + " units from " +
-               m_source->getTerritoryName() + " to attack " + m_target->getTerritoryName() + ".\n";
+    m_effect = "Effect: " + player() + " advanced " + to_string(attackUnits) +
+               " army units from " + m_source->getTerritoryName() + " to attack " +
+               m_target->getTerritoryName() + ".\n";
 
-    int attackKills = killCount(attackingUnits, 60);
+    int attackKills = killCount(attackUnits, 60);
     int defenceKills = killCount(defenceUnits, 70);
 
-    defenceKills = std::min(defenceKills, attackingUnits);
-    attackingUnits -= defenceKills;
+    defenceKills = std::min(defenceKills, attackUnits);
+    attackUnits -= defenceKills;
 
-    if ((attackingUnits > 0) && (attackKills >= defenceUnits))
+    if ((attackUnits > 0) && (attackKills >= defenceUnits))
     {
-        conquer();
+        conquer(attackUnits);
 
-        m_effect += "\tAttacker killed " + to_string(defenceUnits) + " of " +
-                    to_string(defenceUnits) + " defence units.\n\tDefender killed " +
-                    to_string(defenceKills) + " of " + to_string(m_units) +
-                    " units.\n\tAttacker victory! " + player() + " conquered " +
-                    m_target->getTerritoryName() + " from player " + defencePlayer + " with " +
-                    to_string(attackingUnits) + " surviving units.";
+        m_effect += "\tAttacker's " + to_string(m_units) + " units killed " +
+                    to_string(defenceUnits) + " of " + to_string(defenceUnits) +
+                    " defence units.\n\tDefender's " + to_string(defenceUnits) + " units killed " +
+                    to_string(defenceKills) + " of " + to_string(m_units) + " attack units.\n\t" +
+                    "Attacker victory! " + player() + " conquered " +
+                    m_target->getTerritoryName() + " from " + defencePlayer + " with " +
+                    to_string(attackUnits) + " surviving units.";
     }
     else
     {
         m_source->setArmyUnits(m_source->getArmyUnits() - defenceKills);
         m_target->setArmyUnits(defenceUnits - attackKills);
 
-        m_effect += "\tAttacker killed " + to_string(defenceUnits - m_target->getArmyUnits()) +
-                    " of " + to_string(defenceUnits) + " defence units.\n\tDefender killed " +
-                    to_string(defenceKills) + " of " + to_string(m_units) +
-                    " units.\n\tDefender victory! " + defencePlayer + " retains control of " +
-                    m_target->getTerritoryName() + ". " + player() + " retreats " +
-                    to_string(attackingUnits) + " units to " + m_source->getTerritoryName() + ".";
+        string retreat = "";
+        if (attackUnits > 0)
+            retreat = "\n" + player() + " retreats " + to_string(attackUnits) + " units to " +
+                      m_source->getTerritoryName() + ".";
+
+        m_effect += "\tAttacker's " + to_string(m_units) + " units killed " +
+                    to_string(defenceUnits - m_target->getArmyUnits()) + " of " +
+                    to_string(defenceUnits) + " defence units.\n\tDefender's " +
+                    to_string(defenceUnits) + " units killed " + to_string(defenceKills) + " of " +
+                    to_string(m_units) + " attack units.\n\tDefender victory! " + defencePlayer +
+                    " retains control of " + m_target->getTerritoryName() + ". " + retreat;
     }
 }
 
@@ -330,12 +328,12 @@ int Advance::killCount(int units, int probability) const
     return kills;
 }
 
-void Advance::conquer()
+void Advance::conquer(int attackUnits)
 {
     m_source->setArmyUnits(m_source->getArmyUnits() - m_units);
 
     m_target->getOwner()->removeTerritory(m_target);
-    m_target->setArmyUnits(m_units);
+    m_target->setArmyUnits(attackUnits);
     m_player->addTerritory(m_target);
 
     if (std::find(m_getsCard.begin(), m_getsCard.end(), m_player) == m_getsCard.end())
@@ -404,12 +402,12 @@ void Bomb::execute()
         int initialUnits = m_target->getArmyUnits();
         m_target->setArmyUnits(initialUnits / 2);
 
-        string territory = m_target->getTerritoryName();
         int survivingUnits = m_target->getArmyUnits();
+        string territory = m_target->getTerritoryName();
         string lostUnits = to_string(initialUnits - survivingUnits);
-
         m_effect = "Effect: " + player() + " bombed " + territory + ". " + lostUnits +
-                   " units killed. " + territory + " now has " + to_string(survivingUnits) +
+                   " of " + to_string(initialUnits) + " units killed.\n\t" + territory +
+                   " now has " + to_string(survivingUnits) +
                    " units.";
         cout << m_effect << endl;
     }
@@ -420,8 +418,6 @@ void Bomb::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
-
-    Notify(this);
 }
 
 Bomb::~Bomb() {}
@@ -457,6 +453,7 @@ bool Blockade::validate()
         return true;
     }
 
+    m_effect = player() + " does not control " + m_target->getTerritoryName() + ".";
     cout << "~INVALID ORDER~\n";
     return false;
 }
@@ -472,30 +469,23 @@ void Blockade::execute()
         if (m_neutralPlayer == nullptr)
         {
             m_neutralPlayer = new Player("Neutral Player");
-            neutralCreated = "Neutral Player created.\n\t";
+            neutralCreated = "Neutral Player created.";
         }
         m_neutralPlayer->addTerritory(m_target);
 
         string territory = m_target->getTerritoryName();
-        string units = to_string(m_target->getArmyUnits());
-
         m_effect = "Effect: " + player() + " blockaded " + territory + ". " + neutralCreated +
-                   territory + " now has " + units + " units and belongs to the Neutral Player.";
+                   "\n\t" + territory + " now has " + to_string(m_target->getArmyUnits()) +
+                   " units and belongs to the Neutral Player.";
         cout << m_effect << endl;
     }
     else
-    {
-        m_effect = "Effect: No effect. " + m_target->getTerritoryName() +
-                   " is not a valid target territory.";
-        cout << m_effect << endl;
-    }
+        cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
-
-    Notify(this);
 }
 
 Blockade::~Blockade() {}
@@ -533,13 +523,13 @@ bool Airlift::validate()
 
     if (m_source->getOwner() != m_player)
     {
-        m_effect = m_target->getTerritoryName() + " is not a valid source territory.";
+        m_effect = player() + " does not control " + m_source->getTerritoryName() + ".";
         cout << "~INVALID ORDER~\n";
         return false;
     }
     if (m_target->getOwner() != m_player)
     {
-        m_effect = m_target->getTerritoryName() + " is not a valid target territory.";
+        m_effect = player() + " does not control " + m_target->getTerritoryName() + ".";
         cout << "~INVALID ORDER~\n";
         return false;
     }
@@ -567,17 +557,12 @@ void Airlift::execute()
         cout << m_effect << endl;
     }
     else
-    {
-        m_effect = "Effect: No effect. " + m_effect;
-        cout << m_effect << endl;
-    }
+        cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
-
-    Notify(this);
 }
 
 Airlift::~Airlift() {}
@@ -613,6 +598,7 @@ bool Negotiate::validate()
         return true;
     }
 
+    m_effect = "A player cannot negotiate with themselves.";
     cout << "~INVALID ORDER~\n";
     return false;
 }
@@ -625,21 +611,16 @@ void Negotiate::execute()
 
         m_effect = "Effect: " + player() + " entered negotiations with " +
                    m_target->getPlayerName() +
-                   ". Attacks between them are invalid for the rest of the turn.";
+                   ".\n\tAttacks between them are invalid for the rest of the turn.";
         cout << m_effect << endl;
     }
     else
-    {
-        m_effect = "Effect: No effect. A player cannot negotiate with themselves.";
-        cout << m_effect << endl;
-    }
+        cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
-
-    Notify(this);
 }
 
 Negotiate::~Negotiate() {}
@@ -656,8 +637,6 @@ OrdersList::OrdersList(const OrdersList &other)
 void OrdersList::addOrder(Order *newOrder)
 {
     m_orders.push_back(newOrder);
-
-    Notify(this);
 }
 
 // move() takes in the current position of an order, from a list of current orders shown to the
@@ -686,12 +665,19 @@ void OrdersList::remove(int p)
     }
 }
 
-Order *OrdersList::nextOrder()
+Order *OrdersList::nextOrder(bool deployOnly)
 {
-    Order *temp = nullptr;
+    Order* temp = nullptr;
     if (!(m_orders.empty()))
     {
         temp = m_orders.front();
+
+        // only want deploy orders but the next order is not deploy
+        if (deployOnly && dynamic_cast<const Deploy*> (temp) == nullptr)
+        {
+            return nullptr;
+        }
+        
         m_orders.erase(m_orders.begin());
         return temp;
     }
@@ -738,21 +724,4 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
             cout << i++ << ". " << *order << endl;
         return output;
     }
-}
-
-
-//stringToLog
-string Order::stringToLog() {
-    
-    string stringLog = "Order has been executed. " + m_effect;
-    cout << stringLog << endl;
-    return stringLog;
-}
-
-//stringToLog
-string OrdersList::stringToLog() {
-
-    string stringLog = m_orders.back()->type() + " Order has been added to the Order List.";
-    cout << stringLog << endl;
-    return stringLog;
 }

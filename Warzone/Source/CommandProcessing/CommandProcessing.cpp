@@ -93,8 +93,6 @@ ostream& operator<<(std::ostream& output, const CommandProcessor& adapter)
 void Command::saveEffect(Command* cmd, string effectName)
 {
 	cmd->commandEffect = effectName;
-	effectToLog = effectName;
-	Notify(this);
 }
 
 string CommandProcessor::readCommand()
@@ -179,9 +177,6 @@ Command* CommandProcessor::saveCommand(string commandName) //remember to track w
 	Command* cmd = new Command(commandName);
 	listCommands.push_back(cmd);
 	std::cout << "The command's name is : " << cmd->commandName << std::endl;
-	
-	Notify(this);
-	
 	return cmd;
 }
 
@@ -395,57 +390,5 @@ std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& ada
 	return output;
 }
 
-std::string command::statetostringc(gameengine::state state)
-{
-	if (state == gameengine::state::start)
-	{
-		return "start";
-	}
-	else if (state == gameengine::state::maploaded)
-	{
-		return "maploaded";
-	}
-	else if (state == gameengine::state::mapvalidated)
-	{
-		return "mapvalidated";
-	}
-	else if (state == gameengine::state::playersadded)
-	{
-		return "playersadded";
-	}
-	else if (state == gameengine::state::playersadded)
-	{
-		return "playersadded";
-	}
-	else if (state == gameengine::state::win)
-	{
-		return "win";
-	}
-	else
-	{
-		return "end";
-	}
-}
 
-GameEngine::State GameEngine::getStateC()
-	{
-	return this->state;
-}
 
-//CommandProcessor's stringToLog() method
-string CommandProcessor::stringToLog() {
-
-	string stringLog = listCommands.back()->commandName + " has been saved using saveCommand().";
-	cout << stringLog << endl;
-	return stringLog;
-}
-
-//Command's stringToLog() method
-string Command::stringToLog() {
-
-	string stringLog = "saveEffect() method saved the transition to the " + effectToLog + " state inside the commandEffect attribute";
-	//string stringLog = commandEffect + " saveEffect() method saved the transition.";
-	//string stringLog = stateToStringC(getStateC()) + " saveEffect() method saved the transition.";
-	cout << stringLog << endl;
-	return stringLog;
-}

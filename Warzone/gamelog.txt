@@ -1,4 +1,0 @@
-Output of commands:
-saveEffect() method saved the transition to the Start state inside the commandEffect attribute
-saveEffect() method saved the transition to the MapLoaded state inside the commandEffect attribute
-saveEffect() method saved the transition to the MapValidated state inside the commandEffect attribute
