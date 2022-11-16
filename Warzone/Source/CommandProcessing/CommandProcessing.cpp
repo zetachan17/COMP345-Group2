@@ -395,42 +395,42 @@ std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& ada
 	return output;
 }
 
-//std::string Command::stateToStringC(GameEngine::State state)
-//{
-//	if (state == GameEngine::State::Start)
-//	{
-//		return "Start";
-//	}
-//	else if (state == GameEngine::State::MapLoaded)
-//	{
-//		return "MapLoaded";
-//	}
-//	else if (state == GameEngine::State::MapValidated)
-//	{
-//		return "MapValidated";
-//	}
-//	else if (state == GameEngine::State::PlayersAdded)
-//	{
-//		return "PlayersAdded";
-//	}
-//	else if (state == GameEngine::State::PlayersAdded)
-//	{
-//		return "PlayersAdded";
-//	}
-//	else if (state == GameEngine::State::Win)
-//	{
-//		return "Win";
-//	}
-//	else
-//	{
-//		return "End";
-//	}
-//}
+std::string command::statetostringc(gameengine::state state)
+{
+	if (state == gameengine::state::start)
+	{
+		return "start";
+	}
+	else if (state == gameengine::state::maploaded)
+	{
+		return "maploaded";
+	}
+	else if (state == gameengine::state::mapvalidated)
+	{
+		return "mapvalidated";
+	}
+	else if (state == gameengine::state::playersadded)
+	{
+		return "playersadded";
+	}
+	else if (state == gameengine::state::playersadded)
+	{
+		return "playersadded";
+	}
+	else if (state == gameengine::state::win)
+	{
+		return "win";
+	}
+	else
+	{
+		return "end";
+	}
+}
 
-//GameEngine::State GameEngine::getStateC()
-//{
-//	return this->state;
-//}
+GameEngine::State GameEngine::getStateC()
+	{
+	return this->state;
+}
 
 //CommandProcessor's stringToLog() method
 string CommandProcessor::stringToLog() {

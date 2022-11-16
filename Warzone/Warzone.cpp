@@ -25,10 +25,10 @@ int main()
     //testGameStates();
 
     //A2P5
-    testLoggingObserver();
+    //testLoggingObserver();
 
     //
-    //testCommandProcessor();
+    testCommandProcessor();
 
     //testStartupPhase();
 }
