@@ -60,6 +60,9 @@ public:
     CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
 
+    //friend string stateToStringC(GameEngine::State state);
+    //friend GameEngine::State getStateC();
+
     //stringToLog
     string stringToLog();
 

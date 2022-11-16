@@ -129,7 +129,7 @@ void testLoggingObserver() {
 
     cout << "\nCommand::saveEffect() being added to log file:" << endl;
 
-    /*Command* saveEffectTest = new Command();
+    Command* saveEffectTest = new Command();
     Command* cmd = new Command();
     LogObserver* view3 = new LogObserver(cmd);
     cmd->saveEffect(saveEffectTest, "Start");
@@ -145,7 +145,7 @@ void testLoggingObserver() {
     delete cmd;
     delete view3;
 
-    cout << "-----------------------------------------------------------\n" << endl;*/
+    cout << "-----------------------------------------------------------\n" << endl;
 
     cout << "\n\nOrderList::addOrder() being added to log file:" << endl;
 

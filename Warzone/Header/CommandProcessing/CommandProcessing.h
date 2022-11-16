@@ -38,8 +38,13 @@ public:
 	friend class CommandProcessor;
 	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor*commandProcessor);
 
+	//string stateToStringC(GameEngine::State state);
+	//GameEngine::State getStateC();
+
 	//stringToLog
     string stringToLog();
+
+	string effectToLog;
 };
 
 
