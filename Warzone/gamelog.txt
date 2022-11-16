@@ -1,4 +1,14 @@
 Output of commands:
+Order has been executed. Effect: Eugene deployed 40 units to Plateau.
+Order has been executed. Effect: Tina deployed 30 units to Downtown.
 saveEffect() method saved the transition to the Start state inside the commandEffect attribute
 saveEffect() method saved the transition to the MapLoaded state inside the commandEffect attribute
 saveEffect() method saved the transition to the MapValidated state inside the commandEffect attribute
+Deploy Order has been added to the Order List.
+Deploy Order has been added to the Order List.
+Deploy Order has been added to the Order List.
+Advance Order has been added to the Order List.
+Advance Order has been added to the Order List.
+Airlift Order has been added to the Order List.
+Blockade Order has been added to the Order List.
+Negotiate Order has been added to the Order List.
