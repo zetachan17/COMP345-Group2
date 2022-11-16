@@ -305,6 +305,8 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
         
         break;
     }
+    Notify(this);
+    
     return state;
 }
 
@@ -443,3 +445,11 @@ Deck *GameEngine::getDeck()
 
 // static variable definition
 Deck *GameEngine::deck;
+
+//GameEngine's stringToLog() method
+string GameEngine::stringToLog() {
+
+    string stringLog = "New state is " + stateToString(getState()); + " using transition().";
+    cout << stringLog << endl;
+    return stringLog;
+}

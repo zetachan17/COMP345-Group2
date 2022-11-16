@@ -4,19 +4,31 @@
 #include "Player/PlayerDriver.h"
 #include "Orders/OrdersDriver.h"
 #include "Cards/CardsDriver.h"
+#include "GameEngine/GameEngineDriver.h"    
+
+#include "LoggingObserver/LoggingObserverDriver.h"
+#include "CommandProcessing/CommandProcessingDriver.h"
 #include "GameEngine/GameEngineDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
 
 int main()
 {
-    //P1
-    testCommandProcessor();
-    //P2
+    ////P1
+    //testLoadMaps();
+    ////P2
     //testPlayers();
-    //P3
+    ////P3
     //testOrdersLists();
-    //P4
+    ////P4
     //testCards();
-    //P5
-   //testStartupPhase();
+    ////P5
+    //testGameStates();
+
+    //A2P5
+    testLoggingObserver();
+
+    //
+    //testCommandProcessor();
+
+    //testStartupPhase();
 }

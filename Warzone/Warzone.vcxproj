@@ -128,6 +128,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\LoggingObserver\LoggingObserver.cpp" />
+    <ClCompile Include="Source\LoggingObserver\LoggingObserverDriver.cpp" />
     <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp" />
     <ClCompile Include="Source\CommandProcessing\CommandProcessingDriver.cpp" />
     <ClCompile Include="Source\Cards\CardsDriver.cpp" />
@@ -143,6 +145,8 @@
   <ItemGroup>
     <ClInclude Include="Header\CommandProcessing\CommandProcessing.h" />
     <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h" />
+    <ClInclude Include="Header\LoggingObserver\LoggingObserver.h" />
+    <ClInclude Include="Header\LoggingObserver\LoggingObserverDriver.h" />
     <ClInclude Include="Header\Cards\CardsDriver.h" />
     <ClInclude Include="Header\GameEngine\GameEngine.h" />
     <ClInclude Include="Header\Cards\Cards.h" />

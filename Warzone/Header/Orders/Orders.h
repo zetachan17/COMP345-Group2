@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <utility>
+#include "LoggingObserver/LoggingObserver.h"
 using std::ostream;
 using std::pair;
 using std::string;
@@ -13,7 +14,7 @@ class Territory;
 class Player;
 
 /// Base Order class representing an order issued by the player to then be executed
-class Order
+class Order : public Subject, public ILoggable
 {
 public:
     // constructors
@@ -60,6 +61,9 @@ public:
 
     // decrements the order counter for the round by one
     static void decrementOrderCount();
+
+    //stringToLog
+    string stringToLog();
 
 protected:
     Player *m_player;
@@ -273,7 +277,7 @@ private:
 
 /// OrdersList manages a list of Order objects representing the sequential orders issued by a
 /// player. Orders can be added, moved around, removed, and executed.
-class OrdersList
+class OrdersList : public Subject, public ILoggable
 {
 public:
     // constructors
@@ -281,8 +285,8 @@ public:
     OrdersList(const OrdersList &other);
 
     // destructor
-    ~OrdersList();
-
+    virtual ~OrdersList();
+    
     // assignment operator
     OrdersList &operator=(const OrdersList &ordersList);
 
@@ -301,6 +305,9 @@ public:
 
     // returns the next order and removes it from the list
     Order *nextOrder();
+
+    //stringToLog
+    string stringToLog();
 
 private:
     vector<Order *> m_orders;

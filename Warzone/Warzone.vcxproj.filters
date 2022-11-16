@@ -48,6 +48,11 @@
     <ClCompile Include="Source\Map\MapDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LoggingObserver\LoggingObserver.cpp">
+    <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoggingObserver\LoggingObserverDriver.cpp">
     <ClCompile Include="Source\CommandProcessing\CommandProcessing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -84,6 +89,14 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header\Cards\CardsDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\LoggingObserver\LoggingObserver.h">
+    <ClInclude Include="Header\CommandProcessing\CommandProcessing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\LoggingObserver\LoggingObserverDriver.h">
+    <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header\CommandProcessing\CommandProcessing.h">

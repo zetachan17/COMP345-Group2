@@ -1,6 +1,9 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
+#include <string>
+using std::string;
 
 class MapLoader;
 class Player;
@@ -10,7 +13,13 @@ class Card;
 
 class CommandProcessor;
 
-class GameEngine
+#include "Map/Map.h"
+#include "Player/Player.h"
+#include "LoggingObserver/LoggingObserver.h"
+
+class CommandProcessor;
+
+class GameEngine : public Subject, public ILoggable
 {
 public:
     // all game states
@@ -30,7 +39,7 @@ public:
     GameEngine();                              // default constructor
     GameEngine(const GameEngine &game);        // copy constructor
     GameEngine &operator=(const GameEngine &); // assignment operator
-    ~GameEngine();                             // destructor
+    virtual ~GameEngine();                             // destructor
 
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
@@ -51,6 +60,11 @@ public:
     CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
 
+    //friend string stateToStringC(GameEngine::State state);
+    //friend GameEngine::State getStateC();
+
+    //stringToLog
+    string stringToLog();
 
 private:
     // ENUM, DOES NOT NEED TO BE A POINTER
