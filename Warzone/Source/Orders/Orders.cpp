@@ -161,6 +161,8 @@ void Deploy::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
+
+    Notify(this);
 }
 
 Deploy::~Deploy() {}
@@ -267,6 +269,8 @@ void Advance::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
+
+    Notify(this);
 }
 
 void Advance::battle()
@@ -418,6 +422,8 @@ void Bomb::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
+
+    Notify(this);
 }
 
 Bomb::~Bomb() {}
@@ -486,6 +492,8 @@ void Blockade::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
+
+    Notify(this);
 }
 
 Blockade::~Blockade() {}
@@ -563,6 +571,8 @@ void Airlift::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
+
+    Notify(this);
 }
 
 Airlift::~Airlift() {}
@@ -621,6 +631,8 @@ void Negotiate::execute()
     decrementOrderCount();
     if (m_orderCount == 0)
         turnEnd();
+
+    Notify(this);
 }
 
 Negotiate::~Negotiate() {}
@@ -637,6 +649,8 @@ OrdersList::OrdersList(const OrdersList &other)
 void OrdersList::addOrder(Order *newOrder)
 {
     m_orders.push_back(newOrder);
+
+    Notify(this);
 }
 
 // move() takes in the current position of an order, from a list of current orders shown to the
@@ -724,4 +738,20 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
             cout << i++ << ". " << *order << endl;
         return output;
     }
+}
+
+//stringToLog
+string Order::stringToLog() {
+
+    string stringLog = "Order has been executed. " + m_effect;
+    cout << stringLog << endl;
+    return stringLog;
+}
+
+//stringToLog
+string OrdersList::stringToLog() {
+
+    string stringLog = m_orders.back()->type() + " Order has been added to the Order List.";
+    cout << stringLog << endl;
+    return stringLog;
 }

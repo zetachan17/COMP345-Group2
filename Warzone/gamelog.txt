@@ -1,0 +1,12 @@
+Output of commands:
+loadmap 002_I72_X-29.map has been saved using saveCommand().
+New state is MapLoaded
+validatemap has been saved using saveCommand().
+New state is MapValidated
+addplayer p1 has been saved using saveCommand().
+New state is PlayersAdded
+gamestart has been saved using saveCommand().
+New state is End
+New state is End
+New state is End
+New state is Win
