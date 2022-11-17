@@ -11,10 +11,8 @@
 
 int main()
 {
-    srand(time(0));
-
     //P1
-    //testCommandProcessor();
+    testCommandProcessor();
     //P2
     //testStartupPhase();
     //P3
@@ -22,5 +20,5 @@ int main()
     //P4
     //testOrderExecution();
     //P5
-    testLoggingObserver();
+    //testLoggingObserver();
 }
