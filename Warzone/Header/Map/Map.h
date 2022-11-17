@@ -86,6 +86,7 @@ public:
 	//getters
 	int getBonus();
 	vector<Territory*> getTerritories();
+	string getContinentName();
 
 	friend class Map;
 	friend class Territory;

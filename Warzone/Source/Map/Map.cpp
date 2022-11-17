@@ -599,6 +599,11 @@ vector<Territory*> Continent::getTerritories()
     return territories;
 }
 
+string Continent::getContinentName()
+{
+    return continentName;
+}
+
 int Continent::getBonus()
 {
     return bonus;

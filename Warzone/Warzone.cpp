@@ -6,19 +6,19 @@
 #include "Cards/CardsDriver.h"
 #include "GameEngine/GameEngineDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
+#include "LoggingObserver/LoggingObserverDriver.h"
 #include <iostream>
 
 int main()
 {
-    srand(time(0));
-
     //P1
-    //testCommandProcessor();
+    testCommandProcessor();
     //P2
     //testStartupPhase();
     //P3
-    testMainGameLoop();
+    //testMainGameLoop();
     //P4
     //testOrderExecution();
     //P5
+    //testLoggingObserver();
 }

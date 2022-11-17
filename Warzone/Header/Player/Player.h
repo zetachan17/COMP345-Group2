@@ -83,6 +83,9 @@ public:
 	// resets the player to not have finished issuing orders
 	void resetIsFinishedIssuingOrders();
 
+	// resets the number of armies deployed in orders issued to 0
+	void resetArmiesDeployedThisTurn();
+
 	// calculates the reinforcements for a player based on owned territories and continents
 	int calculateReinforcements(Map* const map);
 private:
