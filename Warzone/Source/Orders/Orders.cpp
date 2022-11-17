@@ -207,7 +207,7 @@ bool Advance::validate()
 
     if (m_source->getOwner() != m_player)
     {
-        m_effect = player() + " does not control " + m_target->getTerritoryName() + ".";
+        m_effect = player() + " does not control " + m_source->getTerritoryName() + ".";
         cout << "~INVALID ORDER~\n";
         return false;
     }
@@ -681,17 +681,17 @@ void OrdersList::remove(int p)
 
 Order *OrdersList::nextOrder(bool deployOnly)
 {
-    Order* temp = nullptr;
+    Order *temp = nullptr;
     if (!(m_orders.empty()))
     {
         temp = m_orders.front();
 
         // only want deploy orders but the next order is not deploy
-        if (deployOnly && dynamic_cast<const Deploy*> (temp) == nullptr)
+        if (deployOnly && dynamic_cast<const Deploy *>(temp) == nullptr)
         {
             return nullptr;
         }
-        
+
         m_orders.erase(m_orders.begin());
         return temp;
     }
@@ -740,16 +740,18 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
     }
 }
 
-//stringToLog
-string Order::stringToLog() {
+// stringToLog
+string Order::stringToLog()
+{
 
     string stringLog = "Order has been executed. " + m_effect;
     cout << stringLog << endl;
     return stringLog;
 }
 
-//stringToLog
-string OrdersList::stringToLog() {
+// stringToLog
+string OrdersList::stringToLog()
+{
 
     string stringLog = m_orders.back()->type() + " Order has been added to the Order List.";
     cout << stringLog << endl;
