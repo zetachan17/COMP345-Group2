@@ -197,7 +197,7 @@ Order *Advance::clone() const
 
 bool Advance::validate()
 {
-    if (m_units > m_source->getArmyUnits())
+    if (m_units > m_source->getArmyUnits() || m_units == 0)
     {
         m_effect = "Invalid number of units. " + m_source->getTerritoryName() +
                    " has a max of " + to_string(m_source->getArmyUnits()) + " available units.";

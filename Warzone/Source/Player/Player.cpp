@@ -356,13 +356,25 @@ void Player::resetIsFinishedIssuingOrders()
 	this->finishedIssuingOrders = false;
 }
 
+void Player::resetArmiesDeployedThisTurn()
+{
+	this->armiesDeployedThisTurn = 0;
+}
+
 int Player::calculateReinforcements(Map* const map)
 {
+	cout << "\n\t-----Calculating reinforcements for player " << playerName << endl;
+
 	int numberOfTerritories = this->getTerritories().size();
 
 	int territoryReinforcements = std::max(numberOfTerritories / 3, 3);
+	
+	cout << "Player " << playerName << " owns " << numberOfTerritories << " territories and receives " <<  territoryReinforcements << " reinforcement army units from territory ownership." << endl;
 
 	int continentBonusReinforcements = this->calculateContinentBonuses(map);
+
+	cout << "Player " << playerName << " receives " <<  continentBonusReinforcements << " reinforcement army units in continent control bonuses." << endl;
+
 
 	return territoryReinforcements + continentBonusReinforcements;
 }
@@ -374,6 +386,7 @@ int Player::calculateContinentBonuses(Map* const map)
 	{
 		if (this->ownsContinent(continent))
 		{
+			cout << "Player " << playerName << " owns " << continent->getContinentName() << " and will receive a " << continent->getBonus() << " continent control bonus." << endl;
 			totalBonus += continent->getBonus();
 		}
 	}

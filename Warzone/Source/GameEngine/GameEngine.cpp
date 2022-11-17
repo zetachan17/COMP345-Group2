@@ -474,7 +474,7 @@ void GameEngine::issueOrdersPhase()
 
     for (Player* player : activePlayers) {
         player->resetIsFinishedIssuingOrders();
-        //std::cout << "Player: " << player->getPlayerName() << " : " << player->isFinishedIssuingOrders() << endl;
+        player->resetArmiesDeployedThisTurn();
     }
 }
 
