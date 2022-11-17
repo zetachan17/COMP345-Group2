@@ -270,6 +270,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
         
         break;
     }
+
+    Notify(this);
+
     return state;
 }
 
@@ -620,4 +623,12 @@ void GameEngine::checkForVictory(MapLoader* mLoader)
     {
         std::cout << "No victories detected this turn." << endl;
     }
+}
+
+//GameEngine's stringToLog() method
+string GameEngine::stringToLog() {
+
+    string stringLog = "New state is " + stateToString(getState()); +" using transition().";
+    cout << stringLog << endl;
+    return stringLog;
 }

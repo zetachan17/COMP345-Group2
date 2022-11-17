@@ -6,6 +6,7 @@
 #include "Cards/CardsDriver.h"
 #include "GameEngine/GameEngineDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
+#include "LoggingObserver/LoggingObserverDriver.h"
 #include <iostream>
 
 int main()
@@ -17,8 +18,9 @@ int main()
     //P2
     //testStartupPhase();
     //P3
-    testMainGameLoop();
+    //testMainGameLoop();
     //P4
     //testOrderExecution();
     //P5
+    testLoggingObserver();
 }
