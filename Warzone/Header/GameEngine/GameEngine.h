@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "LoggingObserver/LoggingObserver.h"
 
 class MapLoader;
 class Player;
@@ -10,7 +11,7 @@ class Card;
 
 class CommandProcessor;
 
-class GameEngine
+class GameEngine : public Subject, public ILoggable
 {
 public:
     // all game states
@@ -30,7 +31,7 @@ public:
     GameEngine();                              // default constructor
     GameEngine(const GameEngine &game);        // copy constructor
     GameEngine &operator=(const GameEngine &); // assignment operator
-    ~GameEngine();                             // destructor
+    virtual ~GameEngine();                             // destructor
 
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
@@ -55,6 +56,10 @@ public:
 
     // contains logic for the game loop after initial setup
     void mainGameLoop(MapLoader *mLoader);
+
+    //stringToLog
+    string stringToLog();
+
 private:
     // ENUM, DOES NOT NEED TO BE A POINTER
     State state;

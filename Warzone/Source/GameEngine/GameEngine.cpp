@@ -243,9 +243,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
                 this->state = GameEngine::State::Start;    
                (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState()));//Saving the effect inside the Command object as a string
                commandProcessor->nbCommands++;
-                delete mLoader->getMap();
-                delete mLoader;
-                mLoader = nullptr;
+                //delete mLoader->getMap();
+                //delete mLoader;
+                //mLoader = nullptr;
                 break;
             }
             else //In this case the command must have been "quit"
@@ -270,6 +270,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
         
         break;
     }
+
+    Notify(this);
+
     return state;
 }
 
@@ -471,7 +474,7 @@ void GameEngine::issueOrdersPhase()
 
     for (Player* player : activePlayers) {
         player->resetIsFinishedIssuingOrders();
-        //std::cout << "Player: " << player->getPlayerName() << " : " << player->isFinishedIssuingOrders() << endl;
+        player->resetArmiesDeployedThisTurn();
     }
 }
 
@@ -620,4 +623,12 @@ void GameEngine::checkForVictory(MapLoader* mLoader)
     {
         std::cout << "No victories detected this turn." << endl;
     }
+}
+
+//GameEngine's stringToLog() method
+string GameEngine::stringToLog() {
+
+    string stringLog = "New state is " + stateToString(getState()); +" using transition().";
+    cout << stringLog << endl;
+    return stringLog;
 }
