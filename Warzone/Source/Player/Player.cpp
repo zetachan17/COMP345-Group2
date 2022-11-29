@@ -3,6 +3,7 @@
 #include "Map/Map.h"
 #include "Orders/Orders.h"
 #include "GameEngine/GameEngine.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 
 #include <vector>
 #include <iostream>
@@ -11,7 +12,13 @@ using std::endl;
 using std::vector;
 
 Player::Player(const string &name) : playerName(name), hand(new Hand), ordersList(new OrdersList),
-									 reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false) {}
+									 reinforcementPool(0), armiesDeployedThisTurn(0),
+									 finishedIssuingOrders(false), strategy(nullptr) {}
+
+Player::Player(PlayerStrategy *pStrategy) : Player(pStrategy->getStrategyType() + " Player")
+{
+	strategy = pStrategy;
+}
 
 void Player::addTerritory(Territory *territory)
 {
@@ -74,6 +81,7 @@ Player::~Player()
 	territories.clear();
 	delete hand;
 	delete ordersList;
+	delete strategy;
 }
 
 Player &Player::operator=(const Player &otherPlayer)
@@ -112,11 +120,17 @@ ostream &operator<<(ostream &output, const Player &player)
 
 vector<Territory *> Player::toDefend()
 {
+	if (strategy != nullptr)
+		return strategy->toDefend();
+
 	return territories;
 }
 
 vector<Territory *> Player::toAttack()
 {
+	if (strategy != nullptr)
+		return strategy->toAttack();
+
 	vector<Territory *> allAdjacentTerritories;
 
 	for (Territory *territory : territories)
@@ -166,14 +180,18 @@ Hand *Player::getHand()
 
 void Player::issueOrder()
 {
+	if (strategy != nullptr)
+		return strategy->issueOrder();
+
 	cout << *this << endl;
 
-	if (armiesDeployedThisTurn < reinforcementPool) {
+	if (armiesDeployedThisTurn < reinforcementPool)
+	{
 		this->issueDeployOrder();
 	}
 	else
 	{
-		
+
 		int randomChoice = rand() % (100);
 
 		if (randomChoice <= 25)
@@ -190,7 +208,6 @@ void Player::issueOrder()
 			{
 				this->issueAdvanceOrder();
 			}
-			
 		}
 		else
 		{
@@ -219,7 +236,7 @@ void Player::issueDeployOrder()
 		return;
 	}
 
-	Territory* randomTerritoryToDefend = toDefend()[rand() % (toDefend().size())];
+	Territory *randomTerritoryToDefend = toDefend()[rand() % (toDefend().size())];
 	cout << "Deploying " << armiesToDeploy << " to " << randomTerritoryToDefend->getTerritoryName() << endl;
 
 	ordersList->addOrder(new Deploy(this, armiesToDeploy, randomTerritoryToDefend));
@@ -236,23 +253,24 @@ void Player::issueAdvanceOrder()
 		return;
 	}
 
-	//get random target territory from toAttack
-	Territory* targetTerritory = toAttack()[rand() % (toAttack().size())];
-	Territory* sourceTerritory;
-	
+	// get random target territory from toAttack
+	Territory *targetTerritory = toAttack()[rand() % (toAttack().size())];
+	Territory *sourceTerritory;
+
 	// find a territory adjacent to the target that's in toDefend
-	for(Territory* territoryAdjacentToTarget : targetTerritory->getAdjacentTerritories())
+	for (Territory *territoryAdjacentToTarget : targetTerritory->getAdjacentTerritories())
 	{
-		vector<Territory*> territoriesToDefend = toDefend();
-		if (find_if(territoriesToDefend.begin(), territoriesToDefend.end(), [territoryAdjacentToTarget](Territory* territory) { return territory->getTerritoryName() == territoryAdjacentToTarget->getTerritoryName(); }) == territoriesToDefend.end())
-        {
-            continue;
-        }
+		vector<Territory *> territoriesToDefend = toDefend();
+		if (find_if(territoriesToDefend.begin(), territoriesToDefend.end(), [territoryAdjacentToTarget](Territory *territory)
+					{ return territory->getTerritoryName() == territoryAdjacentToTarget->getTerritoryName(); }) == territoriesToDefend.end())
+		{
+			continue;
+		}
 		sourceTerritory = territoryAdjacentToTarget;
 		break;
 	}
-	
-	//determine how many armies
+
+	// determine how many armies
 	int units = sourceTerritory->getArmyUnits();
 
 	cout << "Advancing " << units << " to " << targetTerritory->getTerritoryName() << " from " << sourceTerritory->getTerritoryName() << endl;
@@ -264,16 +282,15 @@ void Player::issueAirliftOrder()
 {
 	cout << "Issuing an Airlift order." << endl;
 
-
 	if (toDefend().size() == 0)
 	{
 		return;
 	}
-	//get random territory from toAttack and toDefend
-	Territory* sourceTerritory = toDefend()[rand() % (toDefend().size())];
-	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
+	// get random territory from toAttack and toDefend
+	Territory *sourceTerritory = toDefend()[rand() % (toDefend().size())];
+	Territory *targetTerritory = toDefend()[rand() % (toDefend().size())];
 
-	//determine how many armies
+	// determine how many armies
 	int units = sourceTerritory->getArmyUnits();
 
 	cout << "Airlifting " << units << " from " << sourceTerritory->getTerritoryName() << " to " << targetTerritory->getTerritoryName() << endl;
@@ -290,7 +307,7 @@ void Player::issueBombOrder()
 		return;
 	}
 
-	Territory* targetTerritory = toAttack()[rand() % (toAttack().size())];
+	Territory *targetTerritory = toAttack()[rand() % (toAttack().size())];
 
 	cout << "Bombing " << targetTerritory->getTerritoryName() << endl;
 	ordersList->addOrder(new Bomb(this, targetTerritory));
@@ -305,7 +322,7 @@ void Player::issueBlockadeOrder()
 		return;
 	}
 
-	Territory* targetTerritory = toDefend()[rand() % (toDefend().size())];
+	Territory *targetTerritory = toDefend()[rand() % (toDefend().size())];
 	cout << "Blockading " << targetTerritory->getTerritoryName() << endl;
 
 	ordersList->addOrder(new Blockade(this, targetTerritory));
@@ -315,9 +332,9 @@ void Player::issueNegotiateOrder()
 {
 	cout << "Issuing a Negotiate order." << endl;
 
-	Player* targetPlayer = nullptr;
+	Player *targetPlayer = nullptr;
 
-	for (Player* player : GameEngine::getPlayers())
+	for (Player *player : GameEngine::getPlayers())
 	{
 		if (player->getPlayerName() != this->playerName)
 		{
@@ -341,7 +358,7 @@ string Player::getPlayerName()
 	return playerName;
 }
 
-vector<Territory*> Player::getTerritories() const
+vector<Territory *> Player::getTerritories() const
 {
 	return territories;
 }
@@ -361,28 +378,27 @@ void Player::resetArmiesDeployedThisTurn()
 	this->armiesDeployedThisTurn = 0;
 }
 
-int Player::calculateReinforcements(Map* const map)
+int Player::calculateReinforcements(Map *const map)
 {
 	cout << "\n\t-----Calculating reinforcements for player " << playerName << endl;
 
 	int numberOfTerritories = this->getTerritories().size();
 
 	int territoryReinforcements = std::max(numberOfTerritories / 3, 3);
-	
-	cout << "Player " << playerName << " owns " << numberOfTerritories << " territories and receives " <<  territoryReinforcements << " reinforcement army units from territory ownership." << endl;
+
+	cout << "Player " << playerName << " owns " << numberOfTerritories << " territories and receives " << territoryReinforcements << " reinforcement army units from territory ownership." << endl;
 
 	int continentBonusReinforcements = this->calculateContinentBonuses(map);
 
-	cout << "Player " << playerName << " receives " <<  continentBonusReinforcements << " reinforcement army units in continent control bonuses." << endl;
-
+	cout << "Player " << playerName << " receives " << continentBonusReinforcements << " reinforcement army units in continent control bonuses." << endl;
 
 	return territoryReinforcements + continentBonusReinforcements;
 }
 
-int Player::calculateContinentBonuses(Map* const map)
+int Player::calculateContinentBonuses(Map *const map)
 {
 	int totalBonus = 0;
-	for (Continent* continent : map->getContinents())
+	for (Continent *continent : map->getContinents())
 	{
 		if (this->ownsContinent(continent))
 		{
@@ -392,14 +408,15 @@ int Player::calculateContinentBonuses(Map* const map)
 	}
 
 	return totalBonus;
-
 }
 
-bool Player::ownsContinent(Continent* continent)
+bool Player::ownsContinent(Continent *continent)
 {
-	for (auto territory : continent->getTerritories()) 
+	for (auto territory : continent->getTerritories())
 	{
-		if (std::find_if(this->territories.begin(), this->territories.end(), [territory](Territory* ownedTerritory){ return territory->getTerritoryName() == ownedTerritory->getTerritoryName(); }) == this->territories.end()) {
+		if (std::find_if(this->territories.begin(), this->territories.end(), [territory](Territory *ownedTerritory)
+						 { return territory->getTerritoryName() == ownedTerritory->getTerritoryName(); }) == this->territories.end())
+		{
 			return false;
 		}
 		return true;
@@ -407,7 +424,12 @@ bool Player::ownsContinent(Continent* continent)
 	return false;
 }
 
-Order* Player::nextOrder(bool deployOnly)
+Order *Player::nextOrder(bool deployOnly)
 {
 	return ordersList->nextOrder(deployOnly);
+}
+
+void Player::setPlayerStrategy(PlayerStrategy *pStrategy)
+{
+	strategy = pStrategy;
 }

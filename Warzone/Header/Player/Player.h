@@ -13,6 +13,7 @@ class Map;
 class Hand;
 class Order;
 class OrdersList;
+class PlayerStrategy;
 
 class Player
 {
@@ -20,6 +21,7 @@ public:
 	// constructors
 	Player();
 	Player(const string &name);
+	Player(PlayerStrategy *pStrategy);
 	Player(const Player &player);
 
 	// destructor
@@ -40,10 +42,9 @@ public:
 	// Used to test specific orders
 	void issueOrder(Order *order);
 
-
 	// REQUIRED - the player issues an order by adding it to their orderslist
 	void issueOrder();
-	
+
 	// methods for creating and issuing a specific order
 	void issueDeployOrder();
 	void issueAdvanceOrder();
@@ -53,11 +54,11 @@ public:
 	void issueNegotiateOrder();
 
 	// returns pointer to player's next order
-	Order* nextOrder(bool deployOnly = false);
+	Order *nextOrder(bool deployOnly = false);
 
 	string getPlayerName();
-	
-	vector<Territory*> getTerritories() const;
+
+	vector<Territory *> getTerritories() const;
 
 	// adds a territory to the player and updates the territory's ownership
 	void addTerritory(Territory *territory);
@@ -87,7 +88,11 @@ public:
 	void resetArmiesDeployedThisTurn();
 
 	// calculates the reinforcements for a player based on owned territories and continents
-	int calculateReinforcements(Map* const map);
+	int calculateReinforcements(Map *const map);
+
+	// sets a new player strategy
+	void setPlayerStrategy(PlayerStrategy *pStrategy);
+
 private:
 	string playerName;
 	Hand *hand;
@@ -95,12 +100,13 @@ private:
 	int reinforcementPool;
 	bool finishedIssuingOrders;
 	int armiesDeployedThisTurn;
-	vector<Territory*> territories;
-	
+	vector<Territory *> territories;
+	PlayerStrategy *strategy;
+
 	// plays a random card from the players hand
 	void playCard();
 
 	// helper method for calculating reinforcements
-	int calculateContinentBonuses(Map* const map);
-	bool ownsContinent(Continent* continent);
+	int calculateContinentBonuses(Map *const map);
+	bool ownsContinent(Continent *continent);
 };
