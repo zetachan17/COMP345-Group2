@@ -83,6 +83,11 @@ public:
 	// adds a territory to the list of territory in this continent
 	void addTerritoryToContinent(Territory *territory);
 
+	//getters
+	int getBonus();
+	vector<Territory*> getTerritories();
+	string getContinentName();
+
 	friend class Map;
 	friend class Territory;
 };

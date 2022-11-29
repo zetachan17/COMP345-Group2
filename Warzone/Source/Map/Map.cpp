@@ -588,6 +588,27 @@ vector<Territory *> Map::getTerritories()
     return territories;
 }
 
+vector<Continent*> Map::getContinents()
+{
+    return continents;
+}
+
+
+vector<Territory*> Continent::getTerritories()
+{
+    return territories;
+}
+
+string Continent::getContinentName()
+{
+    return continentName;
+}
+
+int Continent::getBonus()
+{
+    return bonus;
+}
+
 ostream &operator<<(ostream &os, const Map &map)
 {
     for (Continent *x : map.continents)

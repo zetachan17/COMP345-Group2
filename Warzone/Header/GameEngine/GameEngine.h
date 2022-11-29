@@ -2,20 +2,13 @@
 
 #include <iostream>
 #include <vector>
-#include <string>
-using std::string;
+#include "LoggingObserver/LoggingObserver.h"
 
 class MapLoader;
 class Player;
 class Deck;
 class Card;
 
-
-class CommandProcessor;
-
-#include "Map/Map.h"
-#include "Player/Player.h"
-#include "LoggingObserver/LoggingObserver.h"
 
 class CommandProcessor;
 
@@ -39,7 +32,7 @@ public:
     GameEngine();                              // default constructor
     GameEngine(const GameEngine &game);        // copy constructor
     GameEngine &operator=(const GameEngine &); // assignment operator
-    ~GameEngine();                             // destructor
+    virtual ~GameEngine();                             // destructor
 
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
@@ -59,6 +52,9 @@ public:
 
     CommandProcessor* initializeCommandProcessor();
     friend class GameProcessor;
+
+    // contains logic for the game loop after initial setup
+    void mainGameLoop(MapLoader *mLoader);
 
     //stringToLog
     string stringToLog();

@@ -202,7 +202,7 @@ Order *Advance::clone() const
 
 bool Advance::validate()
 {
-    if (m_units > m_source->getArmyUnits())
+    if (m_units > m_source->getArmyUnits() || m_units == 0)
     {
         m_effect = "Invalid number of units. " + m_source->getTerritoryName() +
                    " has a max of " + to_string(m_source->getArmyUnits()) + " available units.";
@@ -212,7 +212,7 @@ bool Advance::validate()
 
     if (m_source->getOwner() != m_player)
     {
-        m_effect = player() + " does not control " + m_target->getTerritoryName() + ".";
+        m_effect = player() + " does not control " + m_source->getTerritoryName() + ".";
         cout << "~INVALID ORDER~\n";
         return false;
     }
@@ -692,6 +692,13 @@ Order *OrdersList::nextOrder()
     if (!(m_orders.empty()))
     {
         temp = m_orders.front();
+
+        // only want deploy orders but the next order is not deploy
+        if (deployOnly && dynamic_cast<const Deploy *>(temp) == nullptr)
+        {
+            return nullptr;
+        }
+
         m_orders.erase(m_orders.begin());
         return temp;
     }
@@ -740,17 +747,18 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
     }
 }
 
+// stringToLog
+string Order::stringToLog()
+{
 
-//stringToLog
-string Order::stringToLog() {
-    
     string stringLog = "Order has been executed. " + m_effect;
     cout << stringLog << endl;
     return stringLog;
 }
 
-//stringToLog
-string OrdersList::stringToLog() {
+// stringToLog
+string OrdersList::stringToLog()
+{
 
     string stringLog = m_orders.back()->type() + " Order has been added to the Order List.";
     cout << stringLog << endl;

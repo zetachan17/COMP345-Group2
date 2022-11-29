@@ -286,7 +286,6 @@ public:
 
     // destructor
     virtual ~OrdersList();
-    
     // assignment operator
     OrdersList &operator=(const OrdersList &ordersList);
 
@@ -305,6 +304,9 @@ public:
 
     // returns the next order and removes it from the list
     Order *nextOrder();
+
+    //stringToLog
+    string stringToLog();
 
     //stringToLog
     string stringToLog();

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-struct Command : public Subject, public ILoggable
+class Command : public Subject, public ILoggable
 {
 private:
 	string commandName;
@@ -22,7 +22,7 @@ public:
 	Command(const Command& command);
 
 	//Destructor
-	~Command();
+	virtual ~Command();
 
 	//Another constructor useful for the saveCommand() method
 	Command(string cmdName);
@@ -39,7 +39,8 @@ public:
 	friend GameEngine::State GameEngine::startupPhase(GameEngine::State state, CommandProcessor*commandProcessor);
 
 	//stringToLog
-    string stringToLog();
+	string stringToLog();
+	string effectToLog;
 };
 
 
@@ -80,7 +81,7 @@ public:
 	friend GameEngine::State GameEngine::getState();
 
 	//stringToLog
-    string stringToLog();
+	string stringToLog();
 };
 
 class FileLineReader {

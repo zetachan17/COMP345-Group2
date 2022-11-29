@@ -93,6 +93,7 @@ ostream& operator<<(std::ostream& output, const CommandProcessor& adapter)
 void Command::saveEffect(Command* cmd, string effectName)
 {
 	cmd->commandEffect = effectName;
+	effectToLog = effectName;
 	Notify(this);
 }
 
@@ -178,9 +179,9 @@ Command* CommandProcessor::saveCommand(string commandName) //remember to track w
 	Command* cmd = new Command(commandName);
 	listCommands.push_back(cmd);
 	std::cout << "The command's name is : " << cmd->commandName << std::endl;
-	
+
 	Notify(this);
-	
+
 	return cmd;
 }
 
@@ -405,7 +406,7 @@ string CommandProcessor::stringToLog() {
 //Command's stringToLog() method
 string Command::stringToLog() {
 
-	string stringLog = "saveEffect() method saved the transition.";
+	string stringLog = "saveEffect() method saved the transition to the " + effectToLog + " state inside the commandEffect attribute.";
 	cout << stringLog << endl;
 	return stringLog;
 }

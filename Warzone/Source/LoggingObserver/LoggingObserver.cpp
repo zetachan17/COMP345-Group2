@@ -38,14 +38,15 @@ void Subject::Detach(Observer* o) {
 	observers->remove(o);
 }
 
+//Notify Method
 void Subject::Notify(ILoggable* ilog) {
+
 	std::cout << "Notify(Subject) has been called." << std::endl;
 	list<Observer*>::iterator i = observers->begin();
 	for (; i != observers->end(); ++i) {
 		(*i)->Update(ilog);
 	}
 }
-
 
 //LogObserver
 LogObserver::LogObserver() {
@@ -84,12 +85,13 @@ LogObserver::LogObserver(GameEngine* transition) {
 	subjectT->Attach(this);
 }
 
+//Update Method
 void LogObserver::Update(ILoggable* ilog) {
 
 	string output = ilog->stringToLog();
 	std::ofstream gameLog;
 	gameLog.open("gamelog.txt", std::ios_base::app);
-	gameLog  << output << "\n";
+	gameLog << output << "\n";
 	gameLog.close();
-	
+
 }

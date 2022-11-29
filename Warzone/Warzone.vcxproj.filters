@@ -42,9 +42,6 @@
     <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\PlayerDriver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Map\MapDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,6 +54,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\CommandProcessing\CommandProcessingDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoggingObserver\LoggingObserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoggingObserver\LoggingObserverDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -103,6 +106,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header\CommandProcessing\CommandProcessingDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\LoggingObserver\LoggingObserver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\LoggingObserver\LoggingObserverDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
