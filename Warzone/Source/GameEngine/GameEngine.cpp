@@ -60,6 +60,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
     switch (state)
     {
     case GameEngine::State::Start:
+        activePlayers.clear();
         std::cout << "Welcome to Warzone!" << std::endl;
         commandProcessor->getCommand(commandProcessor); //Getting the command from the user
         if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName) == "NULL")
