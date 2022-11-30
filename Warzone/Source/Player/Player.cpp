@@ -36,11 +36,6 @@ void Player::removeTerritory(Territory *territory)
 	}
 }
 
-void Player::issueOrder(Order *order)
-{
-	ordersList->addOrder(order);
-}
-
 void Player::addReinforcements(int units)
 {
 	cout << "Player " << getPlayerName() << " received " << units << " armies." << endl;
@@ -51,6 +46,11 @@ void Player::addReinforcements(int units)
 int Player::getReinforcementPool() const
 {
 	return reinforcementPool;
+}
+
+int Player::getArmiesDeployedThisTurn() const
+{
+	return armiesDeployedThisTurn;
 }
 
 const string &Player::getPlayerName() const
@@ -120,57 +120,12 @@ ostream &operator<<(ostream &output, const Player &player)
 
 vector<Territory *> Player::toDefend()
 {
-	if (strategy != nullptr)
-		return strategy->toDefend();
-
-	return territories;
+	return strategy->toDefend();
 }
 
 vector<Territory *> Player::toAttack()
 {
-	if (strategy != nullptr)
-		return strategy->toAttack();
-
-	vector<Territory *> allAdjacentTerritories;
-
-	for (Territory *territory : territories)
-	{
-		vector<Territory *> currentAdjacentTerritories = territory->getAdjacentTerritories();
-		allAdjacentTerritories.insert(allAdjacentTerritories.end(),
-									  currentAdjacentTerritories.begin(),
-									  currentAdjacentTerritories.end());
-	}
-
-	// remove duplicates
-	for (int i = 0; i < allAdjacentTerritories.size(); i++)
-	{
-		for (int j = i + 1; j < allAdjacentTerritories.size();)
-		{
-			if (allAdjacentTerritories[i]->getTerritoryName() ==
-				allAdjacentTerritories[j]->getTerritoryName())
-			{
-				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
-				continue;
-			}
-			j++;
-		}
-	}
-
-	// remove the player's territories
-	for (int i = 0; i < territories.size(); i++)
-	{
-		for (int j = 0; j < allAdjacentTerritories.size();)
-		{
-			if (territories[i]->getTerritoryName() ==
-				allAdjacentTerritories[j]->getTerritoryName())
-			{
-				allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
-				continue;
-			}
-			j++;
-		}
-	}
-	return allAdjacentTerritories;
+	return strategy->toAttack();
 }
 
 Hand *Player::getHand()
@@ -180,53 +135,25 @@ Hand *Player::getHand()
 
 void Player::issueOrder()
 {
-	if (strategy != nullptr)
-		return strategy->issueOrder();
+	strategy->issueOrder();
+}
 
-	cout << *this << endl;
-
-	if (armiesDeployedThisTurn < reinforcementPool)
-	{
-		this->issueDeployOrder();
-	}
-	else
-	{
-
-		int randomChoice = rand() % (100);
-
-		if (randomChoice <= 25)
-		{
-			this->issueAdvanceOrder();
-		}
-		else if (randomChoice <= 75)
-		{
-			if (hand->getCards().size() != 0)
-			{
-				this->playCard();
-			}
-			else
-			{
-				this->issueAdvanceOrder();
-			}
-		}
-		else
-		{
-			this->finishedIssuingOrders = true;
-		}
-	}
+void Player::addToOrdersList(Order *order)
+{
+	ordersList->addOrder(order);
 }
 
 void Player::issueDeployOrder()
 {
 	cout << "Issuing a Deploy order." << endl;
-	int remainingArmiesToDeploy = reinforcementPool - armiesDeployedThisTurn;
-	cout << remainingArmiesToDeploy << " armies remain available in their reinforcement pool." << endl;
+	int remainingUnitsToDeploy = reinforcementPool - armiesDeployedThisTurn;
+	cout << remainingUnitsToDeploy << " armies remain available in their reinforcement pool." << endl;
 
-	int armiesToDeploy = remainingArmiesToDeploy;
+	int armiesToDeploy = remainingUnitsToDeploy;
 
-	if (remainingArmiesToDeploy > 10)
+	if (remainingUnitsToDeploy > 10)
 	{
-		int maximumArmies = std::min(remainingArmiesToDeploy, 30);
+		int maximumArmies = std::min(remainingUnitsToDeploy, 30);
 		int minimumArmies = 10;
 		armiesToDeploy = rand() % (maximumArmies - minimumArmies + 1) + minimumArmies;
 	}
@@ -373,11 +300,6 @@ void Player::resetIsFinishedIssuingOrders()
 	this->finishedIssuingOrders = false;
 }
 
-void Player::resetArmiesDeployedThisTurn()
-{
-	this->armiesDeployedThisTurn = 0;
-}
-
 int Player::calculateReinforcements(Map *const map)
 {
 	cout << "\n\t-----Calculating reinforcements for player " << playerName << endl;
@@ -427,6 +349,11 @@ bool Player::ownsContinent(Continent *continent)
 Order *Player::nextOrder(bool deployOnly)
 {
 	return ordersList->nextOrder(deployOnly);
+}
+
+void Player::setArmiesDeployedThisTurn(int deployed)
+{
+	armiesDeployedThisTurn = deployed;
 }
 
 void Player::setPlayerStrategy(PlayerStrategy *pStrategy)

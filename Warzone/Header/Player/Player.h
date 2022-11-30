@@ -39,9 +39,6 @@ public:
 	// REQUIRED - lists territories that the player is able to attack
 	vector<Territory *> toAttack();
 
-	// Used to test specific orders
-	void issueOrder(Order *order);
-
 	// REQUIRED - the player issues an order by adding it to their orderslist
 	void issueOrder();
 
@@ -72,6 +69,9 @@ public:
 	// returns number of army units in the reinforcement pool
 	int getReinforcementPool() const;
 
+	// returns number of army units deployed in the current turn
+	int getArmiesDeployedThisTurn() const;
+
 	// returns string of player's name
 	const string &getPlayerName() const;
 
@@ -84,14 +84,17 @@ public:
 	// resets the player to not have finished issuing orders
 	void resetIsFinishedIssuingOrders();
 
-	// resets the number of armies deployed in orders issued to 0
-	void resetArmiesDeployedThisTurn();
+	// sets the number of armies deployed this turn
+	void setArmiesDeployedThisTurn(int deployed);
 
 	// calculates the reinforcements for a player based on owned territories and continents
 	int calculateReinforcements(Map *const map);
 
 	// sets a new player strategy
 	void setPlayerStrategy(PlayerStrategy *pStrategy);
+
+	// adds an issued order to the player's orders list
+	void addToOrdersList(Order *order);
 
 private:
 	string playerName;

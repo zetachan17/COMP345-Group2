@@ -14,7 +14,7 @@ class PlayerStrategy
 public:
     // constructors
     PlayerStrategy();
-    PlayerStrategy(Player *player, const string &type);
+    PlayerStrategy(Player *pl, const string &type);
 
     // destructor
     virtual ~PlayerStrategy();
@@ -28,8 +28,8 @@ public:
     string getStrategyType() const;
 
 protected:
-    Player *mPlayer;
-    string mStrategyType;
+    Player *player;
+    string strategyType;
 };
 
 // Human player strategy: requires user input to make decisions
@@ -37,7 +37,7 @@ class HumanPlayerStrategy : public PlayerStrategy
 {
 public:
     HumanPlayerStrategy();
-    HumanPlayerStrategy(Player *player);
+    HumanPlayerStrategy(Player *pl);
 
     ~HumanPlayerStrategy();
 
@@ -46,6 +46,9 @@ public:
     vector<Territory *> toDefend() override;
 
     vector<Territory *> toAttack() override;
+
+private:
+    void issueDeployOrder(const int deployedThisTurn, const int reinforcementPool);
 };
 
 // Computer player that focuses on attack (deploys or advances armies on its strongest country,
@@ -54,7 +57,7 @@ class AggressivePlayerStrategy : public PlayerStrategy
 {
 public:
     AggressivePlayerStrategy();
-    AggressivePlayerStrategy(Player *player);
+    AggressivePlayerStrategy(Player *pl);
 
     ~AggressivePlayerStrategy();
 
@@ -71,7 +74,7 @@ class BenevolentPlayerStrategy : public PlayerStrategy
 {
 public:
     BenevolentPlayerStrategy();
-    BenevolentPlayerStrategy(Player *player);
+    BenevolentPlayerStrategy(Player *pl);
 
     ~BenevolentPlayerStrategy();
 
@@ -87,7 +90,7 @@ class NeutralPlayerStrategy : public PlayerStrategy
 {
 public:
     NeutralPlayerStrategy();
-    NeutralPlayerStrategy(Player *player);
+    NeutralPlayerStrategy(Player *pl);
 
     ~NeutralPlayerStrategy();
 
@@ -104,7 +107,7 @@ class CheaterPlayerStrategy : public PlayerStrategy
 {
 public:
     CheaterPlayerStrategy();
-    CheaterPlayerStrategy(Player *player);
+    CheaterPlayerStrategy(Player *pl);
 
     ~CheaterPlayerStrategy();
 
