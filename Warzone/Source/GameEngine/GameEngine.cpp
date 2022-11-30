@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <regex>
+#include <sstream>
 #include <string>
 
 GameEngine::GameEngine()
@@ -60,6 +61,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor* comman
     switch (state)
     {
     case GameEngine::State::Start:
+        activePlayers.clear();
         std::cout << "Welcome to Warzone!" << std::endl;
         commandProcessor->getCommand(commandProcessor); //Getting the command from the user
         if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName) == "NULL")
@@ -376,23 +378,24 @@ CommandProcessor* GameEngine::initializeCommandProcessor()
 {
     CommandProcessor* commandProcessor;
     string userInput;
-    std::regex fileRegex("-file");
+    std::regex fileRegex("-file ");
     
     std::cout << "Please choose if you want the game accept commands form the console (-console) or from a file (-file filename)" << std::endl;
     std::getline(cin, userInput);
+
+    processTournamentCommand(userInput);
     
     if (userInput == "-console")
     {   
         commandProcessor = new CommandProcessor();
         
     }
-    else if (std::regex_search(userInput, fileRegex))
+    else if (!(userInput == "-file") && std::regex_search(userInput, fileRegex))
     {
         string fileName = userInput.substr(6);
         std::cout << "The file name is:"<<fileName << std::endl;
         FileLineReader* fileLineReader = new FileLineReader();
         commandProcessor = new FileCommandProcessorAdapter(fileLineReader,fileName);
-        
     }
     else
     {
@@ -625,6 +628,78 @@ void GameEngine::checkForVictory(MapLoader* mLoader)
     }
 }
 
+std::vector<std::string> GameEngine::processTournamentCommand(string userinput)
+{
+    stringstream inputstream(userinput);
+    std::string segment;
+    std::vector<std::string> segmentlist;
+    std::vector<std::vector<std::string>> commandlist;
+    std::vector<std::string> commands;
+    std::regex commaRegex(",");
+    int vectorIndex = -1;
+    
+    while (std::getline(inputstream, segment, '-'))
+    {
+        segmentlist.push_back(segment);
+    }
+    
+    for (string i:segmentlist)
+    {
+        stringstream commandstream(i);
+        std::string command;
+
+        while (std::getline(commandstream, command, ' '))
+        {
+            if (command == "M" || command == "P" || command == "G" || command == "D")
+            {
+                vectorIndex++;
+                commandlist.push_back(std::vector<std::string>());
+                continue;
+            }
+            
+            if (regex_search(command, commaRegex))
+            {
+                int commaIndex = command.find(",");
+                command = command.substr(0, commaIndex);
+            }
+            
+            commandlist[vectorIndex].push_back(command);
+        }
+    }
+
+    int numMap = static_cast<int>(commandlist[0].size());
+    int numGame = std::stoi(commandlist[2][0]);
+    
+    for (int m = 0; m < numMap; ++m)
+    {
+        for (int n = 0; n < numGame; ++n)
+        {
+            std::string loadmapCommand = "loadmap " + commandlist[0][m];
+            commands.push_back(loadmapCommand);
+            commands.push_back("validatemap");
+        
+            for (int j = 0; j < commandlist[1].size(); ++j)
+            {
+                std::string addplayerCommand = "addplayer " + commandlist[1][j];
+                commands.push_back(addplayerCommand);
+            }
+
+            commands.push_back("gamestart");
+            commands.push_back("replay");
+        }
+    }
+
+    commands.pop_back();
+    commands.push_back("quit");
+
+    for (std::string i : commands)
+    {
+        std::cout << i << std::endl;
+    }
+
+    return commands;
+}
+
 //GameEngine's stringToLog() method
 string GameEngine::stringToLog() {
 
@@ -632,3 +707,4 @@ string GameEngine::stringToLog() {
     cout << stringLog << endl;
     return stringLog;
 }
+

@@ -1,0 +1,35 @@
+loadmap montreal.map
+validatemap
+addplayer P1
+addplayer P11
+addplayer P111
+gamestart
+replay
+loadmap montreal.map
+validatemap
+addplayer P2
+addplayer P22
+addplayer P222
+gamestart
+replay
+loadmap montreal.map
+validatemap
+addplayer P3
+addplayer P33
+addplayer P333
+gamestart
+replay
+loadmap montreal.map
+validatemap
+addplayer P4
+addplayer P44
+addplayer P444
+gamestart
+replay
+loadmap montreal.map
+validatemap
+addplayer P5
+addplayer P55
+addplayer P555
+gamestart
+quit

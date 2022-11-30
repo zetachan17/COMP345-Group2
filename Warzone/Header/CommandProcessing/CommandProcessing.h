@@ -8,7 +8,7 @@
 
 using namespace std;
 
-struct Command : public Subject, public ILoggable
+class Command : public Subject, public ILoggable
 {
 private:
 	string commandName;
