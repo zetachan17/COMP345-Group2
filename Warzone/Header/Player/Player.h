@@ -22,6 +22,7 @@ public:
 	Player();
 	Player(const string &name);
 	Player(PlayerStrategy *pStrategy);
+	Player(const string &name, PlayerStrategy *pStrategy);
 	Player(const Player &player);
 
 	// destructor
@@ -50,11 +51,25 @@ public:
 	void issueBombOrder();
 	void issueNegotiateOrder();
 
+	// adds an issued order to the player's orders list
+	void addToOrdersList(Order *order);
+
 	// returns pointer to player's next order
 	Order *nextOrder(bool deployOnly = false);
 
-	string getPlayerName();
+	// returns whether the player has finished issuing orders
+	bool isFinishedIssuingOrders() const;
 
+	// resets the player to not have finished issuing orders
+	void setIsFinishedIssuingOrders(bool finishedIssuingOrders);
+
+	// returns pointer to player's hand of cards
+	Hand *getHand();
+
+	// plays a random card from the players hand
+	void playCard();
+
+	// returns vector of pointers to territories controlled by the player
 	vector<Territory *> getTerritories() const;
 
 	// adds a territory to the player and updates the territory's ownership
@@ -63,51 +78,36 @@ public:
 	// removes a territory from the player and sets a territory's owner to null
 	void removeTerritory(Territory *territory);
 
-	// adds army units to a player's reinforcement pool
-	void addReinforcements(int units);
+	// calculates the reinforcements for a player based on owned territories and continents
+	int calculateReinforcements(Map *const map);
 
 	// returns number of army units in the reinforcement pool
 	int getReinforcementPool() const;
 
+	// adds army units to a player's reinforcement pool
+	void addReinforcements(int units);
+
 	// returns number of army units deployed in the current turn
 	int getArmiesDeployedThisTurn() const;
-
-	// returns string of player's name
-	const string &getPlayerName() const;
-
-	// returns pointer to player's hand of cards
-	Hand *getHand();
-
-	// returns whether the player has finished issuing orders
-	bool isFinishedIssuingOrders() const;
-
-	// resets the player to not have finished issuing orders
-	void resetIsFinishedIssuingOrders();
 
 	// sets the number of armies deployed this turn
 	void setArmiesDeployedThisTurn(int deployed);
 
-	// calculates the reinforcements for a player based on owned territories and continents
-	int calculateReinforcements(Map *const map);
+	// returns string of player's name
+	const string &getPlayerName() const;
 
 	// sets a new player strategy
 	void setPlayerStrategy(PlayerStrategy *pStrategy);
 
-	// adds an issued order to the player's orders list
-	void addToOrdersList(Order *order);
-
 private:
+	vector<Territory *> territories;
 	string playerName;
+	PlayerStrategy *strategy;
 	Hand *hand;
 	OrdersList *ordersList;
 	int reinforcementPool;
-	bool finishedIssuingOrders;
 	int armiesDeployedThisTurn;
-	vector<Territory *> territories;
-	PlayerStrategy *strategy;
-
-	// plays a random card from the players hand
-	void playCard();
+	bool finishedIssuingOrders;
 
 	// helper method for calculating reinforcements
 	int calculateContinentBonuses(Map *const map);

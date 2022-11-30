@@ -474,7 +474,7 @@ void GameEngine::issueOrdersPhase()
 
     for (Player *player : activePlayers)
     {
-        player->resetIsFinishedIssuingOrders();
+        player->setIsFinishedIssuingOrders(false);
         player->setArmiesDeployedThisTurn(0);
     }
 }

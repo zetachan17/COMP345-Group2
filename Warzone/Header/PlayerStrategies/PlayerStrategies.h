@@ -14,22 +14,23 @@ class PlayerStrategy
 public:
     // constructors
     PlayerStrategy();
-    PlayerStrategy(Player *pl, const string &type);
+    PlayerStrategy(Player *pl);
 
     // destructor
     virtual ~PlayerStrategy();
 
     virtual void issueOrder() = 0;
 
-    virtual vector<Territory *> toDefend() = 0;
+    virtual vector<Territory *> toDefend() const = 0;
 
-    virtual vector<Territory *> toAttack() = 0;
+    virtual vector<Territory *> toAttack() const = 0;
 
-    string getStrategyType() const;
+    virtual string getStrategyType() const = 0;
+
+    void setPlayer(Player* pl);
 
 protected:
     Player *player;
-    string strategyType;
 };
 
 // Human player strategy: requires user input to make decisions
@@ -43,9 +44,11 @@ public:
 
     void issueOrder() override;
 
-    vector<Territory *> toDefend() override;
+    vector<Territory *> toDefend() const override;
 
-    vector<Territory *> toAttack() override;
+    vector<Territory *> toAttack() const override;
+
+    string getStrategyType() const override;
 
 private:
     void issueDeployOrder(const int deployedThisTurn, const int reinforcementPool);
@@ -63,9 +66,11 @@ public:
 
     void issueOrder() override;
 
-    vector<Territory *> toDefend() override;
+    vector<Territory *> toDefend() const override;
 
-    vector<Territory *> toAttack() override;
+    vector<Territory *> toAttack() const override;
+
+    string getStrategyType() const override;
 };
 
 // Computer player that focuses on protecting its weak countries (deploys or advances armies
@@ -80,9 +85,11 @@ public:
 
     void issueOrder() override;
 
-    vector<Territory *> toDefend() override;
+    vector<Territory *> toDefend() const override;
 
-    vector<Territory *> toAttack() override;
+    vector<Territory *> toAttack() const override;
+
+    string getStrategyType() const override;
 };
 
 // Computer player that never issues any order. If attacked, it becomes an Aggressive player
@@ -96,9 +103,11 @@ public:
 
     void issueOrder() override;
 
-    vector<Territory *> toDefend() override;
+    vector<Territory *> toDefend() const override;
 
-    vector<Territory *> override;
+    vector<Territory *> toAttack() const override;
+
+    string getStrategyType() const override;
 };
 
 // Computer player that automatically conquers all territories that are adjacent to its own
@@ -113,7 +122,9 @@ public:
 
     void issueOrder() override;
 
-    vector<Territory *> toDefend() override;
+    vector<Territory *> toDefend() const override;
 
-    vector<Territory *> toAttack() override;
+    vector<Territory *> toAttack() const override;
+
+    string getStrategyType() const override;
 };
