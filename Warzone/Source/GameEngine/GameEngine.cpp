@@ -674,23 +674,23 @@ std::vector<std::string> GameEngine::processTournamentCommand(string userinput)
     {
         for (int n = 0; n < numGame; ++n)
         {
-            std::string loadmapCommand = "-loadmap " + commandlist[0][m];
+            std::string loadmapCommand = "loadmap " + commandlist[0][m];
             commands.push_back(loadmapCommand);
-            commands.push_back("-validatemap");
+            commands.push_back("validatemap");
         
             for (int j = 0; j < commandlist[1].size(); ++j)
             {
-                std::string addplayerCommand = "-addplayer " + commandlist[1][j];
+                std::string addplayerCommand = "addplayer " + commandlist[1][j];
                 commands.push_back(addplayerCommand);
             }
 
-            commands.push_back("-startgame");
-            commands.push_back("-replay");
+            commands.push_back("gamestart");
+            commands.push_back("replay");
         }
     }
 
     commands.pop_back();
-    commands.push_back("-quit");
+    commands.push_back("quit");
 
     for (std::string i : commands)
     {
