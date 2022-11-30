@@ -95,4 +95,7 @@ private:
 
     void checkForDefeats();
     void checkForVictory(MapLoader* mLoader);
+
+    //A3P2, process tournament command
+    std::vector<std::string> processTournamentCommand(string userinput);
 };
