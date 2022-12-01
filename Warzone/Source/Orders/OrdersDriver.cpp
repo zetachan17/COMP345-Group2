@@ -62,42 +62,42 @@ void testOrderExecution()
      louise->addReinforcements(50);
 
      // issue test deploy orders
-     tina->issueOrder(new Deploy(tina, 10, territories[4]));
-     louise->issueOrder(new Deploy(louise, 11, territories[3]));
-     eugene->issueOrder(new Deploy(eugene, 10, territories[0]));
-     tina->issueOrder(new Deploy(tina, 30, territories[5]));
-     louise->issueOrder(new Deploy(louise, 9, territories[1]));
-     eugene->issueOrder(new Deploy(eugene, 40, territories[3]));
-     tina->issueOrder(new Deploy(tina, 20, territories[6]));
-     louise->issueOrder(new Deploy(louise, 30, territories[2]));
-
-     // issue test advance orders
-     eugene->issueOrder(new Advance(eugene, 35, territories[3], territories[4]));
-     tina->issueOrder(new Advance(tina, 20, territories[5], territories[6]));
-     louise->issueOrder(new Advance(louise, 7, territories[2], territories[4]));
-     eugene->issueOrder(new Advance(eugene, 5, territories[4], territories[0]));
-     tina->issueOrder(new Advance(tina, 4, territories[4], territories[5]));
-     louise->issueOrder(new Advance(louise, 22, territories[2], territories[3]));
-
-     // issue test airlift orders
-     eugene->issueOrder(new Airlift(eugene, 6, territories[4], territories[0]));
-     tina->issueOrder(new Airlift(tina, 2, territories[4], territories[6]));
-     louise->issueOrder(new Airlift(louise, 5, territories[3], territories[5]));
-
-     // issue test bomb orders
-     eugene->issueOrder(new Bomb(eugene, territories[1]));
-     tina->issueOrder(new Bomb(tina, territories[2]));
-
-     // issue test blockade orders
-     louise->issueOrder(new Blockade(louise, territories[3]));
-     eugene->issueOrder(new Blockade(eugene, territories[1]));
-     tina->issueOrder(new Blockade(tina, territories[5]));
-
-     // issue and test negotiate order
-     louise->issueOrder(new Negotiate(louise, eugene));
-     eugene->issueOrder(new Advance(eugene, 4, territories[4], territories[2]));
-     tina->issueOrder(new Advance(tina, 12, territories[6], territories[3]));
-     louise->issueOrder(new Bomb(louise, territories[0]));
+     // tina->issueOrder(new Deploy(tina, 10, territories[4]));
+     // louise->issueOrder(new Deploy(louise, 11, territories[3]));
+     // eugene->issueOrder(new Deploy(eugene, 10, territories[0]));
+     // tina->issueOrder(new Deploy(tina, 30, territories[5]));
+     // louise->issueOrder(new Deploy(louise, 9, territories[1]));
+     // eugene->issueOrder(new Deploy(eugene, 40, territories[3]));
+     // tina->issueOrder(new Deploy(tina, 20, territories[6]));
+     // louise->issueOrder(new Deploy(louise, 30, territories[2]));
+     //
+     // // issue test advance orders
+     // eugene->issueOrder(new Advance(eugene, 35, territories[3], territories[4]));
+     // tina->issueOrder(new Advance(tina, 20, territories[5], territories[6]));
+     // louise->issueOrder(new Advance(louise, 7, territories[2], territories[4]));
+     // eugene->issueOrder(new Advance(eugene, 5, territories[4], territories[0]));
+     // tina->issueOrder(new Advance(tina, 4, territories[4], territories[5]));
+     // louise->issueOrder(new Advance(louise, 22, territories[2], territories[3]));
+     //
+     // // issue test airlift orders
+     // eugene->issueOrder(new Airlift(eugene, 6, territories[4], territories[0]));
+     // tina->issueOrder(new Airlift(tina, 2, territories[4], territories[6]));
+     // louise->issueOrder(new Airlift(louise, 5, territories[3], territories[5]));
+     //
+     // // issue test bomb orders
+     // eugene->issueOrder(new Bomb(eugene, territories[1]));
+     // tina->issueOrder(new Bomb(tina, territories[2]));
+     //
+     // // issue test blockade orders
+     // louise->issueOrder(new Blockade(louise, territories[3]));
+     // eugene->issueOrder(new Blockade(eugene, territories[1]));
+     // tina->issueOrder(new Blockade(tina, territories[5]));
+     //
+     // // issue and test negotiate order
+     // louise->issueOrder(new Negotiate(louise, eugene));
+     // eugene->issueOrder(new Advance(eugene, 4, territories[4], territories[2]));
+     // tina->issueOrder(new Advance(tina, 12, territories[6], territories[3]));
+     // louise->issueOrder(new Bomb(louise, territories[0]));
 
      cout << "*CREATED TEST PLAYERS*\n"
           << "*ASSIGNED TERRITORIES*\n"

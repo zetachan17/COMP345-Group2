@@ -1,10 +1,11 @@
 #pragma once
 
+#include "LoggingObserver/LoggingObserver.h"
+
 #include <vector>
 #include <string>
 #include <iostream>
 #include <utility>
-#include "LoggingObserver/LoggingObserver.h"
 using std::ostream;
 using std::pair;
 using std::string;
@@ -60,9 +61,9 @@ public:
     static Player *neutralPlayer();
 
     // decrements the order counter for the round by one
-    static void decrementOrderCount();
+    static void decrementOrderCount(bool inOrderExecutionPhase);
 
-    //stringToLog
+    // stringToLog
     string stringToLog();
 
 protected:
@@ -76,7 +77,7 @@ protected:
     static Player *m_neutralPlayer;
 
     // clears negotiations and draws cards for players who conquered at least one territory
-    void turnEnd();
+    static void turnEnd();
 };
 
 /// Tells a certain number of army units taken from the reinforcement pool of the player issuing
@@ -307,7 +308,7 @@ public:
     // if deployOnly is true, returns the next order if it is Deploy or returns nullptr
     Order *nextOrder(bool deployOnly = false);
 
-    //stringToLog
+    // stringToLog
     string stringToLog();
 
 private:
