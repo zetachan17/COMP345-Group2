@@ -494,7 +494,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 
 	std::string fileName = "tournamentFile.txt";
 	
-	bool status = std::remove(fileName.c_str());
+	std::remove(fileName.c_str());
 	ofstream tournamentfile(fileName);
 
 	for (std::string i : commands)
