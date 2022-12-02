@@ -383,10 +383,9 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
     std::getline(cin, userInput);
 
     //processTournamentCommand(userInput);
-    
-    if (userInput.substr(0,2) == "-M")
+    //if (userInput.substr(0,2) == "-M")
+    if (userInput.substr(0,13) == "tournament -M")
     {
-        
         std::string tournamentFileName = "tournamentFile.txt";
         FileLineReader* fileLineReader = new FileLineReader();
         FileCommandProcessorAdapter* commandProcessor2 = new FileCommandProcessorAdapter(fileLineReader, tournamentFileName);

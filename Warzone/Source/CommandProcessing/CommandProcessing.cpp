@@ -324,7 +324,8 @@ string FileCommandProcessorAdapter::readCommand()
 {
 	std::ofstream tournamentFile;
 	tournamentFile.open("tournamentFile.txt");
-	if (tournamentFile.is_open()) {
+	if (tournamentFile.is_open())
+	{
 		for (std::string i : this->commands)
 		{
 			tournamentFile << i + "\n";
@@ -427,6 +428,8 @@ string Command::stringToLog() {
 
 std::vector<std::string> CommandProcessor::processTournamentCommand(string userinput)
 {
+	//tournament 
+	userinput = userinput.substr(11);
 	stringstream inputstream(userinput);
 	std::string segment;
 	std::vector<std::string> segmentlist;
@@ -434,7 +437,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	std::vector<std::string> commands;
 	std::regex commaRegex(",");
 	int vectorIndex = -1;
-
+	
 	while (std::getline(inputstream, segment, '-'))
 	{
 		segmentlist.push_back(segment);
@@ -489,11 +492,16 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	commands.pop_back();
 	commands.push_back("quit");
 
+	std::string fileName = "tournamentFile.txt";
+	
+	bool status = std::remove(fileName.c_str());
+	ofstream tournamentfile(fileName);
+
 	for (std::string i : commands)
 	{
-		std::cout << i << std::endl;
+		tournamentfile << i << "\n";
 	}
 	
-
+	tournamentfile.close();
 	return commands;
 }

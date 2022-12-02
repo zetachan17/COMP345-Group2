@@ -1,0 +1,48 @@
+loadmap Map1
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map1
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map1
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map1
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map2
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map2
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map2
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+replay
+loadmap Map2
+validatemap
+addplayer P1
+addplayer P2222
+gamestart
+quit
