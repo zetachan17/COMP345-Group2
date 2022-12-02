@@ -7,18 +7,20 @@
 #include "GameEngine/GameEngineDriver.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
 #include "LoggingObserver/LoggingObserverDriver.h"
+#include "PlayerStrategies/PlayerStrategiesDriver.h"
 #include <iostream>
 
 int main()
 {
     //P1
-    testCommandProcessor();
+    //testCommandProcessor();
     //P2
-    //testStartupPhase();
+    testStartupPhase();
     //P3
     //testMainGameLoop();
     //P4
     //testOrderExecution();
     //P5
     //testLoggingObserver();
+    //testPlayerStrategies();
 }
