@@ -1,21 +1,3 @@
-loadmap 4D_Hypercube.map
-validatemap
-addplayer Aggressive
-addplayer Neutral
-gamestart
-replay
-loadmap 4D_Hypercube.map
-validatemap
-addplayer Aggressive
-addplayer Neutral
-gamestart
-replay
-loadmap 4D_Hypercube.map
-validatemap
-addplayer Aggressive
-addplayer Neutral
-gamestart
-replay
 loadmap montreal.map
 validatemap
 addplayer Aggressive

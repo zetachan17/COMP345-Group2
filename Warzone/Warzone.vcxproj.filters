@@ -119,5 +119,6 @@
     <Text Include="CommandFile\InvalidFile.txt" />
     <Text Include="CommandFile\cmd3.txt" />
     <Text Include="tournamentFile.txt" />
+    <Text Include="CommandFile\tournamentFile.txt" />
   </ItemGroup>
 </Project>
