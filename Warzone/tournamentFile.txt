@@ -1,48 +1,36 @@
-loadmap Map1
+loadmap 4D_Hypercube.map
 validatemap
-addplayer P1
-addplayer P2
+addplayer Aggressive
+addplayer Neutral
 gamestart
 replay
-loadmap Map1
+loadmap 4D_Hypercube.map
 validatemap
-addplayer P1
-addplayer P2
+addplayer Aggressive
+addplayer Neutral
 gamestart
 replay
-loadmap Map1
+loadmap 4D_Hypercube.map
 validatemap
-addplayer P1
-addplayer P2
+addplayer Aggressive
+addplayer Neutral
 gamestart
 replay
-loadmap Map1
+loadmap montreal.map
 validatemap
-addplayer P1
-addplayer P2
+addplayer Aggressive
+addplayer Neutral
 gamestart
 replay
-loadmap Map2
+loadmap montreal.map
 validatemap
-addplayer P1
-addplayer P2
+addplayer Aggressive
+addplayer Neutral
 gamestart
 replay
-loadmap Map2
+loadmap montreal.map
 validatemap
-addplayer P1
-addplayer P2
-gamestart
-replay
-loadmap Map2
-validatemap
-addplayer P1
-addplayer P2
-gamestart
-replay
-loadmap Map2
-validatemap
-addplayer P1
-addplayer P2
+addplayer Aggressive
+addplayer Neutral
 gamestart
 quit

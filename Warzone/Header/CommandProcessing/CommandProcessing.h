@@ -141,8 +141,6 @@ private:
 	FileLineReader* fileLineReader;
 	vector<Command*> listCommands;
 	std::ofstream tournamentFile;
-	
-
 
 };
 
