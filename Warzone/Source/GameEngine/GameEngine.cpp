@@ -50,6 +50,11 @@ void GameEngine::addPlayer(string name)
     activePlayers.push_back(p);
 }
 
+void GameEngine::addPlayer(Player *player)
+{
+    activePlayers.push_back(player);
+}
+
 // TODO: THIS IS SO UGLY, NEEDS TO BE FIXED
 MapLoader *mLoader = new MapLoader;
 
@@ -240,6 +245,12 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         {
             if (commandProcessor->listCommands[commandProcessor->nbCommands]->commandName == "replay")
             {
+                // deleting static deck & active player list from completed game
+                delete deck;
+                for (Player *player : activePlayers)
+                    delete player;
+                activePlayers.clear();
+
                 this->state = GameEngine::State::Start;
                 (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
                 commandProcessor->nbCommands++;

@@ -21,13 +21,18 @@ public:
 
     virtual void issueOrder() = 0;
 
+    virtual void issueAirliftOrder() = 0;
+    virtual void issueBlockadeOrder() = 0;
+    virtual void issueBombOrder() = 0;
+    virtual void issueNegotiateOrder() = 0;
+
     virtual vector<Territory *> toDefend() const = 0;
 
     virtual vector<Territory *> toAttack() const = 0;
 
     virtual string getStrategyType() const = 0;
 
-    void setPlayer(Player* pl);
+    void setPlayer(Player *pl);
 
 protected:
     Player *player;
@@ -44,6 +49,11 @@ public:
 
     void issueOrder() override;
 
+    void issueAirliftOrder() override;
+    void issueBlockadeOrder() override;
+    void issueBombOrder() override;
+    void issueNegotiateOrder() override;
+
     vector<Territory *> toDefend() const override;
 
     vector<Territory *> toAttack() const override;
@@ -52,6 +62,18 @@ public:
 
 private:
     void issueDeployOrder(const int deployedThisTurn, const int reinforcementPool);
+    void issueAdvanceOrder();
+
+    const string selectOrder();
+    Territory *selectTerritory(vector<Territory *> territories, string label) const;
+    int selectArmyUnits(Territory *territory, string descriptor, int max = 0) const;
+
+    const vector<string> getOrdersAvailable() const;
+
+    void printTerritoriesAndUnits(vector<Territory*> territories, string label) const;
+    void invalidInput(bool outOfBounds, string message) const;
+    bool hasUnitsOnMap() const;
+    bool inNegotiations(Player *target) const;
 };
 
 // Computer player that focuses on attack (deploys or advances armies on its strongest country,
@@ -65,6 +87,11 @@ public:
     ~AggressivePlayerStrategy();
 
     void issueOrder() override;
+
+    void issueAirliftOrder() override;
+    void issueBlockadeOrder() override;
+    void issueBombOrder() override;
+    void issueNegotiateOrder() override;
 
     vector<Territory *> toDefend() const override;
 
@@ -85,6 +112,11 @@ public:
 
     void issueOrder() override;
 
+    void issueAirliftOrder() override;
+    void issueBlockadeOrder() override;
+    void issueBombOrder() override;
+    void issueNegotiateOrder() override;
+
     vector<Territory *> toDefend() const override;
 
     vector<Territory *> toAttack() const override;
@@ -102,6 +134,11 @@ public:
     ~NeutralPlayerStrategy();
 
     void issueOrder() override;
+
+    void issueAirliftOrder() override;
+    void issueBlockadeOrder() override;
+    void issueBombOrder() override;
+    void issueNegotiateOrder() override;
 
     vector<Territory *> toDefend() const override;
 
@@ -121,6 +158,11 @@ public:
     ~CheaterPlayerStrategy();
 
     void issueOrder() override;
+
+    void issueAirliftOrder() override;
+    void issueBlockadeOrder() override;
+    void issueBombOrder() override;
+    void issueNegotiateOrder() override;
 
     vector<Territory *> toDefend() const override;
 
