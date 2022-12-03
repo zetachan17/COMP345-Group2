@@ -57,6 +57,8 @@ public:
 	// returns pointer to player's next order
 	Order *nextOrder(bool deployOnly = false);
 
+	void printIssuedOrders();
+
 	// returns whether the player has finished issuing orders
 	bool isFinishedIssuingOrders() const;
 

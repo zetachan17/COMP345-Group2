@@ -12,6 +12,7 @@ using std::endl;
 #include <string>
 using std::string;
 using std::to_string;
+#include <iomanip>
 #include <vector>
 using std::vector;
 #include <unordered_set>
@@ -170,18 +171,11 @@ void HumanPlayerStrategy::issueDeployOrder(const int deployedThisTurn, const int
     }
     else
     {
+        player->printIssuedOrders();
+        cout << endl;
         printTerritoriesAndUnits(player->getTerritories(), "Controlled");
         target = selectTerritory(player->getTerritories(), "target");
         armyUnits = selectArmyUnits(target, "deploy to ", (reinforcementPool - deployedThisTurn));
-
-        // int availableToDeploy = reinforcementPool - deployedThisTurn;
-        // cout << "Army units to deploy (1-" << availableToDeploy << ") : ";
-        // cin >> armyUnits;
-        // while (armyUnits > availableToDeploy || armyUnits < 1)
-        // {
-        //     invalidInput(true, to_string(availableToDeploy));
-        //     cin >> armyUnits;
-        // }
     }
     player->setArmiesDeployedThisTurn(deployedThisTurn + armyUnits);
 
@@ -218,12 +212,13 @@ const string HumanPlayerStrategy::selectOrder()
     if (ordersAvailable.size() == 1)
         return ordersAvailable[0];
 
-    cout << "ORDERS AVAILABLE:\n\n";
+    cout << *player
+         << "ORDERS AVAILABLE TO ISSUE:\n\n";
     for (int i = 0; i < ordersAvailable.size(); i++)
         cout << (i + 1) << ". " << ordersAvailable[i] << endl;
 
     int playerInput;
-    cout << "\nSelect an order to issue (1-" << ordersAvailable.size() << ") : ";
+    cout << "\nSelect an order (1-" << ordersAvailable.size() << ") : ";
     cin >> playerInput;
 
     while (playerInput > ordersAvailable.size() || playerInput < 1)
@@ -299,8 +294,10 @@ void HumanPlayerStrategy::printTerritoriesAndUnits(vector<Territory *> territori
 
     for (int i = 0; i < territories.size(); i++)
     {
-        cout << (i + 1) << ". " << territories[i]->getTerritoryName() << "\t: "
+        cout << "    " << (i + 1) << ". " << std::left << std::setw(13)
+             << territories[i]->getTerritoryName() << " : "
              << territories[i]->getArmyUnits() << " army units";
+
         if (territories[i]->getOwner() != player)
             cout << ", controlled by " << territories[i]->getOwner()->getPlayerName();
         cout << endl;

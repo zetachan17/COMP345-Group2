@@ -6,13 +6,16 @@
 #include "PlayerStrategies/PlayerStrategies.h"
 
 #include <vector>
+using std::vector;
 #include <iostream>
 using std::cout;
 using std::endl;
-using std::vector;
+#include <iomanip>
 
 Player::Player() : playerName(""), strategy(nullptr), hand(new Hand), ordersList(new OrdersList),
-				   reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false) {}
+				   reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false)
+{
+}
 
 Player::Player(const string &name) : playerName(name), strategy(nullptr), hand(new Hand),
 									 ordersList(new OrdersList), reinforcementPool(0),
@@ -76,13 +79,15 @@ ostream &operator<<(ostream &output, const Player &player)
 {
 	output << "Player: " << player.playerName << endl
 		   << "\nOwned territories: " << endl;
+
 	for (Territory *territory : player.territories)
-		output << "    " << territory->getTerritoryName() << endl;
+		output << "    " << std::left << std::setw(12) << territory->getTerritoryName()
+			   << " : " << territory->getArmyUnits() << " army units\n";
 
 	output << "\nCards in hand:" << endl
 		   << *player.hand << endl;
 
-	output << "Orders list:" << endl
+	output << "Issued orders:" << endl
 		   << *player.ordersList << endl;
 
 	return output;
@@ -266,6 +271,12 @@ void Player::addToOrdersList(Order *order)
 Order *Player::nextOrder(bool deployOnly)
 {
 	return ordersList->nextOrder(deployOnly);
+}
+
+void Player::printIssuedOrders()
+{
+	cout << "Issued Orders:\n"
+		 << *ordersList;
 }
 
 bool Player::isFinishedIssuingOrders() const

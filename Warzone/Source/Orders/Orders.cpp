@@ -749,7 +749,7 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
     {
         int i = 1;
         for (auto &order : orders.m_orders)
-            cout << i++ << ". " << *order << endl;
+            cout << "    " << i++ << ". " << *order << endl;
         return output;
     }
 }

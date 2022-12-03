@@ -117,6 +117,8 @@ public:
 
 private:
 	vector<Card *> cardsInDeck;
+
+	void clearDeck();
 };
 
 class Hand
@@ -150,6 +152,8 @@ public:
 
 	// getters
 	const vector<Card *> getCards() const;
+
+	void returnCardsToDeck(Deck* deck);
 
 	bool hasAirlift();
 	bool hasBlockade();

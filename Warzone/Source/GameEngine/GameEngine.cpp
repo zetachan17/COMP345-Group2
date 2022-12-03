@@ -15,7 +15,6 @@ GameEngine::GameEngine()
     this->state = GameEngine::State::Start;
     // TODO:: PASS DECK FROM CARD.CPP TO HERE
     this->deck = new Deck();
-    deck->createDeck();
 }
 
 GameEngine::GameEngine(const GameEngine &game)
@@ -66,6 +65,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     {
     case GameEngine::State::Start:
         activePlayers.clear();
+        deck->createDeck();
         std::cout << "Welcome to Warzone!" << std::endl;
         commandProcessor->getCommand(commandProcessor); // Getting the command from the user
         if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName) == "NULL")
@@ -245,11 +245,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         {
             if (commandProcessor->listCommands[commandProcessor->nbCommands]->commandName == "replay")
             {
-                // deleting static deck & active player list from completed game
-                delete deck;
+                // deleting players from completed game
                 for (Player *player : activePlayers)
                     delete player;
-                activePlayers.clear();
 
                 this->state = GameEngine::State::Start;
                 (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
@@ -278,7 +276,6 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
             break;
         }
     case GameEngine::State::End:
-
         break;
     }
 
@@ -605,6 +602,7 @@ void GameEngine::checkForDefeats()
         if (activePlayers[i]->getTerritories().size() == 0)
         {
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has lost." << endl;
+            activePlayers[i]->getHand()->returnCardsToDeck(deck);
             activePlayers.erase(activePlayers.begin() + i);
             defeat = true;
             continue;
@@ -647,7 +645,6 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
 // GameEngine's stringToLog() method
 string GameEngine::stringToLog()
 {
-
     string stringLog = "New state is " + stateToString(getState()) + " using transition().";
     cout << stringLog << endl;
     return stringLog;

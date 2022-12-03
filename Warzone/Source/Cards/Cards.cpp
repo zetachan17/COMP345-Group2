@@ -37,7 +37,7 @@ Card &Card::operator=(const Card &card)
 
 ostream &operator<<(ostream &output, const Card &card)
 {
-	output << "Card: " << card.type << endl;
+	output << card.type << " Card";
 	return output;
 }
 
@@ -52,7 +52,7 @@ AirliftCard::~AirliftCard() {}
 
 void AirliftCard::play(Player *player)
 {
-	cout << "*Playing an Airlift card*" << endl;
+	cout << "*Playing an Airlift Card*" << endl;
 	player->issueAirliftOrder();
 }
 
@@ -62,7 +62,7 @@ BlockadeCard::~BlockadeCard() {}
 
 void BlockadeCard::play(Player *player)
 {
-	cout << "*Playing a Blockade card*" << endl;
+	cout << "*Playing a Blockade Card*" << endl;
 	player->issueBlockadeOrder();
 }
 
@@ -72,7 +72,7 @@ BombCard::~BombCard() {}
 
 void BombCard::play(Player *player)
 {
-	cout << "*Playing a Bomb card*" << endl;
+	cout << "*Playing a Bomb Card*" << endl;
 	player->issueBombOrder();
 }
 
@@ -82,7 +82,7 @@ DiplomacyCard::~DiplomacyCard() {}
 
 void DiplomacyCard::play(Player *player)
 {
-	cout << "*Playing a Diplomacy card*" << endl;
+	cout << "*Playing a Diplomacy Card*" << endl;
 	player->issueNegotiateOrder();
 }
 
@@ -92,11 +92,14 @@ ReinforcementCard::~ReinforcementCard() {}
 
 void ReinforcementCard::play(Player *player)
 {
-	cout << "*Playing a Reinforcement card*" << endl;
+	cout << "*Playing a Reinforcement Card*" << endl;
 	player->addReinforcements(5);
 }
 
-Deck::Deck() {}
+Deck::Deck()
+{
+	createDeck();
+}
 
 Deck::Deck(const Deck &deck)
 {
@@ -106,9 +109,7 @@ Deck::Deck(const Deck &deck)
 
 Deck::~Deck()
 {
-	for (auto &card : cardsInDeck)
-		delete card;
-	cardsInDeck.clear();
+	clearDeck();
 }
 
 Deck &Deck::operator=(const Deck &deck)
@@ -156,8 +157,18 @@ Card *Deck::draw()
 	return cardDrawn;
 }
 
+void Deck::clearDeck()
+{
+	for (auto &card : cardsInDeck)
+		delete card;
+	cardsInDeck.clear();
+}
+
 void Deck::createDeck()
 {
+	if (cardsInDeck.size() != 0)
+		clearDeck();
+
 	// to determine the type of the card and add it to the deck
 	for (int i = 0; i < TOTAL_CARDS_IN_DECK; i++)
 	{
@@ -227,7 +238,7 @@ ostream &operator<<(ostream &output, const Hand &hand)
 	{
 		int i = 1;
 		for (auto &card : hand.cardsInHand)
-			cout << i++ << ". " << *card << endl;
+			cout << "    " << i++ << ". " << *card << endl;
 		return output;
 	}
 }
@@ -310,6 +321,15 @@ void Hand::updateCardTypesInHand(const string &type, int add)
 		cardTypesInHand[2] += add;
 	else if (type == "Diplomacy")
 		cardTypesInHand[3] += add;
+}
+
+void Hand::returnCardsToDeck(Deck *deck)
+{
+	for (Card *card : cardsInHand)
+		deck->addToDeck(card);
+
+	cardsInHand.clear();
+	cardTypesInHand = {0};
 }
 
 Card *AirliftCard::clone() const
