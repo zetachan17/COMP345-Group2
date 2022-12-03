@@ -15,8 +15,9 @@ using std::vector;
 using std::array;
 
 // number of cards in the deck defined as number of cards per type multiplied by number of types
-const int CARDS_PER_TYPE = 3;
-const int TOTAL_CARDS_IN_DECK = CARDS_PER_TYPE * 5;
+const int CARD_TYPES = 5;
+const int CARDS_PER_TYPE = 4;
+const int DECK_SIZE = CARDS_PER_TYPE * CARD_TYPES;
 
 Card::Card() : type("") {}
 
@@ -170,7 +171,7 @@ void Deck::createDeck()
 		clearDeck();
 
 	// to determine the type of the card and add it to the deck
-	for (int i = 0; i < TOTAL_CARDS_IN_DECK; i++)
+	for (int i = 0; i < DECK_SIZE; i++)
 	{
 		switch (i % 5)
 		{
@@ -198,7 +199,7 @@ void Deck::addToDeck(Card *card)
 	cardsInDeck.push_back(card);
 }
 
-Hand::Hand() : cardTypesInHand{0} {}
+Hand::Hand() {}
 
 Hand::Hand(const Hand &hand)
 {
