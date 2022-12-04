@@ -417,3 +417,12 @@ bool Player::ownsContinent(Continent *continent)
 	}
 	return false;
 }
+
+void Player::underAttack()
+{
+	if(strategy->getStrategyType() == "Neutral")
+	{
+		delete strategy;
+		strategy = new AggressivePlayerStrategy();
+	}
+}

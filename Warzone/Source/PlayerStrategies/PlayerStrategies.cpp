@@ -641,100 +641,44 @@ void NeutralPlayerStrategy::issueOrder()
 {
     cout << *player << endl;
 
-    if (player->getArmiesDeployedThisTurn() < player->getReinforcementPool())
-        player->issueDeployOrder();
-    else
-    {
-        int randomChoice = rand() % (100);
-
-        if (randomChoice <= 25)
-            player->issueAdvanceOrder();
-        else if (randomChoice <= 75)
-        {
-            if (player->getHand()->getHandSize() != 0)
-                player->playCard();
-            else
-                player->issueAdvanceOrder();
-        }
-        else
-            player->setIsFinishedIssuingOrders(true);
-    }
+    player->setIsFinishedIssuingOrders(true);
 }
 
 void NeutralPlayerStrategy::issueDeployOrder()
 {
-    player->issueDeployOrder();
+    // no-op
 }
 
 void NeutralPlayerStrategy::issueAdvanceOrder()
 {
-    player->issueAdvanceOrder();
+    // no-op
 }
 
 void NeutralPlayerStrategy::issueAirliftOrder()
 {
-    player->issueAirliftOrder();
+    // no-op
 }
 void NeutralPlayerStrategy::issueBlockadeOrder()
 {
-    player->issueBlockadeOrder();
+    // no-op
 }
 void NeutralPlayerStrategy::issueBombOrder()
 {
-    player->issueBombOrder();
+    // no-op
 }
 void NeutralPlayerStrategy::issueNegotiateOrder()
 {
-    player->issueNegotiateOrder();
+    // no-op
 }
 
 vector<Territory *> NeutralPlayerStrategy::toDefend() const
 {
-    return player->getTerritories();
+    return {};
 }
 
 vector<Territory *> NeutralPlayerStrategy::toAttack() const
 {
-    vector<Territory *> allAdjacentTerritories;
-
-    for (Territory *territory : player->getTerritories())
-    {
-        vector<Territory *> currentAdjacentTerritories = territory->getAdjacentTerritories();
-        allAdjacentTerritories.insert(allAdjacentTerritories.end(),
-                                      currentAdjacentTerritories.begin(),
-                                      currentAdjacentTerritories.end());
-    }
-
-    // remove duplicates
-    for (int i = 0; i < allAdjacentTerritories.size(); i++)
-    {
-        for (int j = i + 1; j < allAdjacentTerritories.size();)
-        {
-            if (allAdjacentTerritories[i]->getTerritoryName() ==
-                allAdjacentTerritories[j]->getTerritoryName())
-            {
-                allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
-                continue;
-            }
-            j++;
-        }
-    }
-
-    // remove the player's territories
-    for (int i = 0; i < player->getTerritories().size(); i++)
-    {
-        for (int j = 0; j < allAdjacentTerritories.size();)
-        {
-            if (player->getTerritories()[i]->getTerritoryName() ==
-                allAdjacentTerritories[j]->getTerritoryName())
-            {
-                allAdjacentTerritories.erase(allAdjacentTerritories.begin() + j);
-                continue;
-            }
-            j++;
-        }
-    }
-    return allAdjacentTerritories;
+    return {};
 }
 
 string NeutralPlayerStrategy::getStrategyType() const

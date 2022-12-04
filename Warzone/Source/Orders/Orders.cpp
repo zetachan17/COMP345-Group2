@@ -293,6 +293,7 @@ void Advance::execute()
 
 void Advance::battle()
 {
+    m_target->getOwner()->underAttack();
     int defenceUnits = m_target->getArmyUnits();
     int attackingUnits = m_units;
     string defencePlayer = m_target->getOwner()->getPlayerName();
@@ -415,6 +416,8 @@ void Bomb::execute()
 {
     if (validate())
     {
+        m_target->getOwner()->underAttack();
+        
         int initialUnits = m_target->getArmyUnits();
         int survivingUnits = initialUnits / 2;
         m_target->setArmyUnits(survivingUnits);

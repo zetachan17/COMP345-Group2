@@ -62,6 +62,8 @@ public:
 	// returns whether the player has finished issuing orders
 	bool isFinishedIssuingOrders() const;
 
+	void underAttack();
+
 	// sets bool signaling if player finished issuing orders this turn
 	void setIsFinishedIssuingOrders(bool finishedIssuingOrders);
 
