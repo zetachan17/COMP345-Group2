@@ -155,10 +155,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         if (commandValidateValue)
         {
             // P2.3 add players
-            stringToStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
-            //Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
-            //activePlayers.push_back(newPlayer);
-
+            createStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
             this->state = GameEngine::State::PlayersAdded;
             (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
             std::cout << "The effect of this command is: " << commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
@@ -180,9 +177,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         {
             if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName).substr(0, 9) == "addplayer")
             {
-                stringToStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
-                // Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
-                // activePlayers.push_back(newPlayer);
+                createStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
                 (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
                 std::cout << "The effect of this command is: " << commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
                 commandProcessor->nbCommands++;
@@ -665,7 +660,7 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
     }
 }
 
-void GameEngine::stringToStrategyPlayer(string userinput)
+void GameEngine::createStrategyPlayer(string userinput)
 {
     Player *newPlayer = nullptr;
 

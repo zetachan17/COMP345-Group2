@@ -105,5 +105,5 @@ private:
     //std::string processTournamentCommand(string userinput);
 
     //convert userinput to corresponding strategy
-    void stringToStrategyPlayer(string userinput);
+    void createStrategyPlayer(string userinput);
 };
