@@ -20,6 +20,7 @@ using std::unordered_set;
 #include <algorithm>
 using std::find;
 using std::sort;
+using std::min;
 #include <utility>
 using std::pair;
 
@@ -776,7 +777,7 @@ void BenevolentPlayerStrategy::issueDeployOrder()
     }
 
     // target territory based on how many orders have been issued already
-    Territory *territoryToDefend = toDefend()[player->getOrdersList()->size()];
+    Territory *territoryToDefend = toDefend()[min(player->getOrdersList()->size(), (int) toDefend().size() - 1)];
     cout << "Deploying " << armiesToDeploy << " to " << territoryToDefend->getTerritoryName() << endl;
 
     player->setArmiesDeployedThisTurn(deployedThisTurn + armiesToDeploy);
