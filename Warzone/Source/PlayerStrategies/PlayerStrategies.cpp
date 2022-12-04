@@ -695,52 +695,41 @@ CheaterPlayerStrategy::~CheaterPlayerStrategy() {}
 void CheaterPlayerStrategy::issueOrder()
 {
     cout << *player << endl;
-
-    if (player->getArmiesDeployedThisTurn() < player->getReinforcementPool())
-        player->issueDeployOrder();
-    else
+    
+    for(Territory* territory : toAttack())
     {
-        int randomChoice = rand() % (100);
-
-        if (randomChoice <= 25)
-            player->issueAdvanceOrder();
-        else if (randomChoice <= 75)
-        {
-            if (player->getHand()->getHandSize() != 0)
-                player->playCard();
-            else
-                player->issueAdvanceOrder();
-        }
-        else
-            player->setIsFinishedIssuingOrders(true);
+        territory->setOwner(player);
     }
+
+    player->setIsFinishedIssuingOrders(true);
+    
 }
 
 void CheaterPlayerStrategy::issueDeployOrder()
 {
-    player->issueDeployOrder();
+    // no-op
 }
 
 void CheaterPlayerStrategy::issueAdvanceOrder()
 {
-    player->issueAdvanceOrder();
+    // no-op
 }
 
 void CheaterPlayerStrategy::issueAirliftOrder()
 {
-    player->issueAirliftOrder();
+    // no-op
 }
 void CheaterPlayerStrategy::issueBlockadeOrder()
 {
-    player->issueBlockadeOrder();
+    // no-op
 }
 void CheaterPlayerStrategy::issueBombOrder()
 {
-    player->issueBombOrder();
+    // no-op
 }
 void CheaterPlayerStrategy::issueNegotiateOrder()
 {
-    player->issueNegotiateOrder();
+    // no-op
 }
 
 vector<Territory *> CheaterPlayerStrategy::toDefend() const
