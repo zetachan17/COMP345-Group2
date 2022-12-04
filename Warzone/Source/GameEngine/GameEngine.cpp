@@ -70,6 +70,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::Start:
         activePlayers.clear();
         deck->createDeck();
+        currentTurn = 0;
         std::cout << "Welcome to Warzone!" << std::endl;
         commandProcessor->getCommand(commandProcessor); // Getting the command from the user
         if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName) == "NULL")
@@ -233,8 +234,12 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
              << "\t** Execute Orders Phase **\n\n";
         executeOrdersPhase();
         this->state = GameEngine::State::AssignReinforcement;
-        checkForVictory(mLoader);
-        checkForDefeats();
+        if (!checkForDraw())
+        {
+            checkForVictory(mLoader);
+            checkForDefeats();
+        }
+        
         break;
     case GameEngine::State::Win:
 
@@ -401,18 +406,13 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
         FileLineReader* fileLineReader = new FileLineReader();
         commandProcessor = new FileCommandProcessorAdapter(fileLineReader, fileName);
     }
-    //if (userInput.substr(0,2) == "-M")
     else if (userInput.substr(0,13) == "tournament -M")
     {
         std::string tournamentFileName = "tournamentFile.txt";
         FileLineReader* fileLineReader = new FileLineReader();
         FileCommandProcessorAdapter* commandProcessor = new FileCommandProcessorAdapter(fileLineReader, tournamentFileName);
         commandProcessor->commands = commandProcessor->processTournamentCommand(userInput);
-        // for (std::string i : commandProcessor->commands)
-        // {
-        //     std::cout << i << std::endl;
-        // }
-
+        turnLimit = stoi(commandProcessor->commands.back());
         return commandProcessor;
     }
    
@@ -639,6 +639,7 @@ void GameEngine::checkForDefeats()
     }
 }
 
+
 void GameEngine::checkForVictory(MapLoader *mLoader)
 {
     std::cout << "Checking for victory condition" << endl;
@@ -658,6 +659,19 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
     {
         std::cout << "No victories detected this turn." << endl;
     }
+}
+
+bool GameEngine::checkForDraw()
+{
+    currentTurn++;
+    if (currentTurn > turnLimit)
+    {
+        std::cout << "Turn limit is reached! Now end the game!" << endl;
+        this->state = GameEngine::State::Win;
+        return true;
+    }
+
+    return false;
 }
 
 void GameEngine::createStrategyPlayer(string userinput)

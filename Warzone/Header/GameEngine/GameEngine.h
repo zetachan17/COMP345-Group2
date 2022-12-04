@@ -67,6 +67,8 @@ private:
     State state;
     static Deck *deck;
     static std::vector<Player *> activePlayers;
+    int turnLimit;
+    int currentTurn;
     //std::ofstream tournamentFile;
 
     // Part 2.4.a) fairly distribute all the territories to the players
@@ -100,9 +102,7 @@ private:
 
     void checkForVictory(MapLoader* mLoader);
 
-    //A3P2, process tournament command
-
-    //std::string processTournamentCommand(string userinput);
+    bool checkForDraw();
 
     //convert userinput to corresponding strategy
     void createStrategyPlayer(string userinput);

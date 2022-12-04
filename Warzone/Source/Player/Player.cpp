@@ -162,6 +162,9 @@ void Player::issueAdvanceOrder()
 		break;
 	}
 
+	if (sourceTerritory == nullptr)
+		return;
+
 	// determine how many armies
 	int units = sourceTerritory->getArmyUnits();
 
@@ -187,6 +190,9 @@ void Player::issueAirliftOrder()
 	Territory *sourceTerritory = toDefend()[rand() % (toDefend().size())];
 	Territory *targetTerritory = toDefend()[rand() % (toDefend().size())];
 
+	if (sourceTerritory == nullptr)
+		return;
+	
 	// determine how many armies
 	int units = sourceTerritory->getArmyUnits();
 

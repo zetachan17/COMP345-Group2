@@ -491,6 +491,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 
 	commands.pop_back();
 	commands.push_back("quit");
+	commands.push_back(commandlist[3][0]);
 
 	std::string fileName = "tournamentFile.txt";
 	std::string filePath = "CommandFile/";
