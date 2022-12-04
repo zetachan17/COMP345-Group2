@@ -266,7 +266,7 @@ vector<string> HumanPlayerStrategy::getOrdersAvailable() const
             ordersAvailable.push_back("Blockade");
         if (player->getHand()->hasBomb())
             ordersAvailable.push_back("Bomb");
-        if (player->getHand()->hasNegotiate())
+        if (player->getHand()->hasDiplomacy())
             ordersAvailable.push_back("Negotiate");
     }
     ordersAvailable.push_back("Pass");
@@ -622,7 +622,7 @@ void AggressivePlayerStrategy::issueAirliftOrder()
 
 void AggressivePlayerStrategy::issueBlockadeOrder()
 {
-    return ;
+    return;
 }
 
 void AggressivePlayerStrategy::issueBombOrder()
@@ -739,7 +739,7 @@ void BenevolentPlayerStrategy::issueOrder()
         playBenevolentCard();
         player->setIsFinishedIssuingOrders(true);
     }
-    else 
+    else
         player->setIsFinishedIssuingOrders(true);
 }
 
@@ -764,20 +764,20 @@ void BenevolentPlayerStrategy::issueDeployOrder()
     const int reinforcementPool = player->getReinforcementPool();
 
     cout << "Issuing a Deploy order." << endl;
-	int remainingUnitsToDeploy = reinforcementPool - deployedThisTurn;
-	cout << remainingUnitsToDeploy << " armies remain available in their reinforcement pool." << endl;
+    int remainingUnitsToDeploy = reinforcementPool - deployedThisTurn;
+    cout << remainingUnitsToDeploy << " armies remain available in their reinforcement pool." << endl;
 
-	int armiesToDeploy = remainingUnitsToDeploy;
+    int armiesToDeploy = remainingUnitsToDeploy;
 
     // deploy half the remaining units unless there are less than 10 remaining
-	if (remainingUnitsToDeploy > 10)
-	{
-		armiesToDeploy = remainingUnitsToDeploy / 2;
-	}
+    if (remainingUnitsToDeploy > 10)
+    {
+        armiesToDeploy = remainingUnitsToDeploy / 2;
+    }
 
-    //target territory based on how many orders have been issued already
-	Territory *territoryToDefend = toDefend()[player->getOrdersList()->size()];
-	cout << "Deploying " << armiesToDeploy << " to " << territoryToDefend->getTerritoryName() << endl;
+    // target territory based on how many orders have been issued already
+    Territory *territoryToDefend = toDefend()[player->getOrdersList()->size()];
+    cout << "Deploying " << armiesToDeploy << " to " << territoryToDefend->getTerritoryName() << endl;
 
     player->setArmiesDeployedThisTurn(deployedThisTurn + armiesToDeploy);
     player->addToOrdersList(new Deploy(player, armiesToDeploy, territoryToDefend));
@@ -787,15 +787,15 @@ void BenevolentPlayerStrategy::issueAdvanceOrder()
 {
     cout << "Issuing an Advance order." << endl;
 
-	Territory *targetTerritory = nullptr;
-	Territory *sourceTerritory = nullptr;
+    Territory *targetTerritory = nullptr;
+    Territory *sourceTerritory = nullptr;
 
     for (int i = 0; i < toDefend().size(); i++)
     {
         targetTerritory = toDefend()[i];
 
-        vector<Territory*> adjacentOwnedTerritories = {};
-        
+        vector<Territory *> adjacentOwnedTerritories = {};
+
         // find a territory adjacent to the target that's owned by the player
         for (Territory *territoryAdjacentToTarget : targetTerritory->getAdjacentTerritories())
         {
@@ -815,73 +815,75 @@ void BenevolentPlayerStrategy::issueAdvanceOrder()
 
         // of the owned adjacent territories, sort to find the one with the most armies
         sort(adjacentOwnedTerritories.begin(), adjacentOwnedTerritories.end(),
-        [](const Territory *x, const Territory *y) {
-            return x->getArmyUnits() > y->getArmyUnits();
-        });
+             [](const Territory *x, const Territory *y)
+             {
+                 return x->getArmyUnits() > y->getArmyUnits();
+             });
 
         sourceTerritory = adjacentOwnedTerritories[0];
     }
 
-	// balance the number of armies between the two territories
-	int units = (sourceTerritory->getArmyUnits() - targetTerritory->getArmyUnits()) / 2;
+    // balance the number of armies between the two territories
+    int units = (sourceTerritory->getArmyUnits() - targetTerritory->getArmyUnits()) / 2;
 
-	cout << "Advancing " << units << " to " << targetTerritory->getTerritoryName() << " from " << sourceTerritory->getTerritoryName() << endl;
+    cout << "Advancing " << units << " to " << targetTerritory->getTerritoryName() << " from " << sourceTerritory->getTerritoryName() << endl;
 
-	player->addToOrdersList(new Advance(player, units, sourceTerritory, targetTerritory));
+    player->addToOrdersList(new Advance(player, units, sourceTerritory, targetTerritory));
 }
 
 void BenevolentPlayerStrategy::issueAirliftOrder()
 {
-	cout << "Issuing an Airlift order." << endl;
+    cout << "Issuing an Airlift order." << endl;
 
-	// get random territory from toAttack and toDefend
-	Territory *sourceTerritory = toDefend()[toDefend().size()-1];
-	Territory *targetTerritory = toDefend()[0];
+    // get random territory from toAttack and toDefend
+    Territory *sourceTerritory = toDefend()[toDefend().size() - 1];
+    Territory *targetTerritory = toDefend()[0];
 
-	// determine how many armies
-	int units = (sourceTerritory->getArmyUnits() - targetTerritory->getArmyUnits()) / 2;
+    // determine how many armies
+    int units = (sourceTerritory->getArmyUnits() - targetTerritory->getArmyUnits()) / 2;
 
-	cout << "Airlifting " << units << " from " << sourceTerritory->getTerritoryName() << " to " << targetTerritory->getTerritoryName() << endl;
+    cout << "Airlifting " << units << " from " << sourceTerritory->getTerritoryName() << " to " << targetTerritory->getTerritoryName() << endl;
 
-	player->addToOrdersList(new Airlift(player, units, sourceTerritory, targetTerritory));
+    player->addToOrdersList(new Airlift(player, units, sourceTerritory, targetTerritory));
 }
 void BenevolentPlayerStrategy::issueBlockadeOrder()
 {
-    //no-op
+    // no-op
 }
 void BenevolentPlayerStrategy::issueBombOrder()
 {
-    //no-op
+    // no-op
 }
 void BenevolentPlayerStrategy::issueNegotiateOrder()
 {
-	cout << "Issuing a Negotiate order." << endl;
+    cout << "Issuing a Negotiate order." << endl;
 
-	Player *targetPlayer = nullptr;
+    Player *targetPlayer = nullptr;
 
-	for (Player *otherPlayer : GameEngine::getPlayers())
-	{
-		if (otherPlayer->getPlayerName() != player->getPlayerName())
-		{
-			targetPlayer = player;
-			break;
-		}
-	}
+    for (Player *otherPlayer : GameEngine::getPlayers())
+    {
+        if (otherPlayer->getPlayerName() != player->getPlayerName())
+        {
+            targetPlayer = player;
+            break;
+        }
+    }
 
-	cout << "Negotiating with " << targetPlayer->getPlayerName() << endl;
+    cout << "Negotiating with " << targetPlayer->getPlayerName() << endl;
 
-	player->addToOrdersList(new Negotiate(player, targetPlayer));
+    player->addToOrdersList(new Negotiate(player, targetPlayer));
 }
 
 vector<Territory *> BenevolentPlayerStrategy::toDefend() const
 {
-    vector<Territory*> sortedTerritories = player->getTerritories();
+    vector<Territory *> sortedTerritories = player->getTerritories();
 
     sort(sortedTerritories.begin(), sortedTerritories.end(),
-            [](const Territory *x, const Territory *y) {
-                return x->getArmyUnits() < y->getArmyUnits();
-            });
-    
+         [](const Territory *x, const Territory *y)
+         {
+             return x->getArmyUnits() < y->getArmyUnits();
+         });
+
     return sortedTerritories;
 }
 
@@ -959,14 +961,13 @@ CheaterPlayerStrategy::~CheaterPlayerStrategy() {}
 void CheaterPlayerStrategy::issueOrder()
 {
     cout << *player << endl;
-    
-    for(Territory* territory : toAttack())
+
+    for (Territory *territory : toAttack())
     {
         territory->setOwner(player);
     }
 
     player->setIsFinishedIssuingOrders(true);
-    
 }
 
 void CheaterPlayerStrategy::issueDeployOrder()
