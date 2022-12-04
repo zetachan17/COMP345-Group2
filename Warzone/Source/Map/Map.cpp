@@ -91,7 +91,7 @@ bool MapLoader::readFile(string fileName)
                 {
                     i++;
                 }
-                
+
                 mapObj->addContinent(contObj);
 
                 ContinentCounter++;
@@ -131,11 +131,9 @@ bool MapLoader::readFile(string fileName)
             { // Here we will create the array of ajdacent territories
                 Territory *terr = (mapObj->getTerritoryByName(territoriesData[i]));
 
-               
                 i = i + 4;
                 while (territoriesData[i].compare("|") != 0)
                 {
-                    
                     terr->addAdjacentTerritory(mapObj->getTerritoryByName(territoriesData[i]));
                     i++;
                 }
@@ -588,13 +586,12 @@ vector<Territory *> Map::getTerritories()
     return territories;
 }
 
-vector<Continent*> Map::getContinents()
+vector<Continent *> Map::getContinents()
 {
     return continents;
 }
 
-
-vector<Territory*> Continent::getTerritories()
+vector<Territory *> Continent::getTerritories()
 {
     return territories;
 }

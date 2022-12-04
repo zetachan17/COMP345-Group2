@@ -3,8 +3,12 @@
 #include "Player/Player.h"
 #include "Cards/Cards.h"
 #include "GameEngine/GameEngine.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 
 #include <iostream>
+#include <fstream>
+#include <string>
+using std::string;
 #include <algorithm>
 #include <random>
 using std::cout;
@@ -49,7 +53,19 @@ void Order::turnEnd()
     for (Player *player : m_getsCard)
     {
         cout << player->getPlayerName() + " draws a card: ";
-        player->getHand()->addToHand(GameEngine::getDeck()->draw());
+        Card *cardDrawn = GameEngine::getDeck()->draw();
+
+        if (!cardDrawn)
+            cout << "~~DECK EMPTY: NO CARD DRAWN~~";
+        else if (cardDrawn->cardType() == "Reinforcement")
+        {
+            cout << "Reinforcement card drawn. Immediate effect: 5 army units added to "
+                 << player->getPlayerName() << "'s reinforcement pool.";
+            cardDrawn->play(player);
+            GameEngine::getDeck()->addToDeck(cardDrawn);
+        }
+        else
+            player->getHand()->addToHand(cardDrawn);
     }
 
     m_getsCard.clear();
@@ -68,8 +84,17 @@ string Order::player() const
 
 string Order::type() const
 {
-    return m_description;
-    // return m_description.substr(0, m_description.find(" "));
+    return m_description.substr(0, m_description.find(" "));
+}
+
+bool Order::inNegotiations(Player *target) const
+{
+    for (auto pair : m_ceaseFire)
+        if ((pair.first == m_player && pair.second == target) ||
+            (pair.first == target && pair.second == m_player))
+            return true;
+
+    return false;
 }
 
 vector<Player *> *Order::getsCard()
@@ -82,21 +107,17 @@ vector<pair<Player *, Player *>> *Order::negotiations()
     return &m_ceaseFire;
 }
 
-void Order::decrementOrderCount()
+void Order::decrementOrderCount(bool inOrderExecutionPhase)
 {
     --m_orderCount;
+
+    if (m_orderCount == 0 && inOrderExecutionPhase)
+        turnEnd();
 }
 
-Player *Order::m_neutralPlayer = nullptr;
 int Order::m_orderCount = 0;
 vector<pair<Player *, Player *>> Order::m_ceaseFire;
 vector<Player *> Order::m_getsCard;
-
-Player *
-Order::neutralPlayer()
-{
-    return m_neutralPlayer;
-}
 
 Deploy::Deploy() : Order() {}
 
@@ -158,11 +179,8 @@ void Deploy::execute()
         cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
-    decrementOrderCount();
-    if (m_orderCount == 0)
-        turnEnd();
-
     Notify(this);
+    decrementOrderCount(true);
 }
 
 Deploy::~Deploy() {}
@@ -197,10 +215,17 @@ Order *Advance::clone() const
 
 bool Advance::validate()
 {
-    if (m_units > m_source->getArmyUnits() || m_units == 0)
+    if (m_units > m_source->getArmyUnits())
     {
         m_effect = "Invalid number of units. " + m_source->getTerritoryName() +
                    " has a max of " + to_string(m_source->getArmyUnits()) + " available units.";
+        cout << "~INVALID ORDER~\n";
+        return false;
+    }
+
+    if (m_units == 0)
+    {
+        m_effect = "0 is not a valid number of units.";
         cout << "~INVALID ORDER~\n";
         return false;
     }
@@ -229,18 +254,14 @@ bool Advance::validate()
     }
 
     // check for active Negotiate order
-    for (auto pair : m_ceaseFire)
+    if (inNegotiations(m_target->getOwner()))
     {
-        const Player *targetPlayer = m_target->getOwner();
-        if ((pair.first == m_player && pair.second == targetPlayer) ||
-            (pair.first == targetPlayer && pair.second == m_player))
-        {
-            m_effect = "Negotiations are in effect between " + player() + " and " +
-                       m_target->getOwner()->getPlayerName() + ".";
-            cout << "~INVALID ORDER~\n";
-            return false;
-        }
+        m_effect = "Negotiations are in effect between " + player() + " and " +
+                   m_target->getOwner()->getPlayerName() + ".";
+        cout << "~INVALID ORDER~\n";
+        return false;
     }
+
     cout << "~order validated~\n";
     return true;
 }
@@ -254,7 +275,7 @@ void Advance::execute()
             m_source->setArmyUnits(m_source->getArmyUnits() - m_units);
             m_target->setArmyUnits(m_target->getArmyUnits() + m_units);
 
-            m_effect = "Effect: " + player() + " advanced " + to_string(m_units) + " army units from " +
+            m_effect = "Effect: " + player() + " advanced " + to_string(m_units) + " units from " +
                        m_source->getTerritoryName() + " to " + m_target->getTerritoryName() + ".";
         }
         else
@@ -266,32 +287,28 @@ void Advance::execute()
         cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
-    decrementOrderCount();
-    if (m_orderCount == 0)
-        turnEnd();
-
     Notify(this);
+    decrementOrderCount(true);
 }
 
 void Advance::battle()
 {
     int defenceUnits = m_target->getArmyUnits();
-    int attackUnits = m_units;
+    int attackingUnits = m_units;
     string defencePlayer = m_target->getOwner()->getPlayerName();
 
-    m_effect = "Effect: " + player() + " advanced " + to_string(attackUnits) +
-               " army units from " + m_source->getTerritoryName() + " to attack " +
-               m_target->getTerritoryName() + ".\n";
+    m_effect = "Effect: " + player() + " advanced " + to_string(attackingUnits) + " units from " +
+               m_source->getTerritoryName() + " to attack " + m_target->getTerritoryName() + ".\n";
 
-    int attackKills = killCount(attackUnits, 60);
+    int attackKills = killCount(attackingUnits, 60);
     int defenceKills = killCount(defenceUnits, 70);
 
-    defenceKills = std::min(defenceKills, attackUnits);
-    attackUnits -= defenceKills;
+    defenceKills = std::min(defenceKills, attackingUnits);
+    attackingUnits -= defenceKills;
 
-    if ((attackUnits > 0) && (attackKills >= defenceUnits))
+    if ((attackingUnits > 0) && (attackKills >= defenceUnits))
     {
-        conquer(attackUnits);
+        conquer(attackingUnits);
 
         m_effect += "\tAttacker's " + to_string(m_units) + " units killed " +
                     to_string(defenceUnits) + " of " + to_string(defenceUnits) +
@@ -299,7 +316,7 @@ void Advance::battle()
                     to_string(defenceKills) + " of " + to_string(m_units) + " attack units.\n\t" +
                     "Attacker victory! " + player() + " conquered " +
                     m_target->getTerritoryName() + " from " + defencePlayer + " with " +
-                    to_string(attackUnits) + " surviving units.";
+                    to_string(attackingUnits) + " surviving units.";
     }
     else
     {
@@ -307,8 +324,8 @@ void Advance::battle()
         m_target->setArmyUnits(defenceUnits - attackKills);
 
         string retreat = "";
-        if (attackUnits > 0)
-            retreat = "\n" + player() + " retreats " + to_string(attackUnits) + " units to " +
+        if (attackingUnits > 0)
+            retreat = "\n" + player() + " retreats " + to_string(attackingUnits) + " units to " +
                       m_source->getTerritoryName() + ".";
 
         m_effect += "\tAttacker's " + to_string(m_units) + " units killed " +
@@ -332,12 +349,12 @@ int Advance::killCount(int units, int probability) const
     return kills;
 }
 
-void Advance::conquer(int attackUnits)
+void Advance::conquer(int survivingUnits)
 {
     m_source->setArmyUnits(m_source->getArmyUnits() - m_units);
 
     m_target->getOwner()->removeTerritory(m_target);
-    m_target->setArmyUnits(attackUnits);
+    m_target->setArmyUnits(survivingUnits);
     m_player->addTerritory(m_target);
 
     if (std::find(m_getsCard.begin(), m_getsCard.end(), m_player) == m_getsCard.end())
@@ -382,17 +399,12 @@ bool Bomb::validate()
     }
 
     // check for active negotiations between the two players involved
-    for (auto pair : m_ceaseFire)
+    if (inNegotiations(m_target->getOwner()))
     {
-        const Player *targetPlayer = m_target->getOwner();
-        if ((pair.first == m_player && pair.second == targetPlayer) ||
-            (pair.first == targetPlayer && pair.second == m_player))
-        {
-            m_effect = "Negotiations are in effect between " + player() + " and " +
-                       m_target->getOwner()->getPlayerName() + ".";
-            cout << "~INVALID ORDER~\n";
-            return false;
-        }
+        m_effect = "Negotiations are in effect between " + player() + " and " +
+                   m_target->getOwner()->getPlayerName() + ".";
+        cout << "~INVALID ORDER~\n";
+        return false;
     }
 
     cout << "~order validated~\n";
@@ -404,14 +416,13 @@ void Bomb::execute()
     if (validate())
     {
         int initialUnits = m_target->getArmyUnits();
-        m_target->setArmyUnits(initialUnits / 2);
+        int survivingUnits = initialUnits / 2;
+        m_target->setArmyUnits(survivingUnits);
 
-        int survivingUnits = m_target->getArmyUnits();
         string territory = m_target->getTerritoryName();
         string lostUnits = to_string(initialUnits - survivingUnits);
         m_effect = "Effect: " + player() + " bombed " + territory + ". " + lostUnits +
-                   " of " + to_string(initialUnits) + " units killed.\n\t" + territory +
-                   " now has " + to_string(survivingUnits) +
+                   " units killed. " + territory + " now has " + to_string(survivingUnits) +
                    " units.";
         cout << m_effect << endl;
     }
@@ -419,11 +430,8 @@ void Bomb::execute()
         cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
-    decrementOrderCount();
-    if (m_orderCount == 0)
-        turnEnd();
-
     Notify(this);
+    decrementOrderCount(true);
 }
 
 Bomb::~Bomb() {}
@@ -471,29 +479,35 @@ void Blockade::execute()
         m_target->setArmyUnits(m_target->getArmyUnits() * 2);
         m_player->removeTerritory(m_target);
 
-        string neutralCreated = "";
-        if (m_neutralPlayer == nullptr)
+        Player *neutralPlayer = nullptr;
+        for (Player *player : GameEngine::getPlayers())
         {
-            m_neutralPlayer = new Player("Neutral Player");
+            if (player->getStrategyType() == "Neutral")
+            {
+                neutralPlayer = player;
+                break;
+            }
+        }
+
+        string neutralCreated = "";
+        if (!neutralPlayer)
+        {
+            GameEngine::addPlayer(neutralPlayer = new Player(new NeutralPlayerStrategy));
             neutralCreated = "Neutral Player created.";
         }
-        m_neutralPlayer->addTerritory(m_target);
+        neutralPlayer->addTerritory(m_target);
 
-        string territory = m_target->getTerritoryName();
-        m_effect = "Effect: " + player() + " blockaded " + territory + ". " + neutralCreated +
-                   "\n\t" + territory + " now has " + to_string(m_target->getArmyUnits()) +
-                   " units and belongs to the Neutral Player.";
+        m_effect = "Effect: " + player() + " blockaded " + m_target->getTerritoryName() + ". " +
+                   neutralCreated + "\n\t" + m_target->getTerritoryName() + " now has " +
+                   to_string(m_target->getArmyUnits()) + " units and belongs to a Neutral Player.";
         cout << m_effect << endl;
     }
     else
         cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
-    decrementOrderCount();
-    if (m_orderCount == 0)
-        turnEnd();
-
     Notify(this);
+    decrementOrderCount(true);
 }
 
 Blockade::~Blockade() {}
@@ -568,11 +582,8 @@ void Airlift::execute()
         cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
-    decrementOrderCount();
-    if (m_orderCount == 0)
-        turnEnd();
-
     Notify(this);
+    decrementOrderCount(true);
 }
 
 Airlift::~Airlift() {}
@@ -602,15 +613,21 @@ Order *Negotiate::clone() const
 
 bool Negotiate::validate()
 {
-    if (m_target != m_player)
+    if (m_target == m_player)
     {
-        cout << "~order validated~\n";
-        return true;
+        m_effect = "A player cannot negotiate with themselves.";
+        cout << "~INVALID ORDER~\n";
+        return false;
+    }
+    if (inNegotiations(m_target))
+    {
+        m_effect = "Players already in active negotiations.";
+        cout << "~INVALID ORDER~\n";
+        return false;
     }
 
-    m_effect = "A player cannot negotiate with themselves.";
-    cout << "~INVALID ORDER~\n";
-    return false;
+    cout << "~order validated~\n";
+    return true;
 }
 
 void Negotiate::execute()
@@ -628,11 +645,8 @@ void Negotiate::execute()
         cout << (m_effect = "Effect: No effect. " + m_effect) << endl;
 
     m_executed = true;
-    decrementOrderCount();
-    if (m_orderCount == 0)
-        turnEnd();
-
     Notify(this);
+    decrementOrderCount(true);
 }
 
 Negotiate::~Negotiate() {}
@@ -675,7 +689,7 @@ void OrdersList::remove(int p)
     {
         delete (m_orders[p - 1]);
         m_orders.erase(m_orders.begin() + (p - 1));
-        Order::decrementOrderCount();
+        Order::decrementOrderCount(false);
     }
 }
 
@@ -735,7 +749,7 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
     {
         int i = 1;
         for (auto &order : orders.m_orders)
-            cout << i++ << ". " << *order << endl;
+            cout << "    " << i++ << ". " << *order << endl;
         return output;
     }
 }
@@ -743,7 +757,6 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
 // stringToLog
 string Order::stringToLog()
 {
-
     string stringLog = "Order has been executed. " + m_effect;
     cout << stringLog << endl;
     return stringLog;
@@ -752,7 +765,6 @@ string Order::stringToLog()
 // stringToLog
 string OrdersList::stringToLog()
 {
-
     string stringLog = m_orders.back()->type() + " Order has been added to the Order List.";
     cout << stringLog << endl;
     return stringLog;

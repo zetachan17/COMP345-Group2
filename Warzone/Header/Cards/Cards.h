@@ -1,18 +1,19 @@
 #pragma once
 
 #include <vector>
+using std::vector;
 #include <string>
+using std::string;
 #include <iostream>
 using std::ostream;
-using std::string;
-using std::vector;
+#include <array>
+using std::array;
 
 class Player;
 
 class Card
 {
 public:
-	
 	// constructors
 	Card();
 	Card(string type);
@@ -30,8 +31,10 @@ public:
 	// REQUIRED - plays the card, each subclass overrides this to issue the appropriate Order through the Player class
 	virtual void play(Player *player) = 0;
 
+	virtual Card *clone() const = 0;
+
 	// returns the name of the card type
-	string cardType() const;
+	const string cardType() const;
 
 protected:
 	string type;
@@ -43,7 +46,8 @@ class AirliftCard : public Card
 public:
 	AirliftCard();
 	~AirliftCard();
-	void play(Player* player) override;
+	void play(Player *player) override;
+	Card *clone() const override;
 };
 
 /// Card subclass representing a Blockade card
@@ -52,8 +56,8 @@ class BlockadeCard : public Card
 public:
 	BlockadeCard();
 	~BlockadeCard();
-	void play(Player* player) override;
-
+	void play(Player *player) override;
+	Card *clone() const override;
 };
 
 /// Card subclass representing a Bomb card
@@ -62,9 +66,9 @@ class BombCard : public Card
 public:
 	BombCard();
 	~BombCard();
-	void play(Player* player) override;
+	void play(Player *player) override;
+	Card *clone() const override;
 };
-
 
 /// Card subclass representing a Negotiate card
 class DiplomacyCard : public Card
@@ -72,21 +76,22 @@ class DiplomacyCard : public Card
 public:
 	DiplomacyCard();
 	~DiplomacyCard();
-	void play(Player* player) override;
+	void play(Player *player) override;
+	Card *clone() const override;
 };
 
 /// Card subclass representing a Reinforcement card
-class ReinforcementCard: public Card
+class ReinforcementCard : public Card
 {
 public:
 	ReinforcementCard();
 	~ReinforcementCard();
-	void play(Player* player) override;
+	void play(Player *player) override;
+	Card *clone() const override;
 };
 
 class Deck
 {
-
 public:
 	// constructors
 	Deck();
@@ -112,6 +117,8 @@ public:
 
 private:
 	vector<Card *> cardsInDeck;
+
+	void clearDeck();
 };
 
 class Hand
@@ -137,9 +144,25 @@ public:
 	// plays card from hand and adds it back to the deck
 	void playCard(Player *player, Deck *deck);
 
+	// plays card from hand and adds it back to the deck
+	void playCard(Player *player, const string &typeToPlay);
+
+	// returns number of cards in hand
+	int getHandSize() const;
+
 	// getters
-	vector<Card *> getCards();
+	const vector<Card *> getCards() const;
+
+	void returnCardsToDeck(Deck* deck);
+
+	bool hasAirlift();
+	bool hasBlockade();
+	bool hasBomb();
+	bool hasNegotiate();
 
 private:
 	vector<Card *> cardsInHand;
+	array<int, 4> cardTypesInHand;
+
+	void updateCardTypesInHand(const string &type, int add);
 };

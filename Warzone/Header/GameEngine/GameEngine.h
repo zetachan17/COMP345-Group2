@@ -8,7 +8,6 @@ class Player;
 class Deck;
 class Card;
 
-
 class CommandProcessor;
 
 class GameEngine : public Subject, public ILoggable
@@ -31,7 +30,7 @@ public:
     GameEngine();                              // default constructor
     GameEngine(const GameEngine &game);        // copy constructor
     GameEngine &operator=(const GameEngine &); // assignment operator
-    virtual ~GameEngine();                             // destructor
+    virtual ~GameEngine();                     // destructor
 
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
@@ -39,25 +38,27 @@ public:
 
     void addPlayer(std::string name);
 
-    static std::vector<Player*> getPlayers();
+    static void addPlayer(Player *player);
+
+    static std::vector<Player *> getPlayers();
 
     // returns pointer to game deck
     static Deck *getDeck();
-    
-    //Start the game
-    State startupPhase(State state, CommandProcessor*commandProcessor);
 
-    //methods
+    // Start the game
+    State startupPhase(State state, CommandProcessor *commandProcessor);
+
+    // methods
     State getState();
     std::string stateToString(State state);
 
-    CommandProcessor* initializeCommandProcessor();
+    CommandProcessor *initializeCommandProcessor();
     friend class GameProcessor;
 
     // contains logic for the game loop after initial setup
     void mainGameLoop(MapLoader *mLoader);
 
-    //stringToLog
+    // stringToLog
     string stringToLog();
 
 private:
@@ -78,24 +79,26 @@ private:
     // Part 2.4.d) let each player draw 2 initial cards from the deck using the deck's draw() method
     void drawInitialCards();
 
-    //Part 3.1
+    // Part 3.1
     void reinforcementPhase(MapLoader *mLoader);
 
-    //Part 3.2
+    // Part 3.2
     void issueOrdersPhase();
 
-    //Part 3.3
+    // Part 3.3
     void executeOrdersPhase();
 
-    //Part 3.3.a
+    // Part 3.3.a
     void executeDeployOrders();
 
-    //Part 3.3.b
+    // Part 3.3.b
     void executeRemainingOrders();
 
     void checkForDefeats();
+
     void checkForVictory(MapLoader* mLoader);
 
     //A3P2, process tournament command
     std::vector<std::string> processTournamentCommand(string userinput);
+
 };

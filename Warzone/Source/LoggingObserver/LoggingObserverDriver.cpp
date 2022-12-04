@@ -106,10 +106,10 @@ void testLoggingObserver() {
     eugene->addReinforcements(50);
 
     // issue test deploy orders
-    tina->issueOrder(new Deploy(tina, 10, territories[4]));
+    //tina->issueOrder(new Deploy(tina, 10, territories[4]));
 
     // issue test advance orders
-    eugene->issueOrder(new Advance(eugene, 5, territories[4], territories[0]));
+    //eugene->issueOrder(new Advance(eugene, 5, territories[4], territories[0]));
 
     // test execution of deploy orders
     Order* next = tina->nextOrder();
