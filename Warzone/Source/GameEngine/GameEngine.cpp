@@ -675,7 +675,7 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
 bool GameEngine::checkForDraw()
 {
     currentTurn++;
-    if (currentTurn > turnLimit)
+    if (currentTurn == turnLimit)
     {
         std::cout << "Turn limit is reached! Now end the game!" << endl;
         this->state = GameEngine::State::Win;
@@ -715,7 +715,7 @@ void GameEngine::createStrategyPlayer(string userinput)
     {
         newPlayer = new Player(new CheaterPlayerStrategy);
     }
-    else if (userinput == "Human")
+    else
     {
         newPlayer = new Player(new HumanPlayerStrategy);
     }
