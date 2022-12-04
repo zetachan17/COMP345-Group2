@@ -61,9 +61,6 @@ void testLoggingObserver() {
     
     cout << "\nOrder::execute() being added to log file:" << endl;
 
-    // setup game engine (just to test access to the deck), territories, and players to test
-    GameEngine* game = new GameEngine();
-
     Territory* territories[7] = { new Territory(0, "Villeray", 4), new Territory(1, "Little Italy", 4),
                                  new Territory(2, "Mile End", 3), new Territory(3, "Plateau", 3),
                                  new Territory(4, "Mount Royal", 2), new Territory(5, "Downtown", 1),
@@ -161,9 +158,6 @@ void testLoggingObserver() {
 
     OrdersList* orders = new OrdersList();
     LogObserver* view4 = new LogObserver(orders);
-
-    // setup game engine (just to test access to the deck), territories, and players to test
-    GameEngine* game2 = new GameEngine();
 
     Territory* territories2[7] = { new Territory(0, "Villeray", 4), new Territory(1, "Little Italy", 4),
                                  new Territory(2, "Mile End", 3), new Territory(3, "Plateau", 3),

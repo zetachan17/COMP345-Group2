@@ -35,6 +35,7 @@ public:
     // stream insertion operator
     friend std::ostream &operator<<(std::ostream &out, const GameEngine &g);
     friend std::istream &operator>>(std::istream &in, GameEngine &g);
+    friend class FileCommandProcessorAdapter;
 
     void addPlayer(std::string name);
 
@@ -66,6 +67,9 @@ private:
     State state;
     static Deck *deck;
     static std::vector<Player *> activePlayers;
+    int turnLimit;
+    int currentTurn;
+    //std::ofstream tournamentFile;
 
     // Part 2.4.a) fairly distribute all the territories to the players
     void distributeTerritories(MapLoader *mLoader);
@@ -95,5 +99,11 @@ private:
     void executeRemainingOrders();
 
     void checkForDefeats();
-    void checkForVictory(MapLoader *mLoader);
+
+    void checkForVictory(MapLoader* mLoader);
+
+    bool checkForDraw();
+
+    //convert userinput to corresponding strategy
+    void createStrategyPlayer(string userinput);
 };

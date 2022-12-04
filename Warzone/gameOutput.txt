@@ -1,0 +1,10 @@
+Tournament mode:
+M: Montreal.map, 4D_Hypercube.map
+P: Benevolent, Neutral, Cheater
+G: 4
+D: 30
+
+Results: 
+Game #              | Game 1            | Game 2            | Game 3            | Game 4            | Game 1            | Game 2            | Game 3            | Game 4            
+Map                 | Montreal.map      | Montreal.map      | Montreal.map      | Montreal.map      | 4D_Hypercube.map  | 4D_Hypercube.map  | 4D_Hypercube.map  | 4D_Hypercube.map  
+Winner              | Draw              | Benevolent Player | Neutral Player    | Draw              | Neutral Player    | Draw              | Draw              | Draw              

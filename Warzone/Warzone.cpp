@@ -11,5 +11,5 @@ int main()
     //P1
     testPlayerStrategies();
     //P2
-
+    //testStartupPhase();
 }

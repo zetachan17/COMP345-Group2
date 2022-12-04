@@ -1,0 +1,19 @@
+loadmap 001_I72_Ghtroc720.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+gamestart
+replay
+loadmap 001_I72_Ghtroc720.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+gamestart
+replay
+loadmap 001_I72_Ghtroc720.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+gamestart
+quit
+30

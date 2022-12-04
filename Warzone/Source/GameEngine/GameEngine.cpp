@@ -6,9 +6,14 @@
 #include "Orders/Orders.h"
 
 #include <iostream>
+#include <fstream>
 #include <random>
 #include <regex>
+#include <sstream>
 #include <string>
+#include <iomanip>
+
+#include "PlayerStrategies/PlayerStrategies.h"
 
 GameEngine::GameEngine()
 {
@@ -66,6 +71,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::Start:
         activePlayers.clear();
         deck->createDeck();
+        currentTurn = 0;
         std::cout << "Welcome to Warzone!" << std::endl;
         commandProcessor->getCommand(commandProcessor); // Getting the command from the user
         if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName) == "NULL")
@@ -151,10 +157,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         if (commandValidateValue)
         {
             // P2.3 add players
-            // TODO: find a better place to add players
-            Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
-            activePlayers.push_back(newPlayer);
-
+            createStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
             this->state = GameEngine::State::PlayersAdded;
             (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
             std::cout << "The effect of this command is: " << commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
@@ -176,9 +179,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         {
             if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName).substr(0, 9) == "addplayer")
             {
-
-                Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
-                activePlayers.push_back(newPlayer);
+                createStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
                 (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
                 std::cout << "The effect of this command is: " << commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
                 commandProcessor->nbCommands++;
@@ -234,8 +235,12 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
              << "\t** Execute Orders Phase **\n\n";
         executeOrdersPhase();
         this->state = GameEngine::State::AssignReinforcement;
-        checkForVictory(mLoader);
-        checkForDefeats();
+        if (!checkForDraw())
+        {
+            checkForVictory(mLoader);
+            checkForDefeats();
+        }
+        
         break;
     case GameEngine::State::Win:
 
@@ -383,30 +388,43 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
 {
     CommandProcessor *commandProcessor;
     string userInput;
-    std::regex fileRegex("-file");
-
-    std::cout << "Please choose if you want the game accept commands form the console (-console) or from a file (-file filename)" << std::endl;
+    std::regex fileRegex("-file ");
+    
+    std::cout << "Please enter the tournament command" << std::endl;
     std::getline(cin, userInput);
 
+    //processTournamentCommand(userInput);
+    
     if (userInput == "-console")
     {
         commandProcessor = new CommandProcessor();
     }
-    else if (std::regex_search(userInput, fileRegex))
+    else if (!(userInput == "-file") && std::regex_search(userInput, fileRegex))
     {
         string fileName = userInput.substr(6);
         std::cout << "The file name is:" << fileName << std::endl;
-        FileLineReader *fileLineReader = new FileLineReader();
+        FileLineReader* fileLineReader = new FileLineReader();
         commandProcessor = new FileCommandProcessorAdapter(fileLineReader, fileName);
     }
+    else if (userInput.substr(0,13) == "tournament -M")
+    {
+        std::string tournamentFileName = "tournamentFile.txt";
+        FileLineReader* fileLineReader = new FileLineReader();
+        FileCommandProcessorAdapter* commandProcessor = new FileCommandProcessorAdapter(fileLineReader, tournamentFileName);
+        commandProcessor->commands = commandProcessor->processTournamentCommand(userInput);
+        turnLimit = stoi(commandProcessor->commands.back());
+        return commandProcessor;
+    }
+   
     else
     {
         commandProcessor = nullptr;
         this->state = GameEngine::State::End;
-        std::cout << "Invalid input. Please enter -console or -file \"filename\" exclusively" << endl;
+        std::cout << "Invalid input. Please enter the tournament command correctly!" << endl;
+        return commandProcessor;
     }
 
-    return commandProcessor;
+    //return commandProcessor;
 }
 
 Deck *GameEngine::getDeck()
@@ -621,6 +639,7 @@ void GameEngine::checkForDefeats()
     }
 }
 
+
 void GameEngine::checkForVictory(MapLoader *mLoader)
 {
     std::cout << "Checking for victory condition" << endl;
@@ -632,6 +651,17 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
         {
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has won!" << endl;
             victory = true;
+
+            //Logging
+            std::ofstream gameLog;
+            gameLog.open("gameOutput.txt", std::ios_base::app);
+            gameLog
+                << left
+                << setw(20)
+                << "| " + activePlayers[i]->getPlayerName();
+            gameLog.close();
+            
+
             this->state = GameEngine::State::Win;
         }
     }
@@ -642,10 +672,62 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
     }
 }
 
-// GameEngine's stringToLog() method
+bool GameEngine::checkForDraw()
+{
+    currentTurn++;
+    if (currentTurn == turnLimit)
+    {
+        std::cout << "Turn limit is reached! Now end the game!" << endl;
+        this->state = GameEngine::State::Win;
+
+        //Logging
+        std::ofstream gameLog;
+        gameLog.open("gameOutput.txt", std::ios_base::app);
+        gameLog
+            << left
+            << setw(20)
+            << "| Draw";
+        gameLog.close();
+
+        return true;
+    }
+
+    return false;
+}
+
+void GameEngine::createStrategyPlayer(string userinput)
+{
+    Player *newPlayer = nullptr;
+
+    if (userinput == "Aggressive")
+    {
+        newPlayer = new Player(new AggressivePlayerStrategy);
+    }
+    else if (userinput == "Benevolent")
+    {
+        newPlayer = new Player(new BenevolentPlayerStrategy);
+    }
+    else if (userinput == "Neutral")
+    {
+        newPlayer = new Player(new NeutralPlayerStrategy);
+    }
+    else if (userinput == "Cheater")
+    {
+        newPlayer = new Player(new CheaterPlayerStrategy);
+    }
+    else
+    {
+        newPlayer = new Player(new HumanPlayerStrategy);
+    }
+    
+    activePlayers.push_back(newPlayer);
+}
+
+//gameengine's stringtolog() method
 string GameEngine::stringToLog()
 {
     string stringLog = "New state is " + stateToString(getState()) + " using transition().";
     cout << stringLog << endl;
     return stringLog;
 }
+

@@ -51,6 +51,8 @@ private:
 	//This is the collection of Command objects
 	vector<Command*> listCommands;
 	int nbCommands;
+	std::ofstream tournamentFile;
+	std::vector<std::string> commands;
 
 protected:
 	virtual string readCommand();
@@ -74,6 +76,9 @@ public:
 	//Operator Overloads
 	CommandProcessor& operator=(const CommandProcessor& adapter);
 	friend std::ostream& operator<<(std::ostream& output, const CommandProcessor& adapter);
+
+	//public method
+	virtual std::vector<std::string> processTournamentCommand(string userinput);
 	
 	//friends
 
@@ -126,6 +131,8 @@ public:
 	FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& adapter);
 	friend std::ostream& operator<<(std::ostream& output, const FileCommandProcessorAdapter& adapter);
 
+	std::vector<std::string> commands;
+
 protected:
 	
 	 string readCommand() override;
@@ -133,7 +140,7 @@ protected:
 private:
 	FileLineReader* fileLineReader;
 	vector<Command*> listCommands;
-
+	std::ofstream tournamentFile;
 
 };
 
