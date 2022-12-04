@@ -201,7 +201,7 @@ void Deck::addToDeck(Card *card)
 	cardsInDeck.push_back(card);
 }
 
-Hand::Hand() cardsInHand{0} {}
+Hand::Hand() {}
 
 Hand::Hand(const Hand &hand)
 {
