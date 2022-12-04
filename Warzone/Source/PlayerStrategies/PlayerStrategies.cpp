@@ -284,7 +284,7 @@ const vector<string> HumanPlayerStrategy::getOrdersAvailable() const
             ordersAvailable.push_back("Blockade");
         if (player->getHand()->hasBomb())
             ordersAvailable.push_back("Bomb");
-        if (player->getHand()->hasNegotiate())
+        if (player->getHand()->hasDiplomacy())
             ordersAvailable.push_back("Negotiate");
     }
     ordersAvailable.push_back("Pass");
@@ -471,6 +471,7 @@ void BenevolentPlayerStrategy::issueOrder()
         issueAdvanceOrder();
     else if (hasBenevolentCard())
     {
+        cout << "playing a nice card" << endl;
         playBenevolentCard();
         player->setIsFinishedIssuingOrders(true);
     }
@@ -480,15 +481,15 @@ void BenevolentPlayerStrategy::issueOrder()
 
 bool BenevolentPlayerStrategy::hasBenevolentCard()
 {
-    return player->getHand()->hasAirlift() || player->getHand()->hasNegotiate() || player->getHand()->hasReinforcement();
+    return player->getHand()->hasAirlift() || player->getHand()->hasDiplomacy() || player->getHand()->hasReinforcement();
 }
 
 void BenevolentPlayerStrategy::playBenevolentCard()
 {
     if (player->getHand()->hasAirlift())
         player->getHand()->playCard(player, "Airlift");
-    else if (player->getHand()->hasNegotiate())
-        player->getHand()->playCard(player, "Negotiate");
+    else if (player->getHand()->hasDiplomacy())
+        player->getHand()->playCard(player, "Diplomacy");
     else if (player->getHand()->hasReinforcement())
         player->getHand()->playCard(player, "Reinforcement");
 }
@@ -550,8 +551,8 @@ void BenevolentPlayerStrategy::issueAdvanceOrder()
 
         // of the owned adjacent territories, sort to find the one with the most armies
         sort(adjacentOwnedTerritories.begin(), adjacentOwnedTerritories.end(),
-        [](const Territory &x, const Territory &y) {
-            return x.getArmyUnits() > y.getArmyUnits();
+        [](const Territory *x, const Territory *y) {
+            return x->getArmyUnits() > y->getArmyUnits();
         });
 
         sourceTerritory = adjacentOwnedTerritories[0];
@@ -613,8 +614,8 @@ vector<Territory *> BenevolentPlayerStrategy::toDefend() const
     vector<Territory*> sortedTerritories = player->getTerritories();
 
     sort(sortedTerritories.begin(), sortedTerritories.end(),
-            [](const Territory &x, const Territory &y) {
-                return x.getArmyUnits() < y.getArmyUnits();
+            [](const Territory *x, const Territory *y) {
+                return x->getArmyUnits() < y->getArmyUnits();
             });
     
     return sortedTerritories;

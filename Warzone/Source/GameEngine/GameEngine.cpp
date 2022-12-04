@@ -346,7 +346,7 @@ void GameEngine::distributeTerritories(MapLoader *mLoader)
         int count = 0;
         std::cout << player->getPlayerName() << std::endl;
 
-        for (Territory *terr : player->toDefend())
+        for (Territory *terr : player->getTerritories())
         {
             std::cout << terr->getTerritoryName() << std::endl;
             count++;

@@ -158,12 +158,9 @@ public:
 	bool hasAirlift();
 	bool hasBlockade();
 	bool hasBomb();
-	bool hasNegotiate();
+	bool hasDiplomacy();
 	bool hasReinforcement();
 
 private:
 	vector<Card *> cardsInHand;
-	array<int, 5> cardTypesInHand;
-
-	void updateCardTypesInHand(const string &type, int add);
 };
