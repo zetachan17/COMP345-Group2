@@ -962,7 +962,10 @@ void CheaterPlayerStrategy::issueOrder()
     
     for(Territory* territory : toAttack())
     {
-        territory->setOwner(player);
+        territory->getOwner()->removeTerritory(territory);
+        player->addTerritory(territory);
+
+        Order::playerEarnedCard(player);
     }
 
     player->setIsFinishedIssuingOrders(true);

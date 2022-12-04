@@ -102,6 +102,12 @@ vector<Player *> *Order::getsCard()
     return &m_getsCard;
 }
 
+void Order::playerEarnedCard(Player* player)
+{
+    if (std::find(m_getsCard.begin(), m_getsCard.end(), player) == m_getsCard.end())
+        m_getsCard.push_back(player);
+}
+
 vector<pair<Player *, Player *>> *Order::negotiations()
 {
     return &m_ceaseFire;
@@ -358,8 +364,7 @@ void Advance::conquer(int survivingUnits)
     m_target->setArmyUnits(survivingUnits);
     m_player->addTerritory(m_target);
 
-    if (std::find(m_getsCard.begin(), m_getsCard.end(), m_player) == m_getsCard.end())
-        m_getsCard.push_back(m_player);
+    playerEarnedCard(m_player);
 }
 
 Advance::~Advance() {}
