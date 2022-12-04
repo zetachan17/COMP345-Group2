@@ -1,6 +1,7 @@
 #include "Cards/Cards.h"
 #include "Orders/Orders.h"
 #include "Player/Player.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 #include "GameEngine/GameEngine.h"
 
 #include <iostream>
@@ -93,7 +94,8 @@ ReinforcementCard::~ReinforcementCard() {}
 
 void ReinforcementCard::play(Player *player)
 {
-	cout << "*Playing a Reinforcement Card*" << endl;
+	cout << "*Playing a Reinforcement Card*\nImmediate effect: 5 army units added to "
+		 << player->getPlayerName() << "'s reinforcement pool.\n";
 	player->addReinforcements(5);
 }
 
@@ -205,9 +207,6 @@ Hand::Hand(const Hand &hand)
 {
 	for (Card *card : hand.cardsInHand)
 		this->cardsInHand.push_back(card->clone());
-
-	for (int i = 0; i < cardTypesInHand.size(); i++)
-		this->cardTypesInHand[i] = hand.cardTypesInHand[i];
 }
 
 Hand::~Hand()
@@ -221,9 +220,6 @@ Hand &Hand::operator=(const Hand &hand)
 {
 	for (Card *card : hand.cardsInHand)
 		this->cardsInHand.push_back(card->clone());
-
-	for (int i = 0; i < cardTypesInHand.size(); i++)
-		this->cardTypesInHand[i] = hand.cardTypesInHand[i];
 
 	return *this;
 }
@@ -248,22 +244,6 @@ void Hand::addToHand(Card *card)
 {
 	cardsInHand.push_back(card);
 	cout << "Card " << card->cardType() << " has been added to the hand." << endl;
-
-	updateCardTypesInHand(card->cardType(), 1);
-}
-
-void Hand::playCard(Player *player, Deck *deck)
-{
-	int randomIndex = rand() % (getCards().size());
-	Card *randomCard = getCards()[randomIndex];
-
-	cardsInHand.erase(cardsInHand.begin() + randomIndex);
-
-	deck->addToDeck(randomCard);
-
-	randomCard->play(player);
-
-	updateCardTypesInHand(randomCard->cardType(), -1);
 }
 
 void Hand::playCard(Player *player, const string &typeToPlay)
@@ -278,8 +258,6 @@ void Hand::playCard(Player *player, const string &typeToPlay)
 			break;
 		}
 	}
-
-	updateCardTypesInHand(typeToPlay, -1);
 }
 
 int Hand::getHandSize() const
@@ -294,43 +272,65 @@ const vector<Card *> Hand::getCards() const
 
 bool Hand::hasAirlift()
 {
-	return cardTypesInHand[0];
+	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+						 { return card->cardType() == "Airlift"; }) == this->cardsInHand.end())
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 bool Hand::hasBlockade()
 {
-	return cardTypesInHand[1];
+	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+						 { return card->cardType() == "Blockade"; }) == this->cardsInHand.end())
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 bool Hand::hasBomb()
 {
-	return cardTypesInHand[2];
+	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+						 { return card->cardType() == "Bomb"; }) == this->cardsInHand.end())
+	{
+		return false;
+	}
+	
+	return true;
 }
 
-bool Hand::hasNegotiate()
+bool Hand::hasDiplomacy()
 {
-	return cardTypesInHand[3];
+	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+						 { return card->cardType() == "Diplomacy"; }) == this->cardsInHand.end())
+	{
+		return false;
+	}
+	
+	return true;
 }
 
-void Hand::updateCardTypesInHand(const string &type, int add)
+bool Hand::hasReinforcement()
 {
-	if (type == "Airlift")
-		cardTypesInHand[0] += add;
-	else if (type == "Blockade")
-		cardTypesInHand[1] += add;
-	else if (type == "Bomb")
-		cardTypesInHand[2] += add;
-	else if (type == "Diplomacy")
-		cardTypesInHand[3] += add;
+	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+						 { return card->cardType() == "Reinforcement"; }) == this->cardsInHand.end())
+	{
+		return false;
+	}
+	
+	return true;
 }
 
-void Hand::returnCardsToDeck(Deck *deck)
+void Hand::returnCardsToDeck()
 {
 	for (Card *card : cardsInHand)
-		deck->addToDeck(card);
+		GameEngine::getDeck()->addToDeck(card);
 
 	cardsInHand.clear();
-	cardTypesInHand = {0};
 }
 
 Card *AirliftCard::clone() const

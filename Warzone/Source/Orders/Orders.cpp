@@ -102,6 +102,12 @@ vector<Player *> *Order::getsCard()
     return &m_getsCard;
 }
 
+void Order::playerEarnedCard(Player* player)
+{
+    if (std::find(m_getsCard.begin(), m_getsCard.end(), player) == m_getsCard.end())
+        m_getsCard.push_back(player);
+}
+
 vector<pair<Player *, Player *>> *Order::negotiations()
 {
     return &m_ceaseFire;
@@ -293,6 +299,7 @@ void Advance::execute()
 
 void Advance::battle()
 {
+    m_target->getOwner()->underAttack();
     int defenceUnits = m_target->getArmyUnits();
     int attackingUnits = m_units;
     string defencePlayer = m_target->getOwner()->getPlayerName();
@@ -357,8 +364,7 @@ void Advance::conquer(int survivingUnits)
     m_target->setArmyUnits(survivingUnits);
     m_player->addTerritory(m_target);
 
-    if (std::find(m_getsCard.begin(), m_getsCard.end(), m_player) == m_getsCard.end())
-        m_getsCard.push_back(m_player);
+    playerEarnedCard(m_player);
 }
 
 Advance::~Advance() {}
@@ -415,6 +421,8 @@ void Bomb::execute()
 {
     if (validate())
     {
+        m_target->getOwner()->underAttack();
+        
         int initialUnits = m_target->getArmyUnits();
         int survivingUnits = initialUnits / 2;
         m_target->setArmyUnits(survivingUnits);
@@ -752,6 +760,11 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
             cout << "    " << i++ << ". " << *order << endl;
         return output;
     }
+}
+
+const int OrdersList::size() const
+{
+    return m_orders.size();
 }
 
 // stringToLog

@@ -38,6 +38,8 @@ public:
 
 protected:
     Player *player;
+
+    bool hasUnitsOnMap() const;
 };
 
 // Human player strategy: requires user input to make decisions
@@ -66,14 +68,12 @@ public:
 
 private:
     const string selectOrder();
+    vector<string> getOrdersAvailable() const;
     Territory *selectTerritory(vector<Territory *> territories, string label) const;
     int selectArmyUnits(Territory *territory, string descriptor, int max = 0) const;
 
-    const vector<string> getOrdersAvailable() const;
-
-    void printTerritoriesAndUnits(vector<Territory*> territories, string label) const;
+    void printTerritoriesAndUnits(vector<Territory *> territories, string label) const;
     void invalidInput(bool outOfBounds, string message) const;
-    bool hasUnitsOnMap() const;
     bool inNegotiations(Player *target) const;
 };
 
@@ -101,6 +101,21 @@ public:
     vector<Territory *> toAttack() const override;
 
     string getStrategyType() const override;
+
+private:
+    Territory *strongest;
+    vector<int> unitsToAdvanceFromStrongest;
+    vector<Territory *> toAdvanceFrom;
+    vector<Territory *> toAdvanceTo;
+    bool firstOrder;
+
+    void setTerritoriesToAdvanceFrom();
+    const string selectOrder();
+    vector<string> getOrdersAvailable() const;
+    Territory *setStrongestTerritory();
+    vector<Territory *> enemyBorders(Territory *territory) const;
+    Territory *pathToStrongest(Territory *source, Territory *target) const;
+    Territory *pathToEnemy() const;
 };
 
 // Computer player that focuses on protecting its weak countries (deploys or advances armies
@@ -127,6 +142,10 @@ public:
     vector<Territory *> toAttack() const override;
 
     string getStrategyType() const override;
+
+private:
+    bool hasBenevolentCard();
+    void playBenevolentCard();
 };
 
 // Computer player that never issues any order. If attacked, it becomes an Aggressive player

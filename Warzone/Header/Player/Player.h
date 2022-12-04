@@ -62,14 +62,16 @@ public:
 	// returns whether the player has finished issuing orders
 	bool isFinishedIssuingOrders() const;
 
+	void underAttack();
+
 	// sets bool signaling if player finished issuing orders this turn
 	void setIsFinishedIssuingOrders(bool finishedIssuingOrders);
 
+	//returns pointer to player's orderlist
+	OrdersList *getOrdersList();
+
 	// returns pointer to player's hand of cards
 	Hand *getHand();
-
-	// plays a random card from the players hand
-	void playCard();
 
 	// returns vector of pointers to territories controlled by the player
 	vector<Territory *> getTerritories() const;
@@ -102,6 +104,8 @@ public:
 
 	// sets a new player strategy
 	void setPlayerStrategy(PlayerStrategy *pStrategy);
+
+	PlayerStrategy* getStrategy();
 
 private:
 	vector<Territory *> territories;

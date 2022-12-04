@@ -56,6 +56,8 @@ public:
     // returns vector list of players who can draw a card at the end of the current turn
     static vector<Player *> *getsCard();
 
+    static void playerEarnedCard(Player* player);
+
     // returns vector list of pair of players in negotiations (i.e. cannot attack each other)
     static vector<pair<Player *, Player *>> *negotiations();
 
@@ -308,6 +310,9 @@ public:
 
     // stringToLog
     string stringToLog();
+
+    // returns number of orders in the list
+    const int size() const;
 
 private:
     vector<Order *> m_orders;
