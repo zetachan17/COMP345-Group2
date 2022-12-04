@@ -201,7 +201,7 @@ void Deck::addToDeck(Card *card)
 	cardsInDeck.push_back(card);
 }
 
-Hand::Hand() {}
+Hand::Hand() cardsInHand{0} {}
 
 Hand::Hand(const Hand &hand)
 {
@@ -272,57 +272,86 @@ const vector<Card *> Hand::getCards() const
 
 bool Hand::hasAirlift()
 {
-	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
-						 { return card->cardType() == "Airlift"; }) == this->cardsInHand.end())
-	{
-		return false;
-	}
-	
-	return true;
+	for (int i = 0; i < cardsInHand.size(); i++)
+		if (cardsInHand[i]->cardType() == "Reinforcement")
+			return true;
+
+	return false;
+
+	// if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+	// 					 { return card->cardType() == "Airlift"; }) == this->cardsInHand.end())
+	// {
+	// 	return false;
+	// }
+
+	// return true;
 }
 
 bool Hand::hasBlockade()
 {
-	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
-						 { return card->cardType() == "Blockade"; }) == this->cardsInHand.end())
-	{
-		return false;
-	}
-	
-	return true;
+	for (int i = 0; i < cardsInHand.size(); i++)
+		if (cardsInHand[i]->cardType() == "Reinforcement")
+			return true;
+
+	return false;
+
+	// if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+	// 					 { return card->cardType() == "Blockade"; }) == this->cardsInHand.end())
+	// {
+	// 	return false;
+	// }
+
+	// return true;
 }
 
 bool Hand::hasBomb()
 {
-	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
-						 { return card->cardType() == "Bomb"; }) == this->cardsInHand.end())
-	{
-		return false;
-	}
-	
-	return true;
+	for (int i = 0; i < cardsInHand.size(); i++)
+		if (cardsInHand[i]->cardType() == "Reinforcement")
+			return true;
+
+	return false;
+
+	// if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+	// 					 { return card->cardType() == "Bomb"; }) == this->cardsInHand.end())
+	// {
+	// 	return false;
+	// }
+
+	// return true;
 }
 
 bool Hand::hasDiplomacy()
 {
-	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
-						 { return card->cardType() == "Diplomacy"; }) == this->cardsInHand.end())
-	{
-		return false;
-	}
-	
-	return true;
+	for (int i = 0; i < cardsInHand.size(); i++)
+		if (cardsInHand[i]->cardType() == "Reinforcement")
+			return true;
+
+	return false;
+	// if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
+	// 					 { return card->cardType() == "Diplomacy"; }) == this->cardsInHand.end())
+	// {
+	// 	return false;
+	// }
+
+	// return true;
 }
 
 bool Hand::hasReinforcement()
 {
-	if (std::find_if(this->cardsInHand.begin(), this->cardsInHand.end(), [](Card *card)
-						 { return card->cardType() == "Reinforcement"; }) == this->cardsInHand.end())
-	{
-		return false;
-	}
-	
-	return true;
+	for (int i = 0; i < cardsInHand.size(); i++)
+		if (cardsInHand[i]->cardType() == "Reinforcement")
+			return true;
+
+	return false;
+
+	// if (std::find_if(cardsInHand.begin(), cardsInHand.end(), [](Card *card)
+	// 					 { return (card->cardType() == "Reinforcement"); }) == cardsInHand.end())
+	// {
+	// 	return false;
+	// }
+
+	// return true;
 }
 
 void Hand::returnCardsToDeck()
