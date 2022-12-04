@@ -1,6 +1,7 @@
 #include "Cards/Cards.h"
 #include "Orders/Orders.h"
 #include "Player/Player.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 #include "GameEngine/GameEngine.h"
 
 #include <iostream>
@@ -54,7 +55,7 @@ AirliftCard::~AirliftCard() {}
 void AirliftCard::play(Player *player)
 {
 	cout << "*Playing an Airlift Card*" << endl;
-	player->issueAirliftOrder();
+	player->getStrategy()->issueAirliftOrder();
 }
 
 BlockadeCard::BlockadeCard() : Card("Blockade") {}
@@ -64,7 +65,7 @@ BlockadeCard::~BlockadeCard() {}
 void BlockadeCard::play(Player *player)
 {
 	cout << "*Playing a Blockade Card*" << endl;
-	player->issueBlockadeOrder();
+	player->getStrategy()->issueBlockadeOrder();
 }
 
 BombCard::BombCard() : Card("Bomb") {}
@@ -74,7 +75,7 @@ BombCard::~BombCard() {}
 void BombCard::play(Player *player)
 {
 	cout << "*Playing a Bomb Card*" << endl;
-	player->issueBombOrder();
+	player->getStrategy()->issueBombOrder();
 }
 
 DiplomacyCard::DiplomacyCard() : Card("Diplomacy") {}
@@ -84,7 +85,7 @@ DiplomacyCard::~DiplomacyCard() {}
 void DiplomacyCard::play(Player *player)
 {
 	cout << "*Playing a Diplomacy Card*" << endl;
-	player->issueNegotiateOrder();
+	player->getStrategy()->issueNegotiateOrder();
 }
 
 ReinforcementCard::ReinforcementCard() : Card("Reinforcement") {}
@@ -312,6 +313,11 @@ bool Hand::hasNegotiate()
 	return cardTypesInHand[3];
 }
 
+bool Hand::hasReinforcement()
+{
+	return cardTypesInHand[4]
+}
+
 void Hand::updateCardTypesInHand(const string &type, int add)
 {
 	if (type == "Airlift")
@@ -322,6 +328,8 @@ void Hand::updateCardTypesInHand(const string &type, int add)
 		cardTypesInHand[2] += add;
 	else if (type == "Diplomacy")
 		cardTypesInHand[3] += add;
+	else if (type == "Reinforcement")
+		cardTypesInHand[4] += add;
 }
 
 void Hand::returnCardsToDeck(Deck *deck)

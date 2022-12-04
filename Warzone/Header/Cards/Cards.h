@@ -159,10 +159,11 @@ public:
 	bool hasBlockade();
 	bool hasBomb();
 	bool hasNegotiate();
+	bool hasReinforcement();
 
 private:
 	vector<Card *> cardsInHand;
-	array<int, 4> cardTypesInHand;
+	array<int, 5> cardTypesInHand;
 
 	void updateCardTypesInHand(const string &type, int add);
 };
