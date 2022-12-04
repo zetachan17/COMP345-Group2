@@ -351,7 +351,7 @@ void GameEngine::distributeTerritories(MapLoader *mLoader)
         int count = 0;
         std::cout << player->getPlayerName() << std::endl;
 
-        for (Territory *terr : player->toDefend())
+        for (Territory *terr : player->getTerritories())
         {
             std::cout << terr->getTerritoryName() << std::endl;
             count++;
@@ -620,7 +620,7 @@ void GameEngine::checkForDefeats()
         if (activePlayers[i]->getTerritories().size() == 0)
         {
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has lost." << endl;
-            activePlayers[i]->getHand()->returnCardsToDeck(deck);
+            activePlayers[i]->getHand()->returnCardsToDeck();
             activePlayers.erase(activePlayers.begin() + i);
             defeat = true;
             continue;
