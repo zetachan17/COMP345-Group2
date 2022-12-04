@@ -309,6 +309,9 @@ public:
     // stringToLog
     string stringToLog();
 
+    // returns number of orders in the list
+    const int size() const;
+
 private:
     vector<Order *> m_orders;
 };

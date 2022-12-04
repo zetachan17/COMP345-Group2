@@ -290,6 +290,11 @@ void Player::setIsFinishedIssuingOrders(bool finishedIssuingOrders)
 	cout << getPlayerName() << " has no more orders to issue.\n";
 }
 
+OrdersList *Player::getOrdersList()
+{
+	return ordersList;
+}
+
 Hand *Player::getHand()
 {
 	return hand;
@@ -371,6 +376,11 @@ const string &Player::getPlayerName() const
 string Player::getStrategyType() const
 {
 	return strategy->getStrategyType();
+}
+
+PlayerStrategy* Player::getStrategy()
+{
+	return strategy;
 }
 
 void Player::setPlayerStrategy(PlayerStrategy *pStrategy)

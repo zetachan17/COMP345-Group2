@@ -65,6 +65,9 @@ public:
 	// sets bool signaling if player finished issuing orders this turn
 	void setIsFinishedIssuingOrders(bool finishedIssuingOrders);
 
+	//returns pointer to player's orderlist
+	OrdersList *getOrdersList();
+
 	// returns pointer to player's hand of cards
 	Hand *getHand();
 
@@ -102,6 +105,8 @@ public:
 
 	// sets a new player strategy
 	void setPlayerStrategy(PlayerStrategy *pStrategy);
+
+	PlayerStrategy* getStrategy();
 
 private:
 	vector<Territory *> territories;

@@ -127,6 +127,10 @@ public:
     vector<Territory *> toAttack() const override;
 
     string getStrategyType() const override;
+
+private:
+    bool hasBenevolentCard();
+    void playBenevolentCard();
 };
 
 // Computer player that never issues any order. If attacked, it becomes an Aggressive player

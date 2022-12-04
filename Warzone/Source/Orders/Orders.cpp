@@ -754,6 +754,11 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
     }
 }
 
+const int OrdersList::size() const
+{
+    return m_orders.size();
+}
+
 // stringToLog
 string Order::stringToLog()
 {
