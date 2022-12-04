@@ -11,6 +11,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <iomanip>
 
 #include "PlayerStrategies/PlayerStrategies.h"
 
@@ -393,7 +394,6 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
     std::getline(cin, userInput);
 
     //processTournamentCommand(userInput);
-
     
     if (userInput == "-console")
     {
@@ -651,6 +651,17 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
         {
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has won!" << endl;
             victory = true;
+
+            //Logging
+            std::ofstream gameLog;
+            gameLog.open("gameOutput.txt", std::ios_base::app);
+            gameLog
+                << left
+                << setw(20)
+                << "| " + activePlayers[i]->getPlayerName();
+            gameLog.close();
+            
+
             this->state = GameEngine::State::Win;
         }
     }
@@ -668,6 +679,16 @@ bool GameEngine::checkForDraw()
     {
         std::cout << "Turn limit is reached! Now end the game!" << endl;
         this->state = GameEngine::State::Win;
+
+        //Logging
+        std::ofstream gameLog;
+        gameLog.open("gameOutput.txt", std::ios_base::app);
+        gameLog
+            << left
+            << setw(20)
+            << "| Draw";
+        gameLog.close();
+
         return true;
     }
 

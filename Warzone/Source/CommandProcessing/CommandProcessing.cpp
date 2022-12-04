@@ -7,6 +7,7 @@
 #include <regex>
 #include <vector>
 #include <sstream>
+#include <iomanip>
 
 
 Command::Command()
@@ -470,6 +471,47 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	int numMap = static_cast<int>(commandlist[0].size());
 	int numGame = std::stoi(commandlist[2][0]);
 
+	//std::string addplayerCommand = "addplayer " + commandlist[1][j];
+
+	//Logging
+	std::ofstream gameLog;
+	gameLog.open("gameOutput.txt", std::ios_base::app);
+
+	gameLog << "Tournament mode:" << std::endl << "M: ";
+	for (int i = 0; i < numMap; i++) {
+		gameLog << commandlist[0][i];
+		if (i != numMap - 1)
+			gameLog << ", ";
+	}
+	gameLog << std::endl << "P: ";
+	for (int i = 0; i < commandlist[1].size(); i++) {
+		gameLog << commandlist[1][i];
+		if (i != commandlist[1].size() - 1)
+			gameLog << ", ";
+	}
+	gameLog
+		<< std::endl << "G: " << commandlist[2][0]
+		<< std::endl << "D: " << commandlist[3][0]
+		<< "\n\nResults: " << std::endl
+	
+		<< left
+		<< setw(20)
+		<< "Game #";
+	for (int i = 0; i < numMap; i++) {
+		for (int j = 0; j < numGame; j++) {
+			gameLog
+				<< left
+				<< setw(20)
+				<< "| Game " + std::to_string(j + 1);
+		}
+	}
+	gameLog
+		<< std::endl
+		<< left
+		<< setw(20)
+		<< "Map";
+	
+
 	for (int m = 0; m < numMap; ++m)
 	{
 		for (int n = 0; n < numGame; ++n)
@@ -478,6 +520,12 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 			commands.push_back(loadmapCommand);
 			commands.push_back("validatemap");
 
+			//Logging
+			gameLog
+				<< left
+				<< setw(20)
+				<< "| " + commandlist[0][m];
+			
 			for (int j = 0; j < commandlist[1].size(); ++j)
 			{
 				std::string addplayerCommand = "addplayer " + commandlist[1][j];
@@ -488,6 +536,13 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 			commands.push_back("replay");
 		}
 	}
+	gameLog
+		<< std::endl
+		<< left
+		<< setw(20)
+		<< "Winner";
+	gameLog.close();
+
 
 	commands.pop_back();
 	commands.push_back("quit");
