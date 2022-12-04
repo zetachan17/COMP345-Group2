@@ -142,9 +142,6 @@ public:
 	void addToHand(Card *card);
 
 	// plays card from hand and adds it back to the deck
-	void playCard(Player *player, Deck *deck);
-
-	// plays card from hand and adds it back to the deck
 	void playCard(Player *player, const string &typeToPlay);
 
 	// returns number of cards in hand
@@ -153,7 +150,7 @@ public:
 	// getters
 	const vector<Card *> getCards() const;
 
-	void returnCardsToDeck(Deck* deck);
+	void returnCardsToDeck();
 
 	bool hasAirlift();
 	bool hasBlockade();

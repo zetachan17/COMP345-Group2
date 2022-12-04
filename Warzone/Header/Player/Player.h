@@ -73,9 +73,6 @@ public:
 	// returns pointer to player's hand of cards
 	Hand *getHand();
 
-	// plays a random card from the players hand
-	void playCard();
-
 	// returns vector of pointers to territories controlled by the player
 	vector<Territory *> getTerritories() const;
 

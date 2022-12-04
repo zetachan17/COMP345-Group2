@@ -55,7 +55,7 @@ AirliftCard::~AirliftCard() {}
 void AirliftCard::play(Player *player)
 {
 	cout << "*Playing an Airlift Card*" << endl;
-	player->getStrategy()->issueAirliftOrder();
+	player->issueAirliftOrder();
 }
 
 BlockadeCard::BlockadeCard() : Card("Blockade") {}
@@ -65,7 +65,7 @@ BlockadeCard::~BlockadeCard() {}
 void BlockadeCard::play(Player *player)
 {
 	cout << "*Playing a Blockade Card*" << endl;
-	player->getStrategy()->issueBlockadeOrder();
+	player->issueBlockadeOrder();
 }
 
 BombCard::BombCard() : Card("Bomb") {}
@@ -75,7 +75,7 @@ BombCard::~BombCard() {}
 void BombCard::play(Player *player)
 {
 	cout << "*Playing a Bomb Card*" << endl;
-	player->getStrategy()->issueBombOrder();
+	player->issueBombOrder();
 }
 
 DiplomacyCard::DiplomacyCard() : Card("Diplomacy") {}
@@ -85,7 +85,7 @@ DiplomacyCard::~DiplomacyCard() {}
 void DiplomacyCard::play(Player *player)
 {
 	cout << "*Playing a Diplomacy Card*" << endl;
-	player->getStrategy()->issueNegotiateOrder();
+	player->issueNegotiateOrder();
 }
 
 ReinforcementCard::ReinforcementCard() : Card("Reinforcement") {}
@@ -94,7 +94,8 @@ ReinforcementCard::~ReinforcementCard() {}
 
 void ReinforcementCard::play(Player *player)
 {
-	cout << "*Playing a Reinforcement Card*" << endl;
+	cout << "*Playing a Reinforcement Card*\nImmediate effect: 5 army units added to "
+		 << player->getPlayerName() << "'s reinforcement pool.\n";
 	player->addReinforcements(5);
 }
 
@@ -245,18 +246,6 @@ void Hand::addToHand(Card *card)
 	cout << "Card " << card->cardType() << " has been added to the hand." << endl;
 }
 
-void Hand::playCard(Player *player, Deck *deck)
-{
-	int randomIndex = rand() % (getCards().size());
-	Card *randomCard = getCards()[randomIndex];
-
-	cardsInHand.erase(cardsInHand.begin() + randomIndex);
-
-	deck->addToDeck(randomCard);
-
-	randomCard->play(player);
-}
-
 void Hand::playCard(Player *player, const string &typeToPlay)
 {
 	for (int i = 0; i < getHandSize(); i++)
@@ -336,10 +325,10 @@ bool Hand::hasReinforcement()
 	return true;
 }
 
-void Hand::returnCardsToDeck(Deck *deck)
+void Hand::returnCardsToDeck()
 {
 	for (Card *card : cardsInHand)
-		deck->addToDeck(card);
+		GameEngine::getDeck()->addToDeck(card);
 
 	cardsInHand.clear();
 }
