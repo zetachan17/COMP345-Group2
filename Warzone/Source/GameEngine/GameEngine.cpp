@@ -12,6 +12,8 @@
 #include <sstream>
 #include <string>
 
+#include "PlayerStrategies/PlayerStrategies.h"
+
 GameEngine::GameEngine()
 {
     this->state = GameEngine::State::Start;
@@ -153,9 +155,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         if (commandValidateValue)
         {
             // P2.3 add players
-            // TODO: find a better place to add players
-            Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
-            activePlayers.push_back(newPlayer);
+            stringToStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
+            //Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
+            //activePlayers.push_back(newPlayer);
 
             this->state = GameEngine::State::PlayersAdded;
             (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
@@ -178,9 +180,9 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         {
             if ((commandProcessor->listCommands[commandProcessor->nbCommands]->commandName).substr(0, 9) == "addplayer")
             {
-
-                Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
-                activePlayers.push_back(newPlayer);
+                stringToStrategyPlayer(commandProcessor->listCommands[commandProcessor->nbCommands]->commandName.substr(10));
+                // Player *newPlayer = new Player(((commandProcessor->listCommands[commandProcessor->nbCommands])->commandName).substr(10));
+                // activePlayers.push_back(newPlayer);
                 (commandProcessor->listCommands[commandProcessor->nbCommands])->saveEffect(commandProcessor->listCommands[commandProcessor->nbCommands], this->stateToString(getState())); // Saving the effect inside the Command object as a string
                 std::cout << "The effect of this command is: " << commandProcessor->listCommands[commandProcessor->nbCommands]->commandEffect << endl;
                 commandProcessor->nbCommands++;
@@ -411,10 +413,10 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
         FileLineReader* fileLineReader = new FileLineReader();
         FileCommandProcessorAdapter* commandProcessor = new FileCommandProcessorAdapter(fileLineReader, tournamentFileName);
         commandProcessor->commands = commandProcessor->processTournamentCommand(userInput);
-        for (std::string i : commandProcessor->commands)
-        {
-            std::cout << i << std::endl;
-        }
+        // for (std::string i : commandProcessor->commands)
+        // {
+        //     std::cout << i << std::endl;
+        // }
 
         return commandProcessor;
     }
@@ -661,6 +663,34 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
     {
         std::cout << "No victories detected this turn." << endl;
     }
+}
+
+void GameEngine::stringToStrategyPlayer(string userinput)
+{
+    Player *newPlayer = nullptr;
+
+    if (userinput == "Aggressive")
+    {
+        newPlayer = new Player(new AggressivePlayerStrategy);
+    }
+    else if (userinput == "Benevolent")
+    {
+        newPlayer = new Player(new BenevolentPlayerStrategy);
+    }
+    else if (userinput == "Neutral")
+    {
+        newPlayer = new Player(new NeutralPlayerStrategy);
+    }
+    else if (userinput == "Cheater")
+    {
+        newPlayer = new Player(new CheaterPlayerStrategy);
+    }
+    else if (userinput == "Human")
+    {
+        newPlayer = new Player(new HumanPlayerStrategy);
+    }
+    
+    activePlayers.push_back(newPlayer);
 }
 
 //gameengine's stringtolog() method
