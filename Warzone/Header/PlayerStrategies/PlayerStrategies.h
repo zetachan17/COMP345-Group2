@@ -21,6 +21,8 @@ public:
 
     virtual void issueOrder() = 0;
 
+    virtual void issueDeployOrder() = 0;
+    virtual void issueAdvanceOrder() = 0;
     virtual void issueAirliftOrder() = 0;
     virtual void issueBlockadeOrder() = 0;
     virtual void issueBombOrder() = 0;
@@ -49,6 +51,8 @@ public:
 
     void issueOrder() override;
 
+    void issueDeployOrder() override;
+    void issueAdvanceOrder() override;
     void issueAirliftOrder() override;
     void issueBlockadeOrder() override;
     void issueBombOrder() override;
@@ -61,9 +65,6 @@ public:
     string getStrategyType() const override;
 
 private:
-    void issueDeployOrder(const int deployedThisTurn, const int reinforcementPool);
-    void issueAdvanceOrder();
-
     const string selectOrder();
     Territory *selectTerritory(vector<Territory *> territories, string label) const;
     int selectArmyUnits(Territory *territory, string descriptor, int max = 0) const;
@@ -88,6 +89,8 @@ public:
 
     void issueOrder() override;
 
+    void issueDeployOrder() override;
+    void issueAdvanceOrder() override;
     void issueAirliftOrder() override;
     void issueBlockadeOrder() override;
     void issueBombOrder() override;
@@ -112,6 +115,8 @@ public:
 
     void issueOrder() override;
 
+    void issueDeployOrder() override;
+    void issueAdvanceOrder() override;
     void issueAirliftOrder() override;
     void issueBlockadeOrder() override;
     void issueBombOrder() override;
@@ -135,6 +140,8 @@ public:
 
     void issueOrder() override;
 
+    void issueDeployOrder() override;
+    void issueAdvanceOrder() override;
     void issueAirliftOrder() override;
     void issueBlockadeOrder() override;
     void issueBombOrder() override;
@@ -159,6 +166,8 @@ public:
 
     void issueOrder() override;
 
+    void issueDeployOrder() override;
+    void issueAdvanceOrder() override;
     void issueAirliftOrder() override;
     void issueBlockadeOrder() override;
     void issueBombOrder() override;

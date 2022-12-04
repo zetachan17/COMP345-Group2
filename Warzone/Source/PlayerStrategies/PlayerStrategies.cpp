@@ -40,7 +40,7 @@ void HumanPlayerStrategy::issueOrder()
     if (player->isFinishedIssuingOrders())
         cout << player->getPlayerName() << " has no more orders to issue.\n";
     else if (player->getArmiesDeployedThisTurn() < player->getReinforcementPool())
-        issueDeployOrder(player->getArmiesDeployedThisTurn(), player->getReinforcementPool());
+        issueDeployOrder();
     else
     {
         const string selected = selectOrder();
@@ -153,8 +153,11 @@ string HumanPlayerStrategy::getStrategyType() const
     return "Human";
 }
 
-void HumanPlayerStrategy::issueDeployOrder(const int deployedThisTurn, const int reinforcementPool)
+void HumanPlayerStrategy::issueDeployOrder()
 {
+    const int deployedThisTurn = player->getArmiesDeployedThisTurn();
+    const int reinforcementPool = player->getReinforcementPool();
+
     cout << "*Issuing Deploy Order*\n"
          << player->getPlayerName() << ": " << deployedThisTurn << "/" << reinforcementPool
          << " army units deployed.\n\n";
@@ -363,6 +366,16 @@ void AggressivePlayerStrategy::issueOrder()
     }
 }
 
+void AggressivePlayerStrategy::issueDeployOrder()
+{
+    player->issueDeployOrder();
+}
+
+void AggressivePlayerStrategy::issueAdvanceOrder()
+{
+    player->issueAdvanceOrder();
+}
+
 void AggressivePlayerStrategy::issueAirliftOrder()
 {
     player->issueAirliftOrder();
@@ -445,7 +458,7 @@ void BenevolentPlayerStrategy::issueOrder()
     cout << *player << endl;
 
     if (player->getArmiesDeployedThisTurn() < player->getReinforcementPool())
-        player->issueDeployOrder();
+        issueDeployOrder();
     else
     {
         int randomChoice = rand() % (100);
@@ -462,6 +475,16 @@ void BenevolentPlayerStrategy::issueOrder()
         else
             player->setIsFinishedIssuingOrders(true);
     }
+}
+
+void BenevolentPlayerStrategy::issueDeployOrder()
+{
+    player->issueDeployOrder();
+}
+
+void BenevolentPlayerStrategy::issueAdvanceOrder()
+{
+    player->issueAdvanceOrder();
 }
 
 void BenevolentPlayerStrategy::issueAirliftOrder()
@@ -565,6 +588,16 @@ void NeutralPlayerStrategy::issueOrder()
     }
 }
 
+void NeutralPlayerStrategy::issueDeployOrder()
+{
+    player->issueDeployOrder();
+}
+
+void NeutralPlayerStrategy::issueAdvanceOrder()
+{
+    player->issueAdvanceOrder();
+}
+
 void NeutralPlayerStrategy::issueAirliftOrder()
 {
     player->issueAirliftOrder();
@@ -664,6 +697,16 @@ void CheaterPlayerStrategy::issueOrder()
         else
             player->setIsFinishedIssuingOrders(true);
     }
+}
+
+void CheaterPlayerStrategy::issueDeployOrder()
+{
+    player->issueDeployOrder();
+}
+
+void CheaterPlayerStrategy::issueAdvanceOrder()
+{
+    player->issueAdvanceOrder();
 }
 
 void CheaterPlayerStrategy::issueAirliftOrder()
