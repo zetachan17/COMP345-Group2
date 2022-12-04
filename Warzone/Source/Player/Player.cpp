@@ -295,5 +295,6 @@ void Player::underAttack()
 	{
 		delete strategy;
 		strategy = new AggressivePlayerStrategy();
+		strategy->setPlayer(this);
 	}
 }
