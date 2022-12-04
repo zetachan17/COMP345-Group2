@@ -142,6 +142,7 @@
     <ClCompile Include="Source\PlayerStrategies\PlayerStrategiesDriver.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
     <ClCompile Include="Source\Map\Map.cpp" />
+    <ClCompile Include="Source\Tournament\TournamentDriver.cpp" />
     <ClCompile Include="Warzone.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClInclude Include="Header\Player\Player.h" />
     <ClInclude Include="Header\Orders\Orders.h" />
     <ClInclude Include="Header\Player\PlayerDriver.h" />
+    <ClInclude Include="Header\Tournament\TournamentDriver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GameEngine\GameEngineDriver.cpp" />

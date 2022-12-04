@@ -1,19 +1,29 @@
-loadmap 001_I72_Ghtroc720.map
+loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap 001_I72_Ghtroc720.map
+loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap 001_I72_Ghtroc720.map
+loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Montreal.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
 gamestart
 quit
 30

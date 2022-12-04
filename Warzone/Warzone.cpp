@@ -1,6 +1,7 @@
 // Warzone.cpp : This file contains the 'main' function. Program execution begins and ends there.
 
 #include "PlayerStrategies/PlayerStrategiesDriver.h"
+#include "Tournament/TournamentDriver.h"
 #include <iostream>
 
 int main()
@@ -9,7 +10,7 @@ int main()
     srand(time(0));
 
     //P1
-    testPlayerStrategies();
+    //testPlayerStrategies();
     //P2
-    //testStartupPhase();
+    testTournament();
 }
