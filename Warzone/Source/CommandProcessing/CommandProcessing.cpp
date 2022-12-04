@@ -1,10 +1,12 @@
 #include "CommandProcessing/CommandProcessing.h"
 #include "CommandProcessing/CommandProcessingDriver.h"
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <string>
 #include <regex>
 #include <vector>
+#include <sstream>
 
 
 Command::Command()
@@ -320,8 +322,21 @@ FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCo
 
 string FileCommandProcessorAdapter::readCommand() 
 {
-
-	if((this->fileLineReader->inputstream).is_open())
+	std::ofstream tournamentFile;
+	tournamentFile.open("tournamentFile.txt");
+	if (tournamentFile.is_open())
+	{
+		for (std::string i : this->commands)
+		{
+			tournamentFile << i + "\n";
+		}
+		//this->tournamentFile = tournamentFile;
+		//tournamentFile.close();
+	}
+	else { std::cout << "Could not open file"; }
+	std::string tournamentFileString = "tournamentFile.txt";
+	
+	if(tournamentFile.is_open())
 	{
 	string userInput = fileLineReader->readLineFromFile();
 	const std::string delimiter = " ";
@@ -409,4 +424,84 @@ string Command::stringToLog() {
 	string stringLog = "saveEffect() method saved the transition to the " + effectToLog + " state inside the commandEffect attribute.";
 	cout << stringLog << endl;
 	return stringLog;
+}
+
+std::vector<std::string> CommandProcessor::processTournamentCommand(string userinput)
+{
+	//tournament 
+	userinput = userinput.substr(11);
+	stringstream inputstream(userinput);
+	std::string segment;
+	std::vector<std::string> segmentlist;
+	std::vector<std::vector<std::string>> commandlist;
+	std::vector<std::string> commands;
+	std::regex commaRegex(",");
+	int vectorIndex = -1;
+	
+	while (std::getline(inputstream, segment, '-'))
+	{
+		segmentlist.push_back(segment);
+	}
+
+	for (string i : segmentlist)
+	{
+		stringstream commandstream(i);
+		std::string command;
+
+		while (std::getline(commandstream, command, ' '))
+		{
+			if (command == "M" || command == "P" || command == "G" || command == "D")
+			{
+				vectorIndex++;
+				commandlist.push_back(std::vector<std::string>());
+				continue;
+			}
+
+			if (regex_search(command, commaRegex))
+			{
+				int commaIndex = command.find(",");
+				command = command.substr(0, commaIndex);
+			}
+
+			commandlist[vectorIndex].push_back(command);
+		}
+	}
+
+	int numMap = static_cast<int>(commandlist[0].size());
+	int numGame = std::stoi(commandlist[2][0]);
+
+	for (int m = 0; m < numMap; ++m)
+	{
+		for (int n = 0; n < numGame; ++n)
+		{
+			std::string loadmapCommand = "loadmap " + commandlist[0][m];
+			commands.push_back(loadmapCommand);
+			commands.push_back("validatemap");
+
+			for (int j = 0; j < commandlist[1].size(); ++j)
+			{
+				std::string addplayerCommand = "addplayer " + commandlist[1][j];
+				commands.push_back(addplayerCommand);
+			}
+
+			commands.push_back("gamestart");
+			commands.push_back("replay");
+		}
+	}
+
+	commands.pop_back();
+	commands.push_back("quit");
+
+	std::string fileName = "tournamentFile.txt";
+	
+	std::remove(fileName.c_str());
+	ofstream tournamentfile(fileName);
+
+	for (std::string i : commands)
+	{
+		tournamentfile << i << "\n";
+	}
+	
+	tournamentfile.close();
+	return commands;
 }

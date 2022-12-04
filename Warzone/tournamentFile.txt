@@ -1,0 +1,18 @@
+loadmap montreal.map
+validatemap
+addplayer Aggressive
+addplayer Neutral
+gamestart
+replay
+loadmap montreal.map
+validatemap
+addplayer Aggressive
+addplayer Neutral
+gamestart
+replay
+loadmap montreal.map
+validatemap
+addplayer Aggressive
+addplayer Neutral
+gamestart
+quit
