@@ -391,6 +391,7 @@ vector<Territory *> AggressivePlayerStrategy::enemyBorders(Territory *territory)
 
 Territory *AggressivePlayerStrategy::setStrongestTerritory()
 {
+
     strongest = toDefend()[0];
 
     if (toDefend().size() == 1)
@@ -431,7 +432,6 @@ void AggressivePlayerStrategy::setTerritoriesToAdvanceFrom()
     for (Territory *territory : toDefend())
         if (territory->getArmyUnits() != 0 && territory != strongest)
         {
-
             Territory *target = toAttack().empty() ? pathToStrongest(territory, pathToEnemy())
                                                    : pathToStrongest(territory, strongest);
             if (target)
@@ -514,10 +514,10 @@ Territory *AggressivePlayerStrategy::pathToEnemy() const
         currentLevel = nextLevel;
     }
 
-    int i = 2;
+    int i = 0;
     Territory *destination = visited[i];
-    while (destination->getOwner() == player)
-        destination = previous[++i];
+    while (destination->getOwner() == player && (++i) < visited.size())
+        destination = previous[i];
 
     while (previous[--i] != strongest)
         if (visited[i] == destination)
@@ -878,11 +878,14 @@ vector<Territory *> BenevolentPlayerStrategy::toDefend() const
 {
     vector<Territory *> sortedTerritories = player->getTerritories();
 
-    sort(sortedTerritories.begin(), sortedTerritories.end(),
-         [](const Territory *x, const Territory *y)
-         {
-             return x->getArmyUnits() < y->getArmyUnits();
-         });
+    if (sortedTerritories.size() != 0)
+    {
+        sort(sortedTerritories.begin(), sortedTerritories.end(),
+             [](const Territory *x, const Territory *y)
+             {
+                 return x->getArmyUnits() < y->getArmyUnits();
+             });
+    }
 
     return sortedTerritories;
 }

@@ -59,7 +59,7 @@ void Order::turnEnd()
             cout << "~~DECK EMPTY: NO CARD DRAWN~~";
         else if (cardDrawn->cardType() == "Reinforcement")
         {
-            cout << "Reinforcement card drawn. Immediate effect: 5 army units added to "
+            cout << "\nReinforcement card drawn. Immediate effect: 5 army units added to "
                  << player->getPlayerName() << "'s reinforcement pool.";
             cardDrawn->play(player);
             GameEngine::getDeck()->addToDeck(cardDrawn);
@@ -102,7 +102,7 @@ vector<Player *> *Order::getsCard()
     return &m_getsCard;
 }
 
-void Order::playerEarnedCard(Player* player)
+void Order::playerEarnedCard(Player *player)
 {
     if (std::find(m_getsCard.begin(), m_getsCard.end(), player) == m_getsCard.end())
         m_getsCard.push_back(player);
@@ -422,7 +422,7 @@ void Bomb::execute()
     if (validate())
     {
         m_target->getOwner()->underAttack();
-        
+
         int initialUnits = m_target->getArmyUnits();
         int survivingUnits = initialUnits / 2;
         m_target->setArmyUnits(survivingUnits);
