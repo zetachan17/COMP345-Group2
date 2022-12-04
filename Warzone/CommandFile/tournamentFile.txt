@@ -1,36 +1,96 @@
-loadmap 4D_Hypercube.map
+loadmap Map1
 validatemap
 addplayer Aggressive
+addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap 4D_Hypercube.map
+loadmap Map1
 validatemap
 addplayer Aggressive
+addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap 4D_Hypercube.map
+loadmap Map1
 validatemap
 addplayer Aggressive
+addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap montreal.map
+loadmap Map1
 validatemap
 addplayer Aggressive
+addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap montreal.map
+loadmap Map2
 validatemap
 addplayer Aggressive
+addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
 gamestart
 replay
-loadmap montreal.map
+loadmap Map2
 validatemap
 addplayer Aggressive
+addplayer Benevolent
 addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Map2
+validatemap
+addplayer Aggressive
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Map2
+validatemap
+addplayer Aggressive
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Map3
+validatemap
+addplayer Aggressive
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Map3
+validatemap
+addplayer Aggressive
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Map3
+validatemap
+addplayer Aggressive
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
+gamestart
+replay
+loadmap Map3
+validatemap
+addplayer Aggressive
+addplayer Benevolent
+addplayer Neutral
+addplayer Cheater
 gamestart
 quit

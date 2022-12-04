@@ -13,9 +13,6 @@ void testPlayerStrategies()
     cout << "-----------------------------------------------------------\n"
          << "\t** PART 1: PLAYER STRATEGY PATTERN **\n\n";
 
-    // setup game engine (just to test access to the deck), territories, and players to test
-    GameEngine *game = new GameEngine();
-
     Territory *territories[7] = {new Territory(0, "Villeray", 4), new Territory(1, "Little Italy", 4),
                                  new Territory(2, "Mile End", 3), new Territory(3, "Plateau", 3),
                                  new Territory(4, "Mount Royal", 2), new Territory(5, "Downtown", 1),

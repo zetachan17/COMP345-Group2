@@ -493,9 +493,10 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	commands.push_back("quit");
 
 	std::string fileName = "tournamentFile.txt";
+	std::string filePath = "CommandFile/";
 	
-	std::remove(fileName.c_str());
-	ofstream tournamentfile(fileName);
+	std::remove((filePath + fileName).c_str());
+	ofstream tournamentfile(filePath + fileName);
 
 	for (std::string i : commands)
 	{
