@@ -57,10 +57,12 @@ public:
 	// returns pointer to player's next order
 	Order *nextOrder(bool deployOnly = false);
 
+	void printIssuedOrders();
+
 	// returns whether the player has finished issuing orders
 	bool isFinishedIssuingOrders() const;
 
-	// resets the player to not have finished issuing orders
+	// sets bool signaling if player finished issuing orders this turn
 	void setIsFinishedIssuingOrders(bool finishedIssuingOrders);
 
 	// returns pointer to player's hand of cards
@@ -95,6 +97,8 @@ public:
 
 	// returns string of player's name
 	const string &getPlayerName() const;
+
+	string getStrategyType() const;
 
 	// sets a new player strategy
 	void setPlayerStrategy(PlayerStrategy *pStrategy);

@@ -6,13 +6,16 @@
 #include "PlayerStrategies/PlayerStrategies.h"
 
 #include <vector>
+using std::vector;
 #include <iostream>
 using std::cout;
 using std::endl;
-using std::vector;
+#include <iomanip>
 
 Player::Player() : playerName(""), strategy(nullptr), hand(new Hand), ordersList(new OrdersList),
-				   reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false) {}
+				   reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false)
+{
+}
 
 Player::Player(const string &name) : playerName(name), strategy(nullptr), hand(new Hand),
 									 ordersList(new OrdersList), reinforcementPool(0),
@@ -20,7 +23,7 @@ Player::Player(const string &name) : playerName(name), strategy(nullptr), hand(n
 
 Player::Player(const string &name, PlayerStrategy *pStrategy)
 	: playerName(name), strategy(pStrategy), hand(new Hand), ordersList(new OrdersList),
-	  reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false) 
+	  reinforcementPool(0), armiesDeployedThisTurn(0), finishedIssuingOrders(false)
 {
 	strategy->setPlayer(this);
 }
@@ -76,13 +79,15 @@ ostream &operator<<(ostream &output, const Player &player)
 {
 	output << "Player: " << player.playerName << endl
 		   << "\nOwned territories: " << endl;
+
 	for (Territory *territory : player.territories)
-		output << "    " << territory->getTerritoryName() << endl;
+		output << "    " << std::left << std::setw(12) << territory->getTerritoryName()
+			   << " : " << territory->getArmyUnits() << " army units\n";
 
 	output << "\nCards in hand:" << endl
 		   << *player.hand << endl;
 
-	output << "Orders list:" << endl
+	output << "Issued orders:" << endl
 		   << *player.ordersList << endl;
 
 	return output;
@@ -167,6 +172,11 @@ void Player::issueAdvanceOrder()
 
 void Player::issueAirliftOrder()
 {
+	if (strategy->getStrategyType() == "Human")
+	{
+		strategy->issueAirliftOrder();
+		return;
+	}
 	cout << "Issuing an Airlift order." << endl;
 
 	if (toDefend().size() == 0)
@@ -187,6 +197,11 @@ void Player::issueAirliftOrder()
 
 void Player::issueBombOrder()
 {
+	if (strategy->getStrategyType() == "Human")
+	{
+		strategy->issueBombOrder();
+		return;
+	}
 	cout << "Issuing a Bomb order." << endl;
 
 	if (toAttack().size() == 0)
@@ -202,6 +217,12 @@ void Player::issueBombOrder()
 
 void Player::issueBlockadeOrder()
 {
+	if (strategy->getStrategyType() == "Human")
+	{
+		strategy->issueBlockadeOrder();
+		return;
+	}
+
 	cout << "Issuing a Blockade order." << endl;
 
 	if (toDefend().size() == 0)
@@ -217,6 +238,12 @@ void Player::issueBlockadeOrder()
 
 void Player::issueNegotiateOrder()
 {
+	if (strategy->getStrategyType() == "Human")
+	{
+		strategy->issueNegotiateOrder();
+		return;
+	}
+
 	cout << "Issuing a Negotiate order." << endl;
 
 	Player *targetPlayer = nullptr;
@@ -238,11 +265,18 @@ void Player::issueNegotiateOrder()
 void Player::addToOrdersList(Order *order)
 {
 	ordersList->addOrder(order);
+	cout << "\nIssued Order: " << *order << endl;
 }
 
 Order *Player::nextOrder(bool deployOnly)
 {
 	return ordersList->nextOrder(deployOnly);
+}
+
+void Player::printIssuedOrders()
+{
+	cout << "Issued Orders:\n"
+		 << *ordersList;
 }
 
 bool Player::isFinishedIssuingOrders() const
@@ -253,6 +287,7 @@ bool Player::isFinishedIssuingOrders() const
 void Player::setIsFinishedIssuingOrders(bool finishedIssuingOrders)
 {
 	this->finishedIssuingOrders = finishedIssuingOrders;
+	cout << getPlayerName() << " has no more orders to issue.\n";
 }
 
 Hand *Player::getHand()
@@ -294,11 +329,14 @@ int Player::calculateReinforcements(Map *const map)
 
 	int territoryReinforcements = std::max(numberOfTerritories / 3, 3);
 
-	cout << "Player " << playerName << " owns " << numberOfTerritories << " territories and receives " << territoryReinforcements << " reinforcement army units from territory ownership." << endl;
+	cout << "Player " << playerName << " owns " << numberOfTerritories
+		 << " territories and receives " << territoryReinforcements
+		 << " reinforcement army units from territory ownership." << endl;
 
 	int continentBonusReinforcements = this->calculateContinentBonuses(map);
 
-	cout << "Player " << playerName << " receives " << continentBonusReinforcements << " reinforcement army units in continent control bonuses." << endl;
+	cout << "Player " << playerName << " receives " << continentBonusReinforcements
+		 << " reinforcement army units in continent control bonuses." << endl;
 
 	return territoryReinforcements + continentBonusReinforcements;
 }
@@ -330,6 +368,11 @@ const string &Player::getPlayerName() const
 	return playerName;
 }
 
+string Player::getStrategyType() const
+{
+	return strategy->getStrategyType();
+}
+
 void Player::setPlayerStrategy(PlayerStrategy *pStrategy)
 {
 	strategy = pStrategy;
@@ -342,7 +385,8 @@ int Player::calculateContinentBonuses(Map *const map)
 	{
 		if (this->ownsContinent(continent))
 		{
-			cout << "Player " << playerName << " owns " << continent->getContinentName() << " and will receive a " << continent->getBonus() << " continent control bonus." << endl;
+			cout << "Player " << playerName << " owns " << continent->getContinentName()
+				 << " and will receive a " << continent->getBonus() << " continent control bonus.\n";
 			totalBonus += continent->getBonus();
 		}
 	}

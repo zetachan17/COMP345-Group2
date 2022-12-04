@@ -3,6 +3,7 @@
 #include "Player/Player.h"
 #include "Cards/Cards.h"
 #include "GameEngine/GameEngine.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 
 #include <iostream>
 #include <fstream>
@@ -52,7 +53,19 @@ void Order::turnEnd()
     for (Player *player : m_getsCard)
     {
         cout << player->getPlayerName() + " draws a card: ";
-        player->getHand()->addToHand(GameEngine::getDeck()->draw());
+        Card *cardDrawn = GameEngine::getDeck()->draw();
+
+        if (!cardDrawn)
+            cout << "~~DECK EMPTY: NO CARD DRAWN~~";
+        else if (cardDrawn->cardType() == "Reinforcement")
+        {
+            cout << "Reinforcement card drawn. Immediate effect: 5 army units added to "
+                 << player->getPlayerName() << "'s reinforcement pool.";
+            cardDrawn->play(player);
+            GameEngine::getDeck()->addToDeck(cardDrawn);
+        }
+        else
+            player->getHand()->addToHand(cardDrawn);
     }
 
     m_getsCard.clear();
@@ -74,6 +87,16 @@ string Order::type() const
     return m_description.substr(0, m_description.find(" "));
 }
 
+bool Order::inNegotiations(Player *target) const
+{
+    for (auto pair : m_ceaseFire)
+        if ((pair.first == m_player && pair.second == target) ||
+            (pair.first == target && pair.second == m_player))
+            return true;
+
+    return false;
+}
+
 vector<Player *> *Order::getsCard()
 {
     return &m_getsCard;
@@ -92,16 +115,9 @@ void Order::decrementOrderCount(bool inOrderExecutionPhase)
         turnEnd();
 }
 
-Player *Order::m_neutralPlayer = nullptr;
 int Order::m_orderCount = 0;
 vector<pair<Player *, Player *>> Order::m_ceaseFire;
 vector<Player *> Order::m_getsCard;
-
-Player *
-Order::neutralPlayer()
-{
-    return m_neutralPlayer;
-}
 
 Deploy::Deploy() : Order() {}
 
@@ -238,18 +254,14 @@ bool Advance::validate()
     }
 
     // check for active Negotiate order
-    for (auto pair : m_ceaseFire)
+    if (inNegotiations(m_target->getOwner()))
     {
-        const Player *targetPlayer = m_target->getOwner();
-        if ((pair.first == m_player && pair.second == targetPlayer) ||
-            (pair.first == targetPlayer && pair.second == m_player))
-        {
-            m_effect = "Negotiations are in effect between " + player() + " and " +
-                       m_target->getOwner()->getPlayerName() + ".";
-            cout << "~INVALID ORDER~\n";
-            return false;
-        }
+        m_effect = "Negotiations are in effect between " + player() + " and " +
+                   m_target->getOwner()->getPlayerName() + ".";
+        cout << "~INVALID ORDER~\n";
+        return false;
     }
+
     cout << "~order validated~\n";
     return true;
 }
@@ -387,17 +399,12 @@ bool Bomb::validate()
     }
 
     // check for active negotiations between the two players involved
-    for (auto pair : m_ceaseFire)
+    if (inNegotiations(m_target->getOwner()))
     {
-        const Player *targetPlayer = m_target->getOwner();
-        if ((pair.first == m_player && pair.second == targetPlayer) ||
-            (pair.first == targetPlayer && pair.second == m_player))
-        {
-            m_effect = "Negotiations are in effect between " + player() + " and " +
-                       m_target->getOwner()->getPlayerName() + ".";
-            cout << "~INVALID ORDER~\n";
-            return false;
-        }
+        m_effect = "Negotiations are in effect between " + player() + " and " +
+                   m_target->getOwner()->getPlayerName() + ".";
+        cout << "~INVALID ORDER~\n";
+        return false;
     }
 
     cout << "~order validated~\n";
@@ -472,18 +479,27 @@ void Blockade::execute()
         m_target->setArmyUnits(m_target->getArmyUnits() * 2);
         m_player->removeTerritory(m_target);
 
-        string neutralCreated = "";
-        if (m_neutralPlayer == nullptr)
+        Player *neutralPlayer = nullptr;
+        for (Player *player : GameEngine::getPlayers())
         {
-            m_neutralPlayer = new Player("Neutral Player");
+            if (player->getStrategyType() == "Neutral")
+            {
+                neutralPlayer = player;
+                break;
+            }
+        }
+
+        string neutralCreated = "";
+        if (!neutralPlayer)
+        {
+            GameEngine::addPlayer(neutralPlayer = new Player(new NeutralPlayerStrategy));
             neutralCreated = "Neutral Player created.";
         }
-        m_neutralPlayer->addTerritory(m_target);
+        neutralPlayer->addTerritory(m_target);
 
-        string territory = m_target->getTerritoryName();
-        m_effect = "Effect: " + player() + " blockaded " + territory + ". " + neutralCreated +
-                   "\n\t" + territory + " now has " + to_string(m_target->getArmyUnits()) +
-                   " units and belongs to the Neutral Player.";
+        m_effect = "Effect: " + player() + " blockaded " + m_target->getTerritoryName() + ". " +
+                   neutralCreated + "\n\t" + m_target->getTerritoryName() + " now has " +
+                   to_string(m_target->getArmyUnits()) + " units and belongs to a Neutral Player.";
         cout << m_effect << endl;
     }
     else
@@ -597,15 +613,21 @@ Order *Negotiate::clone() const
 
 bool Negotiate::validate()
 {
-    if (m_target != m_player)
+    if (m_target == m_player)
     {
-        cout << "~order validated~\n";
-        return true;
+        m_effect = "A player cannot negotiate with themselves.";
+        cout << "~INVALID ORDER~\n";
+        return false;
+    }
+    if (inNegotiations(m_target))
+    {
+        m_effect = "Players already in active negotiations.";
+        cout << "~INVALID ORDER~\n";
+        return false;
     }
 
-    m_effect = "A player cannot negotiate with themselves.";
-    cout << "~INVALID ORDER~\n";
-    return false;
+    cout << "~order validated~\n";
+    return true;
 }
 
 void Negotiate::execute()
@@ -727,7 +749,7 @@ ostream &operator<<(ostream &output, const OrdersList &orders)
     {
         int i = 1;
         for (auto &order : orders.m_orders)
-            cout << i++ << ". " << *order << endl;
+            cout << "    " << i++ << ". " << *order << endl;
         return output;
     }
 }
