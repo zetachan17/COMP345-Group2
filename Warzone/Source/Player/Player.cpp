@@ -108,36 +108,6 @@ void Player::issueOrder()
 	strategy->issueOrder();
 }
 
-void Player::issueDeployOrder()
-{
-	strategy->issueDeployOrder();
-}
-
-void Player::issueAdvanceOrder()
-{
-	strategy->issueAdvanceOrder();
-}
-
-void Player::issueAirliftOrder()
-{
-	strategy->issueAirliftOrder();
-}
-
-void Player::issueBombOrder()
-{
-	strategy->issueBombOrder();
-}
-
-void Player::issueBlockadeOrder()
-{
-	strategy->issueBlockadeOrder();
-}
-
-void Player::issueNegotiateOrder()
-{
-	strategy->issueNegotiateOrder();
-}
-
 void Player::addToOrdersList(Order *order)
 {
 	ordersList->addOrder(order);

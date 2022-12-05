@@ -43,14 +43,6 @@ public:
 	// REQUIRED - the player issues an order by adding it to their orderslist
 	void issueOrder();
 
-	// methods for creating and issuing a specific order
-	void issueDeployOrder();
-	void issueAdvanceOrder();
-	void issueAirliftOrder();
-	void issueBlockadeOrder();
-	void issueBombOrder();
-	void issueNegotiateOrder();
-
 	// adds an issued order to the player's orders list
 	void addToOrdersList(Order *order);
 
