@@ -2,28 +2,56 @@ loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
-addplayer Cheater
+addplayer Aggressive
 gamestart
 replay
 loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
-addplayer Cheater
+addplayer Aggressive
 gamestart
 replay
 loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
-addplayer Cheater
+addplayer Aggressive
 gamestart
 replay
 loadmap Montreal.map
 validatemap
 addplayer Benevolent
 addplayer Neutral
-addplayer Cheater
+addplayer Aggressive
+gamestart
+replay
+loadmap 4D_Hypercube.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+addplayer Aggressive
+gamestart
+replay
+loadmap 4D_Hypercube.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+addplayer Aggressive
+gamestart
+replay
+loadmap 4D_Hypercube.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+addplayer Aggressive
+gamestart
+replay
+loadmap 4D_Hypercube.map
+validatemap
+addplayer Benevolent
+addplayer Neutral
+addplayer Aggressive
 gamestart
 quit
 30

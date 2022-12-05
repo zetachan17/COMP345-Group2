@@ -392,6 +392,7 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
     CommandProcessor *commandProcessor;
     string userInput;
     std::regex fileRegex("-file ");
+    std::regex pattern("tournament -M (.*) -P (.*) -G (.*) -D (.*)");
 
     std::cout << "Please enter the tournament command" << std::endl;
     std::getline(cin, userInput);
@@ -401,6 +402,7 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
     if (userInput == "-console")
     {
         commandProcessor = new CommandProcessor();
+        return commandProcessor;
     }
     else if (!(userInput == "-file") && std::regex_search(userInput, fileRegex))
     {
@@ -408,8 +410,10 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
         std::cout << "The file name is:" << fileName << std::endl;
         FileLineReader *fileLineReader = new FileLineReader();
         commandProcessor = new FileCommandProcessorAdapter(fileLineReader, fileName);
+        return commandProcessor;
     }
-    else if (userInput.substr(0, 13) == "tournament -M")
+    //else if (userInput.substr(0, 13) == "tournament -M")
+    else if (std::regex_match(userInput, pattern))
     {
         std::string tournamentFileName = "tournamentFile.txt";
         FileLineReader *fileLineReader = new FileLineReader();
@@ -418,7 +422,6 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
         turnLimit = stoi(commandProcessor->commands.back());
         return commandProcessor;
     }
-
     else
     {
         commandProcessor = nullptr;
@@ -675,6 +678,15 @@ bool GameEngine::checkForVictory(MapLoader *mLoader)
             victory = true;
 
             this->state = GameEngine::State::Win;
+
+            // Logging
+            std::ofstream gameLog;
+            gameLog.open("gameOutput.txt", std::ios_base::app);
+            gameLog
+                << left
+                << setw(36)
+                << "| " + activePlayers[0]->getPlayerName();
+            gameLog.close();
         }
     }
 
