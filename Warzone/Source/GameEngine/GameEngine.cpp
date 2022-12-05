@@ -634,6 +634,15 @@ void GameEngine::checkForDefeats()
     {
         std::cout << "Player: " << activePlayers[0]->getPlayerName() << " has won!" << endl;
         this->state = GameEngine::State::Win;
+
+        // Logging
+        std::ofstream gameLog;
+        gameLog.open("gameOutput.txt", std::ios_base::app);
+        gameLog
+            << left
+            << setw(36)
+            << "| " + activePlayers[0]->getPlayerName();
+        gameLog.close();
     }
     else if (!defeat)
     {
@@ -652,15 +661,6 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
         {
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has won!" << endl;
             victory = true;
-
-            // Logging
-            std::ofstream gameLog;
-            gameLog.open("gameOutput.txt", std::ios_base::app);
-            gameLog
-                << left
-                << setw(20)
-                << "| " + activePlayers[i]->getPlayerName();
-            gameLog.close();
 
             this->state = GameEngine::State::Win;
         }
@@ -685,7 +685,7 @@ bool GameEngine::checkForDraw()
         gameLog.open("gameOutput.txt", std::ios_base::app);
         gameLog
             << left
-            << setw(20)
+            << setw(36)
             << "| Draw";
         gameLog.close();
 

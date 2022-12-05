@@ -491,7 +491,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	std::ofstream gameLog;
 	gameLog.open("gameOutput.txt", std::ios_base::app);
 
-	gameLog << "Tournament mode:" << std::endl
+	gameLog << "\n\nTournament mode:" << std::endl
 			<< "M: ";
 	for (int i = 0; i < numMap; i++)
 	{
@@ -515,7 +515,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 		<< "\n\nResults: " << std::endl
 
 		<< left
-		<< setw(20)
+		<< setw(18)
 		<< "Game #";
 	for (int i = 0; i < numMap; i++)
 	{
@@ -523,14 +523,14 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 		{
 			gameLog
 				<< left
-				<< setw(20)
+				<< setw(36)
 				<< "| Game " + std::to_string(j + 1);
 		}
 	}
 	gameLog
 		<< std::endl
 		<< left
-		<< setw(20)
+		<< setw(18)
 		<< "Map";
 
 	for (int m = 0; m < numMap; ++m)
@@ -544,7 +544,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 			// Logging
 			gameLog
 				<< left
-				<< setw(20)
+				<< setw(36)
 				<< "| " + commandlist[0][m];
 
 			for (int j = 0; j < commandlist[1].size(); ++j)
@@ -560,7 +560,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	gameLog
 		<< std::endl
 		<< left
-		<< setw(20)
+		<< setw(18)
 		<< "Winner";
 	gameLog.close();
 
