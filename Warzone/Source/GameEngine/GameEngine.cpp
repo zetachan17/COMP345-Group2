@@ -237,8 +237,11 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
         this->state = GameEngine::State::AssignReinforcement;
         if (!checkForDraw())
         {
-            checkForVictory(mLoader);
-            checkForDefeats();
+            bool victory = checkForVictory(mLoader);
+            if (!victory)
+            {
+                checkForDefeats();
+            }
         }
 
         break;
@@ -627,7 +630,7 @@ void GameEngine::checkForDefeats()
         }
     }
     for (int i = toErase.size() - 1; i >= 0; --i)
-        activePlayers.erase(activePlayers.begin() + i);
+        activePlayers.erase(activePlayers.begin() + toErase[i]);
     toErase.clear();
 
     if (activePlayers.size() == 1)
@@ -650,7 +653,7 @@ void GameEngine::checkForDefeats()
     }
 }
 
-void GameEngine::checkForVictory(MapLoader *mLoader)
+bool GameEngine::checkForVictory(MapLoader *mLoader)
 {
     std::cout << "Checking for victory condition" << endl;
 
@@ -670,6 +673,8 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
     {
         std::cout << "No victories detected this turn." << endl;
     }
+
+    return victory;
 }
 
 bool GameEngine::checkForDraw()
