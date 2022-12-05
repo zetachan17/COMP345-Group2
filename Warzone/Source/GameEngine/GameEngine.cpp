@@ -215,7 +215,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::AssignReinforcement:
         cout << "----------------------------------------------------------\n"
              << "----------------------------------------------------------\n"
-             << "\t\t   *** TURN " << currentTurn << " ***\n"
+             << "\t\t   *** TURN " << currentTurn + 1 << " ***\n"
              << "\t ** Assign Reinforcements Phase **\n\n";
         reinforcementPhase(mLoader);
 
@@ -224,7 +224,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::IssueOrders:
         cout << "----------------------------------------------------------\n"
              << "----------------------------------------------------------\n"
-             << "\t   ** TURN " << currentTurn << ": ISSUE ORDERS PHASE **\n\n";
+             << "\t   ** TURN " << currentTurn + 1 << ": ISSUE ORDERS PHASE **\n\n";
         issueOrdersPhase();
         this->state = GameEngine::State::ExecuteOrders;
         break;
@@ -232,7 +232,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::ExecuteOrders:
         cout << "----------------------------------------------------------\n"
              << "----------------------------------------------------------\n"
-             << "\t   ** TURN " << currentTurn << ": EXECUTE ORDERS PHASE **\n\n";
+             << "\t   ** TURN " << currentTurn + 1 << ": EXECUTE ORDERS PHASE **\n\n";
         executeOrdersPhase();
         this->state = GameEngine::State::AssignReinforcement;
         if (!checkForDraw())
@@ -641,7 +641,10 @@ void GameEngine::checkForDefeats()
         }
     }
     for (int i = toErase.size() - 1; i >= 0; --i)
+    {
+        delete activePlayers[toErase[i]];
         activePlayers.erase(activePlayers.begin() + toErase[i]);
+    }
     toErase.clear();
 
     if (activePlayers.size() == 1)

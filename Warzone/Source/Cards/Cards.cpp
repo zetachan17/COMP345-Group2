@@ -273,7 +273,7 @@ const vector<Card *> Hand::getCards() const
 bool Hand::hasAirlift()
 {
 	for (int i = 0; i < cardsInHand.size(); i++)
-		if (cardsInHand[i]->cardType() == "Reinforcement")
+		if (cardsInHand[i]->cardType() == "Airlift")
 			return true;
 
 	return false;
@@ -290,7 +290,7 @@ bool Hand::hasAirlift()
 bool Hand::hasBlockade()
 {
 	for (int i = 0; i < cardsInHand.size(); i++)
-		if (cardsInHand[i]->cardType() == "Reinforcement")
+		if (cardsInHand[i]->cardType() == "Blockade")
 			return true;
 
 	return false;
@@ -307,7 +307,7 @@ bool Hand::hasBlockade()
 bool Hand::hasBomb()
 {
 	for (int i = 0; i < cardsInHand.size(); i++)
-		if (cardsInHand[i]->cardType() == "Reinforcement")
+		if (cardsInHand[i]->cardType() == "Bomb")
 			return true;
 
 	return false;
@@ -324,7 +324,7 @@ bool Hand::hasBomb()
 bool Hand::hasDiplomacy()
 {
 	for (int i = 0; i < cardsInHand.size(); i++)
-		if (cardsInHand[i]->cardType() == "Reinforcement")
+		if (cardsInHand[i]->cardType() == "Diplomacy")
 			return true;
 
 	return false;

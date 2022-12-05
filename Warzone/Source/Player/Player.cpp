@@ -196,9 +196,13 @@ int Player::getReinforcementPool() const
 
 void Player::addReinforcements(int units)
 {
-	cout << playerName << " received " << units << " armies." << endl;
 	reinforcementPool += units;
-	cout << "Now they have " << getReinforcementPool() << " armies" << endl;
+
+	if (units > 0)
+	{
+		cout << playerName << " received " << units << " armies." << endl;
+		cout << "Now they have " << getReinforcementPool() << " armies" << endl;
+	}
 }
 
 int Player::getArmiesDeployedThisTurn() const
