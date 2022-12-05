@@ -13,7 +13,7 @@
 #include <string>
 #include <iomanip>
 
-#include "PlayerStrategies/PlayerStrategies.h"
+#include "../../Header/PlayerStrategies/PlayerStrategies.h"
 
 GameEngine::GameEngine()
 {
@@ -240,7 +240,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
             checkForVictory(mLoader);
             checkForDefeats();
         }
-        
+
         break;
     case GameEngine::State::Win:
 
@@ -389,12 +389,12 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
     CommandProcessor *commandProcessor;
     string userInput;
     std::regex fileRegex("-file ");
-    
+
     std::cout << "Please enter the tournament command" << std::endl;
     std::getline(cin, userInput);
 
-    //processTournamentCommand(userInput);
-    
+    // processTournamentCommand(userInput);
+
     if (userInput == "-console")
     {
         commandProcessor = new CommandProcessor();
@@ -403,19 +403,19 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
     {
         string fileName = userInput.substr(6);
         std::cout << "The file name is:" << fileName << std::endl;
-        FileLineReader* fileLineReader = new FileLineReader();
+        FileLineReader *fileLineReader = new FileLineReader();
         commandProcessor = new FileCommandProcessorAdapter(fileLineReader, fileName);
     }
-    else if (userInput.substr(0,13) == "tournament -M")
+    else if (userInput.substr(0, 13) == "tournament -M")
     {
         std::string tournamentFileName = "tournamentFile.txt";
-        FileLineReader* fileLineReader = new FileLineReader();
-        FileCommandProcessorAdapter* commandProcessor = new FileCommandProcessorAdapter(fileLineReader, tournamentFileName);
+        FileLineReader *fileLineReader = new FileLineReader();
+        FileCommandProcessorAdapter *commandProcessor = new FileCommandProcessorAdapter(fileLineReader, tournamentFileName);
         commandProcessor->commands = commandProcessor->processTournamentCommand(userInput);
         turnLimit = stoi(commandProcessor->commands.back());
         return commandProcessor;
     }
-   
+
     else
     {
         commandProcessor = nullptr;
@@ -424,7 +424,7 @@ CommandProcessor *GameEngine::initializeCommandProcessor()
         return commandProcessor;
     }
 
-    //return commandProcessor;
+    // return commandProcessor;
 }
 
 Deck *GameEngine::getDeck()
@@ -615,18 +615,20 @@ void GameEngine::checkForDefeats()
     std::cout << "Checking for loss condition" << endl;
 
     bool defeat = false;
-    for (int i = 0; i < activePlayers.size();)
+    vector<int> toErase;
+    for (int i = 0; i < activePlayers.size(); ++i)
     {
         if (activePlayers[i]->getTerritories().size() == 0)
         {
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has lost." << endl;
             activePlayers[i]->getHand()->returnCardsToDeck();
-            activePlayers.erase(activePlayers.begin() + i);
+            toErase.push_back(i);
             defeat = true;
-            continue;
         }
-        i++;
     }
+    for (int i = toErase.size() - 1; i >= 0; --i)
+        activePlayers.erase(activePlayers.begin() + i);
+    toErase.clear();
 
     if (activePlayers.size() == 1)
     {
@@ -638,7 +640,6 @@ void GameEngine::checkForDefeats()
         std::cout << "No player has been defeated this turn." << endl;
     }
 }
-
 
 void GameEngine::checkForVictory(MapLoader *mLoader)
 {
@@ -652,7 +653,7 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
             std::cout << "Player: " << activePlayers[i]->getPlayerName() << " has won!" << endl;
             victory = true;
 
-            //Logging
+            // Logging
             std::ofstream gameLog;
             gameLog.open("gameOutput.txt", std::ios_base::app);
             gameLog
@@ -660,7 +661,6 @@ void GameEngine::checkForVictory(MapLoader *mLoader)
                 << setw(20)
                 << "| " + activePlayers[i]->getPlayerName();
             gameLog.close();
-            
 
             this->state = GameEngine::State::Win;
         }
@@ -680,7 +680,7 @@ bool GameEngine::checkForDraw()
         std::cout << "Turn limit is reached! Now end the game!" << endl;
         this->state = GameEngine::State::Win;
 
-        //Logging
+        // Logging
         std::ofstream gameLog;
         gameLog.open("gameOutput.txt", std::ios_base::app);
         gameLog
@@ -719,15 +719,14 @@ void GameEngine::createStrategyPlayer(string userinput)
     {
         newPlayer = new Player(new HumanPlayerStrategy);
     }
-    
+
     activePlayers.push_back(newPlayer);
 }
 
-//gameengine's stringtolog() method
+// gameengine's stringtolog() method
 string GameEngine::stringToLog()
 {
     string stringLog = "New state is " + stateToString(getState()) + " using transition().";
     cout << stringLog << endl;
     return stringLog;
 }
-

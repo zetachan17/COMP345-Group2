@@ -9,7 +9,6 @@
 #include <sstream>
 #include <iomanip>
 
-
 Command::Command()
 {
 	commandName = "None";
@@ -21,7 +20,7 @@ Command::Command(string cmdName)
 	commandName = cmdName;
 }
 
-Command::Command(const Command& command)
+Command::Command(const Command &command)
 {
 	this->commandName = command.commandName;
 	this->commandEffect = command.commandEffect;
@@ -29,18 +28,17 @@ Command::Command(const Command& command)
 
 Command::~Command()
 {
-	std::cout << "Command object destroyed!";
+	std::cout << "Command object destroyed!\n";
 }
 
-
-Command& Command::operator=(const Command& command)
+Command &Command::operator=(const Command &command)
 {
 	this->commandName = command.commandName;
 	this->commandEffect = command.commandEffect;
 	return *this;
 }
 
-ostream& operator<<(std::ostream& output, const Command& adapter)
+ostream &operator<<(std::ostream &output, const Command &adapter)
 {
 	output << "The name of this command is: " << adapter.commandName << " and the name of the effect it stores is: " << adapter.commandEffect << endl;
 	return output;
@@ -51,30 +49,30 @@ CommandProcessor::CommandProcessor()
 	nbCommands = 0;
 }
 
-CommandProcessor::CommandProcessor(const CommandProcessor& commandProcessor)
+CommandProcessor::CommandProcessor(const CommandProcessor &commandProcessor)
 {
 	nbCommands = commandProcessor.nbCommands;
-	for (Command* command : commandProcessor.listCommands)
+	for (Command *command : commandProcessor.listCommands)
 	{
 		listCommands.push_back(command);
 	}
 }
 
-CommandProcessor& CommandProcessor::operator=(const CommandProcessor& commandProcessor)
+CommandProcessor &CommandProcessor::operator=(const CommandProcessor &commandProcessor)
 {
 	this->nbCommands = commandProcessor.nbCommands;
-	for (Command* command : commandProcessor.listCommands)
+	for (Command *command : commandProcessor.listCommands)
 	{
 		listCommands.push_back(command);
 	}
 	return *this;
 }
 
-CommandProcessor::~CommandProcessor() 
+CommandProcessor::~CommandProcessor()
 {
 	if (!this->listCommands.empty())
 	{
-		for (Command* command : this->listCommands)
+		for (Command *command : this->listCommands)
 		{
 			delete command;
 			command = nullptr;
@@ -82,18 +80,18 @@ CommandProcessor::~CommandProcessor()
 	}
 }
 
-ostream& operator<<(std::ostream& output, const CommandProcessor& adapter)
+ostream &operator<<(std::ostream &output, const CommandProcessor &adapter)
 {
 	output << "CommandProcessor has " << adapter.nbCommands << "number of Commands" << endl;
 	output << "And the Commands contained in this CommandProcessor are: " << endl;
-	for (Command* command : adapter.listCommands)
+	for (Command *command : adapter.listCommands)
 	{
 		output << *command;
 	}
 	return output;
 }
 
-void Command::saveEffect(Command* cmd, string effectName)
+void Command::saveEffect(Command *cmd, string effectName)
 {
 	cmd->commandEffect = effectName;
 	effectToLog = effectName;
@@ -117,26 +115,28 @@ string CommandProcessor::readCommand()
 		if (userInput.substr(0, 7) == "loadmap")
 
 		{
-			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "loadmap" and the file name
+			if (userInput.find(delimiter) == -1)
+			{ // This is to ensure that there is a space between "loadmap" and the file name
 				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
-
 			}
-			else {
+			else
+			{
 				std::cout << "We will load the map" << endl;
-				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); //We store the name of the map file in secondInput
+				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); // We store the name of the map file in secondInput
 				std::cout << "the name of the file is: " << secondInput << endl;
 				condition = 1;
 			}
 		}
 		else if (userInput.substr(0, 9) == "addplayer")
 		{
-			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "addplayer" and the player name
+			if (userInput.find(delimiter) == -1)
+			{ // This is to ensure that there is a space between "addplayer" and the player name
 				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
-
 			}
-			else {
+			else
+			{
 				std::cout << "We will add the Player : ";
-				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); //We store the name of the player in secondInput
+				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); // We store the name of the player in secondInput
 				std::cout << secondInput << endl;
 				condition = 1;
 			}
@@ -170,16 +170,16 @@ string CommandProcessor::readCommand()
 	return userInput;
 }
 
-void CommandProcessor::getCommand(CommandProcessor* commandProcessor)
+void CommandProcessor::getCommand(CommandProcessor *commandProcessor)
 {
 	std::string commandName;
 	commandName = commandProcessor->readCommand();
 	saveCommand(commandName);
 }
 
-Command* CommandProcessor::saveCommand(string commandName) //remember to track where the command object goes
+Command *CommandProcessor::saveCommand(string commandName) // remember to track where the command object goes
 {
-	Command* cmd = new Command(commandName);
+	Command *cmd = new Command(commandName);
 	listCommands.push_back(cmd);
 	std::cout << "The command's name is : " << cmd->commandName << std::endl;
 
@@ -188,7 +188,7 @@ Command* CommandProcessor::saveCommand(string commandName) //remember to track w
 	return cmd;
 }
 
-bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
+bool CommandProcessor::validate(Command *cmd, GameEngine *gameEngine)
 {
 	if ((cmd->commandName).substr(0, 7) == "loadmap")
 	{
@@ -196,7 +196,8 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 		{
 			return true;
 		}
-		else return false;
+		else
+			return false;
 	}
 	else if ((cmd->commandName).substr(0, 9) == "addplayer")
 	{
@@ -204,7 +205,8 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 		{
 			return true;
 		}
-		else return false;
+		else
+			return false;
 	}
 	else if (cmd->commandName == "validatemap")
 	{
@@ -212,7 +214,8 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 		{
 			return true;
 		}
-		else return false;
+		else
+			return false;
 	}
 	else if (cmd->commandName == "gamestart")
 	{
@@ -220,7 +223,8 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 		{
 			return true;
 		}
-		else return false;
+		else
+			return false;
 	}
 	else if (cmd->commandName == "replay")
 	{
@@ -228,7 +232,8 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 		{
 			return true;
 		}
-		else return false;
+		else
+			return false;
 	}
 	else if (cmd->commandName == "quit")
 	{
@@ -236,30 +241,31 @@ bool CommandProcessor::validate(Command* cmd, GameEngine* gameEngine)
 		{
 			return true;
 		}
-		else return false;
+		else
+			return false;
 	}
-	else {
+	else
+	{
 		return false;
 	}
 }
 
-FileLineReader::FileLineReader() 
+FileLineReader::FileLineReader()
 {
-
 }
 
-FileLineReader::FileLineReader(const FileLineReader& filelinereader)
+FileLineReader::FileLineReader(const FileLineReader &filelinereader)
 {
 	this->filename = filelinereader.filename;
 }
 
-FileLineReader& FileLineReader::operator=(const FileLineReader& filelinereader)
+FileLineReader &FileLineReader::operator=(const FileLineReader &filelinereader)
 {
 	this->filename = filelinereader.filename;
 	return *this;
 }
 
-ostream& operator<<(std::ostream& output, const FileLineReader& filelinereader)
+ostream &operator<<(std::ostream &output, const FileLineReader &filelinereader)
 {
 	output << "The name of this filelinereader is: " << filelinereader.filename;
 	return output;
@@ -267,7 +273,7 @@ ostream& operator<<(std::ostream& output, const FileLineReader& filelinereader)
 
 FileLineReader::~FileLineReader()
 {
-	std::cout << "FileLineReader object destroyed!";
+	std::cout << "FileLineReader object destroyed!\n";
 }
 
 string FileLineReader::readLineFromFile()
@@ -289,8 +295,7 @@ string FileLineReader::readLineFromFile()
 	return command;
 }
 
-
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(FileLineReader* fileLineReader, string filename) : CommandProcessor()
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(FileLineReader *fileLineReader, string filename) : CommandProcessor()
 {
 	this->fileLineReader = fileLineReader;
 	this->fileLineReader->filename = filename;
@@ -301,27 +306,28 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 {
 	this->fileLineReader->inputstream.close();
 	delete fileLineReader;
-	for (Command* y : this->listCommands)
+	for (Command *y : this->listCommands)
 	{
 		delete y;
 	}
-	
-	std::cout << "FileCommandProcessorAdapter object destroyed!" << std::endl;
+
+	std::cout << "FileCommandProcessorAdapter object destroyed!\n"
+			  << std::endl;
 }
 
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter& fileCommandProcessorAdapter)
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fileCommandProcessorAdapter)
 {
 	this->fileLineReader = fileCommandProcessorAdapter.fileLineReader;
 	this->fileLineReader->filename = fileCommandProcessorAdapter.fileLineReader->filename;
-	this->fileLineReader->inputstream.open("CommandFile/" +(fileCommandProcessorAdapter.fileLineReader->filename).substr(0));
+	this->fileLineReader->inputstream.open("CommandFile/" + (fileCommandProcessorAdapter.fileLineReader->filename).substr(0));
 }
 
-FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter& adapter)
+FileCommandProcessorAdapter &FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter &adapter)
 {
 	return *this;
 }
 
-string FileCommandProcessorAdapter::readCommand() 
+string FileCommandProcessorAdapter::readCommand()
 {
 	std::ofstream tournamentFile;
 	tournamentFile.open("tournamentFile.txt");
@@ -331,96 +337,104 @@ string FileCommandProcessorAdapter::readCommand()
 		{
 			tournamentFile << i + "\n";
 		}
-		//this->tournamentFile = tournamentFile;
-		//tournamentFile.close();
+		// this->tournamentFile = tournamentFile;
+		// tournamentFile.close();
 	}
-	else { std::cout << "Could not open file"; }
+	else
+	{
+		std::cout << "Could not open file";
+	}
 	std::string tournamentFileString = "tournamentFile.txt";
-	
-	if(tournamentFile.is_open())
-	{
-	string userInput = fileLineReader->readLineFromFile();
-	const std::string delimiter = " ";
-	std::string secondInput;
-	int condition = 0;
-	while (condition == 0)
-	{
-		if (userInput.substr(0, 7) == "loadmap")
 
+	if (tournamentFile.is_open())
+	{
+		string userInput = fileLineReader->readLineFromFile();
+		const std::string delimiter = " ";
+		std::string secondInput;
+		int condition = 0;
+		while (condition == 0)
 		{
-			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "loadmap" and the file name
-				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
+			if (userInput.substr(0, 7) == "loadmap")
 
+			{
+				if (userInput.find(delimiter) == -1)
+				{ // This is to ensure that there is a space between "loadmap" and the file name
+					std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
+				}
+				else
+				{
+					std::cout << "We will load the map" << endl;
+					secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); // We store the name of the map file in secondInput
+					std::cout << "the name of the file is: " << secondInput << endl;
+					condition = 1;
+				}
 			}
-			else {
-				std::cout << "We will load the map" << endl;
-				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); //We store the name of the map file in secondInput
-				std::cout << "the name of the file is: " << secondInput << endl;
+			else if (userInput.substr(0, 9) == "addplayer")
+			{
+				if (userInput.find(delimiter) == -1)
+				{ // This is to ensure that there is a space between "addplayer" and the player name
+					std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
+				}
+				else
+				{
+					std::cout << "We will add the Player : ";
+					secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); // We store the name of the player in secondInput
+					std::cout << secondInput << endl;
+					condition = 1;
+				}
+			}
+			else if (userInput == "gamestart")
+			{
+				std::cout << "We will begin the game" << endl;
+				condition = 1;
+			}
+			else if (userInput == "validatemap")
+			{
+				std::cout << "We will validate the map" << endl;
+				condition = 1;
+			}
+			else if (userInput == "replay")
+			{
+				std::cout << "We will begin a new game" << endl;
+				condition = 1;
+			}
+			else if (userInput == "quit")
+			{
+				std::cout << "We will end the game" << endl;
+				condition = 1;
+			}
+			else
+			{
+				std::cout << "That was not a valid input, please try again" << endl;
 				condition = 1;
 			}
 		}
-		else if (userInput.substr(0, 9) == "addplayer")
-		{
-			if (userInput.find(delimiter) == -1) {// This is to ensure that there is a space between "addplayer" and the player name
-				std::cout << "Make sure to add a space between \"loadmap\" and the file name" << endl;
-
-			}
-			else {
-				std::cout << "We will add the Player : ";
-				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); //We store the name of the player in secondInput
-				std::cout << secondInput << endl;
-				condition = 1;
-			}
-		}
-		else if (userInput == "gamestart")
-		{
-			std::cout << "We will begin the game" << endl;
-			condition = 1;
-		}
-		else if (userInput == "validatemap")
-		{
-			std::cout << "We will validate the map" << endl;
-			condition = 1;
-		}
-		else if (userInput == "replay")
-		{
-			std::cout << "We will begin a new game" << endl;
-			condition = 1;
-		}
-		else if (userInput == "quit")
-		{
-			std::cout << "We will end the game" << endl;
-			condition = 1;
-		}
-		else
-		{
-			std::cout << "That was not a valid input, please try again" << endl;
-			condition = 1;
-		}
+		return userInput;
 	}
-	return userInput;
-	}
-	else {
+	else
+	{
 		return "NULL";
 	}
 }
 
-std::ostream& operator<<(ostream& output, const FileCommandProcessorAdapter& adapter)
+std::ostream &operator<<(ostream &output, const FileCommandProcessorAdapter &adapter)
 {
-	std::cout << "This is a file command processor adapter." <<  std::endl;
+	std::cout << "This is a file command processor adapter." << std::endl;
 	return output;
 }
 
-//CommandProcessor's stringToLog() method
-string CommandProcessor::stringToLog() {
+// CommandProcessor's stringToLog() method
+string CommandProcessor::stringToLog()
+{
 
 	string stringLog = listCommands.back()->commandName + " has been saved using saveCommand().";
 	cout << stringLog << endl;
 	return stringLog;
 }
 
-//Command's stringToLog() method
-string Command::stringToLog() {
+// Command's stringToLog() method
+string Command::stringToLog()
+{
 
 	string stringLog = "saveEffect() method saved the transition to the " + effectToLog + " state inside the commandEffect attribute.";
 	cout << stringLog << endl;
@@ -429,7 +443,7 @@ string Command::stringToLog() {
 
 std::vector<std::string> CommandProcessor::processTournamentCommand(string userinput)
 {
-	//tournament 
+	// tournament
 	userinput = userinput.substr(11);
 	stringstream inputstream(userinput);
 	std::string segment;
@@ -438,7 +452,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	std::vector<std::string> commands;
 	std::regex commaRegex(",");
 	int vectorIndex = -1;
-	
+
 	while (std::getline(inputstream, segment, '-'))
 	{
 		segmentlist.push_back(segment);
@@ -471,34 +485,42 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	int numMap = static_cast<int>(commandlist[0].size());
 	int numGame = std::stoi(commandlist[2][0]);
 
-	//std::string addplayerCommand = "addplayer " + commandlist[1][j];
+	// std::string addplayerCommand = "addplayer " + commandlist[1][j];
 
-	//Logging
+	// Logging
 	std::ofstream gameLog;
 	gameLog.open("gameOutput.txt", std::ios_base::app);
 
-	gameLog << "Tournament mode:" << std::endl << "M: ";
-	for (int i = 0; i < numMap; i++) {
+	gameLog << "Tournament mode:" << std::endl
+			<< "M: ";
+	for (int i = 0; i < numMap; i++)
+	{
 		gameLog << commandlist[0][i];
 		if (i != numMap - 1)
 			gameLog << ", ";
 	}
-	gameLog << std::endl << "P: ";
-	for (int i = 0; i < commandlist[1].size(); i++) {
+	gameLog << std::endl
+			<< "P: ";
+	for (int i = 0; i < commandlist[1].size(); i++)
+	{
 		gameLog << commandlist[1][i];
 		if (i != commandlist[1].size() - 1)
 			gameLog << ", ";
 	}
 	gameLog
-		<< std::endl << "G: " << commandlist[2][0]
-		<< std::endl << "D: " << commandlist[3][0]
+		<< std::endl
+		<< "G: " << commandlist[2][0]
+		<< std::endl
+		<< "D: " << commandlist[3][0]
 		<< "\n\nResults: " << std::endl
-	
+
 		<< left
 		<< setw(20)
 		<< "Game #";
-	for (int i = 0; i < numMap; i++) {
-		for (int j = 0; j < numGame; j++) {
+	for (int i = 0; i < numMap; i++)
+	{
+		for (int j = 0; j < numGame; j++)
+		{
 			gameLog
 				<< left
 				<< setw(20)
@@ -510,7 +532,6 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 		<< left
 		<< setw(20)
 		<< "Map";
-	
 
 	for (int m = 0; m < numMap; ++m)
 	{
@@ -520,12 +541,12 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 			commands.push_back(loadmapCommand);
 			commands.push_back("validatemap");
 
-			//Logging
+			// Logging
 			gameLog
 				<< left
 				<< setw(20)
 				<< "| " + commandlist[0][m];
-			
+
 			for (int j = 0; j < commandlist[1].size(); ++j)
 			{
 				std::string addplayerCommand = "addplayer " + commandlist[1][j];
@@ -543,14 +564,13 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 		<< "Winner";
 	gameLog.close();
 
-
 	commands.pop_back();
 	commands.push_back("quit");
 	commands.push_back(commandlist[3][0]);
 
 	std::string fileName = "tournamentFile.txt";
 	std::string filePath = "CommandFile/";
-	
+
 	std::remove((filePath + fileName).c_str());
 	ofstream tournamentfile(filePath + fileName);
 
@@ -558,7 +578,7 @@ std::vector<std::string> CommandProcessor::processTournamentCommand(string useri
 	{
 		tournamentfile << i << "\n";
 	}
-	
+
 	tournamentfile.close();
 	return commands;
 }

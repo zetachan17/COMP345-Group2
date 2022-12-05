@@ -249,7 +249,7 @@ string Player::getStrategyType() const
 	return strategy->getStrategyType();
 }
 
-PlayerStrategy* Player::getStrategy()
+PlayerStrategy *Player::getStrategy()
 {
 	return strategy;
 }
@@ -291,10 +291,11 @@ bool Player::ownsContinent(Continent *continent)
 
 void Player::underAttack()
 {
-	if(strategy->getStrategyType() == "Neutral")
+	if (strategy->getStrategyType() == "Neutral")
 	{
 		delete strategy;
 		strategy = new AggressivePlayerStrategy();
 		strategy->setPlayer(this);
+		playerName += ", Turned Aggressive";
 	}
 }
