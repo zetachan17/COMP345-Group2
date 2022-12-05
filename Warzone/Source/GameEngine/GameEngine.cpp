@@ -13,7 +13,7 @@
 #include <string>
 #include <iomanip>
 
-#include "../../Header/PlayerStrategies/PlayerStrategies.h"
+#include "Header/PlayerStrategies/PlayerStrategies.h"
 
 GameEngine::GameEngine()
 {
