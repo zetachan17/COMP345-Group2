@@ -46,8 +46,8 @@ Order::~Order() {}
 
 void Order::turnEnd()
 {
-    cout << "\n\n~~End of turn triggered~~\n"
-         << "~~Active negotiations cleared~~\n"
+    cout << "\n\n~~End of Turn~~\n"
+         << "~~Active Negotiations Cleared~~\n"
          << "~~Players who conquered at least one territory draw a card~~\n\n";
 
     for (Player *player : m_getsCard)
@@ -57,13 +57,6 @@ void Order::turnEnd()
 
         if (!cardDrawn)
             cout << "~~DECK EMPTY: NO CARD DRAWN~~";
-        else if (cardDrawn->cardType() == "Reinforcement")
-        {
-            cout << "\nReinforcement card drawn. Immediate effect: 5 army units added to "
-                 << player->getPlayerName() << "'s reinforcement pool.";
-            cardDrawn->play(player);
-            GameEngine::getDeck()->addToDeck(cardDrawn);
-        }
         else
             player->getHand()->addToHand(cardDrawn);
     }

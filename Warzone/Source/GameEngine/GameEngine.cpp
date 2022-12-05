@@ -4,6 +4,7 @@
 #include "Player/Player.h"
 #include "Cards/Cards.h"
 #include "Orders/Orders.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 
 #include <iostream>
 #include <fstream>
@@ -12,8 +13,6 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
-
-#include "PlayerStrategies/PlayerStrategies.h"
 
 GameEngine::GameEngine()
 {
@@ -199,7 +198,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
                 commandProcessor->nbCommands++;
                 for (Command *cmd : commandProcessor->listCommands)
                 {
-                    std::cout << "The name of the command is :" + cmd->commandName + " its corresponding effect is :" + cmd->commandEffect << endl;
+                    std::cout << "The name of the command is :" + cmd->commandName + " its corresponding effect is : " + cmd->commandEffect << endl;
                 }
                 break;
             }
@@ -216,7 +215,8 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::AssignReinforcement:
         cout << "----------------------------------------------------------\n"
              << "----------------------------------------------------------\n"
-             << "\t** Assign Reinforcements Phase **\n\n";
+             << "\t\t   *** TURN " << currentTurn << " ***\n"
+             << "\t ** Assign Reinforcements Phase **\n\n";
         reinforcementPhase(mLoader);
 
         this->state = GameEngine::State::IssueOrders;
@@ -224,7 +224,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::IssueOrders:
         cout << "----------------------------------------------------------\n"
              << "----------------------------------------------------------\n"
-             << "\t** Issue Orders Phase **\n\n";
+             << "\t   ** TURN " << currentTurn << ": ISSUE ORDERS PHASE **\n\n";
         issueOrdersPhase();
         this->state = GameEngine::State::ExecuteOrders;
         break;
@@ -232,7 +232,7 @@ GameEngine::State GameEngine::startupPhase(State state, CommandProcessor *comman
     case GameEngine::State::ExecuteOrders:
         cout << "----------------------------------------------------------\n"
              << "----------------------------------------------------------\n"
-             << "\t** Execute Orders Phase **\n\n";
+             << "\t   ** TURN " << currentTurn << ": EXECUTE ORDERS PHASE **\n\n";
         executeOrdersPhase();
         this->state = GameEngine::State::AssignReinforcement;
         if (!checkForDraw())
@@ -466,10 +466,12 @@ void GameEngine::issueOrdersPhase()
 {
     int totalPlayersFinishedIssuingOrders = 0;
     bool issueOrdersPhaseComplete = false;
-    std::cout << "Starting the order issuing round robin" << endl;
+    // std::cout << "~~ Starting the order issuing round robin ~~\n"
+    //           << endl;
     while (!issueOrdersPhaseComplete)
     {
-        std::cout << "Next order issuing round" << endl;
+        // std::cout << "Next order-issuing round\n"
+        //           << endl;
         for (Player *player : activePlayers)
         {
             // std::cout << "Player: " << player->getPlayerName() << " is up" << endl;
@@ -487,12 +489,14 @@ void GameEngine::issueOrdersPhase()
                 // check if the player is now finished
                 if (player->isFinishedIssuingOrders())
                 {
-                    std::cout << "Player: " << player->getPlayerName() << " is finished issuing orders" << endl;
+                    std::cout << "Player: " << player->getPlayerName() << " is finished issuing orders\n"
+                              << endl;
 
                     totalPlayersFinishedIssuingOrders++;
                     if (totalPlayersFinishedIssuingOrders == activePlayers.size())
                     {
-                        std::cout << "All players are finished issuing orders" << endl;
+                        std::cout << "~~ All players are finished issuing orders ~~\n"
+                                  << endl;
 
                         issueOrdersPhaseComplete = true;
                     }
@@ -522,11 +526,12 @@ void GameEngine::executeDeployOrders()
     bool executingDeployOrdersComplete = false;
 
     // start the round robin
-    std::cout << "Starting the deploy order executing round robin" << endl;
+    std::cout << "~~ Starting the deploy order executing round robin ~~\n"
+              << endl;
 
     while (!executingDeployOrdersComplete)
     {
-        std::cout << "Next deploy order executing round" << endl;
+        // std::cout << "Next deploy order executing round" << endl;
 
         for (int i = 0; i < activePlayers.size(); i++)
         {
@@ -536,7 +541,6 @@ void GameEngine::executeDeployOrders()
             {
                 cout << "----------------------------------------------------------\n"
                      << endl;
-                std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is executing their next deploy order" << endl;
 
                 // get the next deploy for this player
                 Order *nextDeploy = activePlayers[i]->nextOrder(true);
@@ -544,19 +548,21 @@ void GameEngine::executeDeployOrders()
                 // if the order is null, the player has no more deploy orders
                 if (nextDeploy == nullptr)
                 {
-                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is finished executing deploy orders" << endl;
+                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is finished executing deploy orders\n"
+                              << endl;
 
                     playersFinishedExecutingDeployOrders[i] = true;
                     totalPlayersFinishedExecutingDeployOrders++;
                     if (totalPlayersFinishedExecutingDeployOrders == activePlayers.size())
                     {
-                        std::cout << "All players are finished executing deploy orders" << endl;
+                        std::cout << "~~ All players are finished executing deploy orders ~~" << endl;
 
                         executingDeployOrdersComplete = true;
                     }
                 }
                 else
                 {
+                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is executing their next deploy order" << endl;
                     nextDeploy->execute();
                     delete nextDeploy;
                 }
@@ -571,10 +577,11 @@ void GameEngine::executeRemainingOrders()
     vector<bool> playersFinishedExecutingOrders(activePlayers.size(), false);
     bool executingOrdersComplete = false;
 
-    std::cout << "Starting the order executing round robin" << endl;
+    std::cout << "~~ Starting the order executing round robin ~~\n"
+              << endl;
     while (!executingOrdersComplete)
     {
-        std::cout << "Next order executing round" << endl;
+        // std::cout << "Next order executing round" << endl;
 
         for (int i = 0; i < activePlayers.size(); i++)
         {
@@ -584,7 +591,6 @@ void GameEngine::executeRemainingOrders()
             {
                 cout << "----------------------------------------------------------\n"
                      << endl;
-                std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is executing their next order" << endl;
 
                 // get the next order for this player
                 Order *nextOrder = activePlayers[i]->nextOrder();
@@ -592,19 +598,21 @@ void GameEngine::executeRemainingOrders()
                 // if the order is null, the player has no more orders
                 if (nextOrder == nullptr)
                 {
-                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is finished executing orders" << endl;
+                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is finished executing orders\n"
+                              << endl;
 
                     playersFinishedExecutingOrders[i] = true;
                     totalPlayersFinishedExecutingOrders++;
                     if (totalPlayersFinishedExecutingOrders == activePlayers.size())
                     {
-                        std::cout << "All players are finished executing orders" << endl;
+                        std::cout << "~~ All players are finished executing orders ~~" << endl;
 
                         executingOrdersComplete = true;
                     }
                 }
                 else
                 {
+                    std::cout << "Player: " << activePlayers[i]->getPlayerName() << " is executing their next order" << endl;
                     nextOrder->execute();
                     delete nextOrder;
                 }
@@ -615,7 +623,7 @@ void GameEngine::executeRemainingOrders()
 
 void GameEngine::checkForDefeats()
 {
-    std::cout << "Checking for loss condition" << endl;
+    std::cout << "*Checking for Loss Condition*" << endl;
 
     bool defeat = false;
     vector<int> toErase;
@@ -649,13 +657,14 @@ void GameEngine::checkForDefeats()
     }
     else if (!defeat)
     {
-        std::cout << "No player has been defeated this turn." << endl;
+        std::cout << "No player has been defeated this turn!\n"
+                  << endl;
     }
 }
 
 bool GameEngine::checkForVictory(MapLoader *mLoader)
 {
-    std::cout << "Checking for victory condition" << endl;
+    std::cout << "*Checking for Victory Condition*" << endl;
 
     bool victory = false;
     for (int i = 0; i < activePlayers.size(); i++)
@@ -671,7 +680,7 @@ bool GameEngine::checkForVictory(MapLoader *mLoader)
 
     if (!victory)
     {
-        std::cout << "No victories detected this turn." << endl;
+        std::cout << "No victories detected this turn!" << endl;
     }
 
     return victory;
@@ -682,7 +691,7 @@ bool GameEngine::checkForDraw()
     currentTurn++;
     if (currentTurn == turnLimit)
     {
-        std::cout << "Turn limit is reached! Now end the game!" << endl;
+        std::cout << "Turn limit is reached! Game over!" << endl;
         this->state = GameEngine::State::Win;
 
         // Logging

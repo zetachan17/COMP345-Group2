@@ -121,7 +121,7 @@ string CommandProcessor::readCommand()
 			}
 			else
 			{
-				std::cout << "We will load the map" << endl;
+				std::cout << "We will load the map." << endl;
 				secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); // We store the name of the map file in secondInput
 				std::cout << "the name of the file is: " << secondInput << endl;
 				condition = 1;
@@ -143,27 +143,27 @@ string CommandProcessor::readCommand()
 		}
 		else if (userInput == "gamestart")
 		{
-			std::cout << "We will begin the game" << endl;
+			std::cout << "We will begin the game." << endl;
 			condition = 1;
 		}
 		else if (userInput == "validatemap")
 		{
-			std::cout << "We will validate the map" << endl;
+			std::cout << "We will validate the map." << endl;
 			condition = 1;
 		}
 		else if (userInput == "replay")
 		{
-			std::cout << "We will begin a new game" << endl;
+			std::cout << "We will begin a new game." << endl;
 			condition = 1;
 		}
 		else if (userInput == "quit")
 		{
-			std::cout << "We will end the game" << endl;
+			std::cout << "We will end the game." << endl;
 			condition = 1;
 		}
 		else
 		{
-			std::cout << "That was not a valid input, please try again" << endl;
+			std::cout << "That was not a valid input, please try again." << endl;
 			condition = 1;
 		}
 	}
@@ -363,7 +363,7 @@ string FileCommandProcessorAdapter::readCommand()
 				}
 				else
 				{
-					std::cout << "We will load the map" << endl;
+					std::cout << "We will load the map." << endl;
 					secondInput = userInput.substr(userInput.find(delimiter) + 1, userInput.size() - 1); // We store the name of the map file in secondInput
 					std::cout << "the name of the file is: " << secondInput << endl;
 					condition = 1;
@@ -385,27 +385,27 @@ string FileCommandProcessorAdapter::readCommand()
 			}
 			else if (userInput == "gamestart")
 			{
-				std::cout << "We will begin the game" << endl;
+				std::cout << "We will begin the game." << endl;
 				condition = 1;
 			}
 			else if (userInput == "validatemap")
 			{
-				std::cout << "We will validate the map" << endl;
+				std::cout << "We will validate the map." << endl;
 				condition = 1;
 			}
 			else if (userInput == "replay")
 			{
-				std::cout << "We will begin a new game" << endl;
+				std::cout << "We will begin a new game." << endl;
 				condition = 1;
 			}
 			else if (userInput == "quit")
 			{
-				std::cout << "We will end the game" << endl;
+				std::cout << "We will end the game." << endl;
 				condition = 1;
 			}
 			else
 			{
-				std::cout << "That was not a valid input, please try again" << endl;
+				std::cout << "That was not a valid input, please try again." << endl;
 				condition = 1;
 			}
 		}

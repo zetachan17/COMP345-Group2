@@ -19,8 +19,8 @@ using std::vector;
 using std::unordered_set;
 #include <algorithm>
 using std::find;
-using std::sort;
 using std::min;
+using std::sort;
 #include <utility>
 using std::pair;
 
@@ -57,7 +57,7 @@ void HumanPlayerStrategy::issueOrder()
         player->setIsFinishedIssuingOrders(true);
         return;
     }
-    
+
     while (player->getHand()->hasReinforcement())
         player->getHand()->playCard(player, "Reinforcement");
 
@@ -80,7 +80,7 @@ void HumanPlayerStrategy::issueOrder()
 
 void HumanPlayerStrategy::issueAirliftOrder()
 {
-    cout << "*Issuing Airlift Order*\n\n";
+    cout << "*Issuing an Airlift Order*\n\n";
 
     printTerritoriesAndUnits(toDefend(), "Controlled");
     Territory *source = selectTerritory(toDefend(), "source");
@@ -211,7 +211,7 @@ void HumanPlayerStrategy::issueDeployOrder()
 
 void HumanPlayerStrategy::issueAdvanceOrder()
 {
-    cout << "*Issuing Advance Order*\n\n";
+    cout << "*Issuing an Advance Order*\n\n";
 
     printTerritoriesAndUnits(toDefend(), "Controlled");
     Territory *source = selectTerritory(toDefend(), "source");
@@ -475,7 +475,7 @@ void AggressivePlayerStrategy::issueDeployOrder()
 
 void AggressivePlayerStrategy::issueAdvanceOrder()
 {
-    cout << "*Issuing Advance Order*\n\n";
+    cout << "*Issuing an Advance Order*\n\n";
 
     int unitsToAdvance;
     Territory *source = strongest;
@@ -609,7 +609,7 @@ Territory *AggressivePlayerStrategy::pathToStrongest(Territory *source, Territor
 
 void AggressivePlayerStrategy::issueAirliftOrder()
 {
-    cout << "*Issuing Airlift Order*\n\n";
+    cout << "*Issuing an Airlift Order*\n\n";
 
     int targetIndex = 0;
     Territory *source = toAdvanceFrom[targetIndex];
@@ -736,6 +736,9 @@ void BenevolentPlayerStrategy::issueOrder()
 {
     cout << *player << endl;
 
+    while (player->getHand()->hasReinforcement())
+        player->getHand()->playCard(player, "Reinforcement");
+
     if (player->getTerritories().size() == 0)
     {
         player->setIsFinishedIssuingOrders(true);
@@ -758,7 +761,7 @@ void BenevolentPlayerStrategy::issueOrder()
 
 bool BenevolentPlayerStrategy::hasBenevolentCard()
 {
-    return player->getHand()->hasAirlift() || player->getHand()->hasDiplomacy() || player->getHand()->hasReinforcement();
+    return player->getHand()->hasAirlift() || player->getHand()->hasDiplomacy();
 }
 
 void BenevolentPlayerStrategy::playBenevolentCard()
@@ -767,8 +770,6 @@ void BenevolentPlayerStrategy::playBenevolentCard()
         player->getHand()->playCard(player, "Airlift");
     else if (player->getHand()->hasDiplomacy())
         player->getHand()->playCard(player, "Diplomacy");
-    else if (player->getHand()->hasReinforcement())
-        player->getHand()->playCard(player, "Reinforcement");
 }
 
 void BenevolentPlayerStrategy::issueDeployOrder()
@@ -776,7 +777,7 @@ void BenevolentPlayerStrategy::issueDeployOrder()
     const int deployedThisTurn = player->getArmiesDeployedThisTurn();
     const int reinforcementPool = player->getReinforcementPool();
 
-    cout << "Issuing a Deploy order." << endl;
+    cout << "*Issuing a Deploy Order*" << endl;
     int remainingUnitsToDeploy = reinforcementPool - deployedThisTurn;
     cout << remainingUnitsToDeploy << " armies remain available in their reinforcement pool." << endl;
 
@@ -789,7 +790,7 @@ void BenevolentPlayerStrategy::issueDeployOrder()
     }
 
     // target territory based on how many orders have been issued already
-    Territory *territoryToDefend = toDefend()[min(player->getOrdersList()->size(), (int) toDefend().size() - 1)];
+    Territory *territoryToDefend = toDefend()[min(player->getOrdersList()->size(), (int)toDefend().size() - 1)];
     cout << "Deploying " << armiesToDeploy << " to " << territoryToDefend->getTerritoryName() << endl;
 
     player->setArmiesDeployedThisTurn(deployedThisTurn + armiesToDeploy);
@@ -798,7 +799,7 @@ void BenevolentPlayerStrategy::issueDeployOrder()
 
 void BenevolentPlayerStrategy::issueAdvanceOrder()
 {
-    cout << "Issuing an Advance order." << endl;
+    cout << "*Issuing an Advance Order*" << endl;
 
     Territory *targetTerritory = nullptr;
     Territory *sourceTerritory = nullptr;
@@ -846,7 +847,7 @@ void BenevolentPlayerStrategy::issueAdvanceOrder()
 
 void BenevolentPlayerStrategy::issueAirliftOrder()
 {
-    cout << "Issuing an Airlift order." << endl;
+    cout << "Issuing an Airlift Order." << endl;
 
     // get random territory from toAttack and toDefend
     Territory *sourceTerritory = toDefend()[toDefend().size() - 1];
@@ -869,7 +870,7 @@ void BenevolentPlayerStrategy::issueBombOrder()
 }
 void BenevolentPlayerStrategy::issueNegotiateOrder()
 {
-    cout << "Issuing a Negotiate order." << endl;
+    cout << "Issuing a Negotiate Order." << endl;
 
     Player *targetPlayer = nullptr;
 
@@ -922,6 +923,9 @@ NeutralPlayerStrategy::~NeutralPlayerStrategy() {}
 void NeutralPlayerStrategy::issueOrder()
 {
     cout << *player << endl;
+
+    while (player->getHand()->hasReinforcement())
+        player->getHand()->playCard(player, "Reinforcement");
 
     player->setIsFinishedIssuingOrders(true);
 }

@@ -94,7 +94,7 @@ ReinforcementCard::~ReinforcementCard() {}
 
 void ReinforcementCard::play(Player *player)
 {
-	cout << "*Playing a Reinforcement Card*\nImmediate effect: 5 army units added to "
+	cout << "\n*Playing a Reinforcement Card*\nImmediate effect: 5 army units added to "
 		 << player->getPlayerName() << "'s reinforcement pool.\n";
 	player->addReinforcements(5);
 }

@@ -132,8 +132,10 @@ bool Player::isFinishedIssuingOrders() const
 
 void Player::setIsFinishedIssuingOrders(bool finishedIssuingOrders)
 {
+	if (!(this->finishedIssuingOrders))
+		cout << getPlayerName() << " has no more orders to issue.\n";
+
 	this->finishedIssuingOrders = finishedIssuingOrders;
-	cout << getPlayerName() << " has no more orders to issue.\n";
 }
 
 OrdersList *Player::getOrdersList()
@@ -169,19 +171,19 @@ void Player::removeTerritory(Territory *territory)
 
 int Player::calculateReinforcements(Map *const map)
 {
-	cout << "\n\t-----Calculating reinforcements for player " << playerName << endl;
+	cout << "\n\t-----Calculating reinforcements for player: " << playerName << endl;
 
 	int numberOfTerritories = this->getTerritories().size();
 
 	int territoryReinforcements = std::max(numberOfTerritories / 3, 3);
 
-	cout << "Player " << playerName << " owns " << numberOfTerritories
+	cout << playerName << " owns " << numberOfTerritories
 		 << " territories and receives " << territoryReinforcements
 		 << " reinforcement army units from territory ownership." << endl;
 
 	int continentBonusReinforcements = this->calculateContinentBonuses(map);
 
-	cout << "Player " << playerName << " receives " << continentBonusReinforcements
+	cout << playerName << " receives " << continentBonusReinforcements
 		 << " reinforcement army units in continent control bonuses." << endl;
 
 	return territoryReinforcements + continentBonusReinforcements;
@@ -194,7 +196,7 @@ int Player::getReinforcementPool() const
 
 void Player::addReinforcements(int units)
 {
-	cout << "Player " << getPlayerName() << " received " << units << " armies." << endl;
+	cout << playerName << " received " << units << " armies." << endl;
 	reinforcementPool += units;
 	cout << "Now they have " << getReinforcementPool() << " armies" << endl;
 }
@@ -236,7 +238,7 @@ int Player::calculateContinentBonuses(Map *const map)
 	{
 		if (this->ownsContinent(continent))
 		{
-			cout << "Player " << playerName << " owns " << continent->getContinentName()
+			cout << playerName << " owns " << continent->getContinentName()
 				 << " and will receive a " << continent->getBonus() << " continent control bonus.\n";
 			totalBonus += continent->getBonus();
 		}
