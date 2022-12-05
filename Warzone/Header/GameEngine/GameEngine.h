@@ -100,7 +100,7 @@ private:
 
     void checkForDefeats();
 
-    void checkForVictory(MapLoader* mLoader);
+    bool checkForVictory(MapLoader* mLoader);
 
     bool checkForDraw();
 
