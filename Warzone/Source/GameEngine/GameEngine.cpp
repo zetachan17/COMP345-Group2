@@ -685,7 +685,7 @@ bool GameEngine::checkForVictory(MapLoader *mLoader)
             gameLog
                 << left
                 << setw(36)
-                << "| " + activePlayers[0]->getPlayerName();
+                << "| " + activePlayers[i]->getPlayerName();
             gameLog.close();
         }
     }
