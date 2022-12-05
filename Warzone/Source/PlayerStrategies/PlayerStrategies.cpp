@@ -52,6 +52,12 @@ HumanPlayerStrategy::~HumanPlayerStrategy() {}
 
 void HumanPlayerStrategy::issueOrder()
 {
+    if (player->getTerritories().size() == 0)
+    {
+        player->setIsFinishedIssuingOrders(true);
+        return;
+    }
+    
     while (player->getHand()->hasReinforcement())
         player->getHand()->playCard(player, "Reinforcement");
 
@@ -355,6 +361,12 @@ AggressivePlayerStrategy::~AggressivePlayerStrategy() {}
 
 void AggressivePlayerStrategy::issueOrder()
 {
+
+    if (player->getTerritories().size() == 0)
+    {
+        player->setIsFinishedIssuingOrders(true);
+        return;
+    }
     while (player->getHand()->hasReinforcement())
         player->getHand()->playCard(player, "Reinforcement");
 
@@ -724,7 +736,7 @@ void BenevolentPlayerStrategy::issueOrder()
 {
     cout << *player << endl;
 
-    if (toDefend().size() == 0)
+    if (player->getTerritories().size() == 0)
     {
         player->setIsFinishedIssuingOrders(true);
         return;
